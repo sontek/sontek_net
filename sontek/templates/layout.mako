@@ -25,7 +25,7 @@
             &nbsp;
             <!-- this div keeps the content centered -->
           </div>
-          <div class="span10">
+          <div class="span8">
             <h3>John Anderson's random thoughts</h3>
           </div>
         </div>
@@ -34,7 +34,7 @@
             &nbsp;
             <!-- this div keeps the content centered -->
           </div>
-          <div class="span10">
+          <div class="span8">
             ${next.body()}
         </div>
       </div> <!-- /container -->

@@ -40,6 +40,7 @@ setup(name='sontek',
     main = sontek:main
     [console_scripts]
     init_sontek_db = sontek.scripts.initializedb:main
+    migrate_from_tekblog = sontek.scripts.migrate_from_tekblog:main
     """,
 )
 
