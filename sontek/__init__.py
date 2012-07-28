@@ -9,6 +9,7 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
 
     engine = engine_from_config(settings, 'sqlalchemy.')
+
     DBSession.configure(bind=engine)
 
     config.registry.registerUtility(DBSession, IDBSession)

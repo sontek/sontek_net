@@ -1,3 +1,5 @@
+<%inherit file="sontek:templates/layout.mako"/>
+
 <%namespace name="utils" file="hiero:templates/blog_utilities.mako"/>
 
 % for entry in entries:
