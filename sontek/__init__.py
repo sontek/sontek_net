@@ -13,6 +13,11 @@ def main(global_config, **settings):
 
     config.registry.registerUtility(DBSession, IDBSession)
 
+    config.override_asset(
+        to_override='hiero:templates/blog_index.mako',
+        override_with='sontek:templates/blog_index.mako'
+    )
+
     config.include('sontek.routes')
     config.scan()
     return config.make_wsgi_app()
