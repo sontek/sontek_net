@@ -18,6 +18,7 @@ from ..models import (
     , Base
     , Entry
     , User
+    , Group
 )
 
 def usage(argv):
@@ -51,11 +52,18 @@ def main(argv=sys.argv):
 
 
     with transaction.manager:
+        admin_group = Group(
+            name = 'admin'
+            , description = 'admin group'
+        )
+
         admin = User(
             user_name = username
             , email=email
         )
+        DBSession.add(admin_group)
 
+        admin.groups.append(admin_group)
         admin.set_password(password)
 
         DBSession.add(admin)

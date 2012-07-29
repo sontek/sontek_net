@@ -4,7 +4,7 @@ from pyramid.view           import view_config
 
 
 @view_config(
-    route_name='sontek_index'
+    route_name='index'
     , renderer='sontek:templates/index.mako'
 )
 def index(request):
