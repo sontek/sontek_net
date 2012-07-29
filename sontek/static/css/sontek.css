@@ -1,0 +1,17 @@
+.twitter-ico, .github-ico {
+  width: 30px;
+}
+
+ul.index {
+  margin-top: 20px;
+  list-style: none;
+}
+
+ul.index li {
+  display: inline;
+}
+
+ul.index li a {
+  padding: 20px;
+  border: solid 1px #000;
+}
