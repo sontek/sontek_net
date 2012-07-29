@@ -10,6 +10,7 @@
     <!-- Le styles -->
     <link href="${request.static_url('hiero:static/assets/css/bootstrap.css')}" rel="stylesheet">
     <link href="${request.static_url('hiero:static/assets/css/bootstrap-responsive.css')}" rel="stylesheet">
+    <link href="${request.static_url('sontek:static/css/sourcehighlight.css')}" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
