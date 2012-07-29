@@ -13,6 +13,11 @@ requires = [
     , 'pyramid_debugtoolbar'
     , 'waitress'
     , 'sqlalchemy'
+    , 'gunicorn'
+    , 'hiero'
+    , 'hem'
+    , 'horus'
+    , 'deform_bootstrap'
 ]
 
 setup(name='sontek',
