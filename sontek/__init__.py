@@ -1,12 +1,20 @@
-from pyramid.config     import Configurator
-from sontek.models      import DBSession
-from hem.interfaces     import IDBSession
-from sqlalchemy         import engine_from_config
+from pyramid.config         import Configurator
+from sontek.models          import DBSession
+from hem.interfaces         import IDBSession
+from sqlalchemy             import engine_from_config
+from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authorization  import ACLAuthorizationPolicy
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
-    config = Configurator(settings=settings)
+    authentication_policy = AuthTktAuthenticationPolicy('seekrit')
+    authorization_policy = ACLAuthorizationPolicy()
+    config = Configurator(
+        settings = settings
+        , authentication_policy = authentication_policy
+        , authorization_policy=authorization_policy
+    )
 
     engine = engine_from_config(settings, 'sqlalchemy.')
 
