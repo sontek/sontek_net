@@ -35,8 +35,17 @@
             &nbsp;
             <!-- this div keeps the content centered -->
           </div>
-          <div class="span8">
+          <div class="span6">
             ${next.body()}
+          </div>
+          <div class="span2">
+            <strong>Categories</strong>
+            <ul>
+            % for category in categories:
+              <li><a href="${request.route_url('hiero_entry_category', slug=category.slug)}">${category.title}</a></li>
+            % endfor
+            </ul>
+          </div>
         </div>
       </div> <!-- /container -->
     </div>
