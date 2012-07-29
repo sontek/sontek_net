@@ -84,6 +84,35 @@ def main(argv=sys.argv):
 
             formatter = get_formatter(entry.markup)
 
+            if entry.markup == 'markdown':
+                lines = []
+                in_code = False
+
+                for line in entry.content.split('\n'):
+                    if '</code>' in line:
+                        lines.append('\n')
+                        lines.append('')
+                        in_code = False
+
+                    elif '<code' in line:
+                        in_code = True
+
+                        if 'class' in line:
+                            cls = line.split('class=')[1].replace('"', '')
+                            cls = cls.replace("'", '').replace(')', '')
+                            cls = cls.replace(">", '')
+                            lines.append('\n\n    :::%s\n' % cls)
+                        else:
+                            lines.append('\n\n    :::\n')
+
+                    elif in_code:
+                        line = '    ' + line
+                        lines.append(line)
+                    else:
+                        lines.append(line)
+
+                entry.content = ''.join(lines)
+
             if formatter:
                 entry.html_content = formatter(entry.content).get_html()
             else:
