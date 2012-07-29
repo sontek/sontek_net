@@ -43,6 +43,7 @@
               <li><a href="${request.route_url('hiero_entry_category', slug='personal')}">Personal Blog</a></li>
               <li><a href="https://github.com/sontek"><img class="github-ico" src="${request.static_url('sontek:static/img/octocat.png')}" />GitHub</a></li>
               <li><a href="https://twitter.com/sontek"><img class="twitter-ico" src="${request.static_url('sontek:static/img/twitter-bird-light-bgs.png')}" />Twitter</a></li>
+              <li><a href="http://www.linkedin.com/in/sontek"><img class="linkedin-ico" src="${request.static_url('sontek:static/img/linkedin.jpg')}" />LinkedIn</a></li>
               <li><a href="http://eventray.com">My Company EventRay</a></li>
             </ul>
           </div>
