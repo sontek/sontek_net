@@ -19,6 +19,12 @@ def main(global_config, **settings):
         override_with='sontek:templates/blog_index.mako'
     )
 
+    config.override_asset(
+        to_override='hiero:templates/entry_detail.mako',
+        override_with='sontek:templates/entry_detail.mako'
+    )
+
     config.include('sontek.routes')
+
     config.scan()
     return config.make_wsgi_app()
