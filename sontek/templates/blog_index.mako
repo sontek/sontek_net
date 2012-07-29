@@ -5,4 +5,3 @@
 % for entry in entries:
   ${utils.render_entry(entry)}
 % endfor
-
