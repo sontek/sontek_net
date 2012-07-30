@@ -1,6 +1,7 @@
 from pyramid.response       import FileResponse
 from pkg_resources          import resource_filename
 from pyramid.view           import view_config
+from pyramid.httpexceptions import HTTPMovedPermanently
 
 
 @view_config(
@@ -9,6 +10,19 @@ from pyramid.view           import view_config
 )
 def index(request):
     return {}
+
+@view_config(
+    route_name='old_detail'
+)
+def old_detail(request):
+    slug = request.matchdict.get('slug')
+
+    return HTTPMovedPermanently(
+        location = request.route_url(
+            'hiero_entry_detail'
+            , slug=slug
+        )
+    )
 
 def favicon_view(request):
     fname = resource_filename(__name__, '../static/favicon.ico')

@@ -7,3 +7,6 @@ def includeme(config):
 
     config.include('horus', route_prefix='auth')
     config.include('hiero', route_prefix='blog')
+
+    # this is last, should only match things not grabbed by horus or hiero
+    config.add_route('old_detail', '/{slug}')
