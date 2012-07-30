@@ -61,6 +61,7 @@ def main(argv=sys.argv):
             user_name = username
             , email=email
         )
+
         DBSession.add(admin_group)
 
         admin.groups.append(admin_group)
@@ -82,13 +83,12 @@ def main(argv=sys.argv):
             entry = Entry(
                 title=result.title
                 , content = result.content
-                , published_on = datetime.utcnow()
+                , published_on = result.published_on.replace(tzinfo=None)
                 , markup = markup
                 , owner = admin
             )
 
-            if entry.published_on:
-                entry.is_published = True
+            entry.is_published = not result.draft
 
             formatter = get_formatter(entry.markup)
 
