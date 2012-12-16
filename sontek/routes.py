@@ -1,4 +1,8 @@
 def includeme(config):
+    # bad routes
+    # these are used to catch popular links that are invalid
+    config.add_route('bad_link_gevent', '/blog/detail/pycon-sprints-part-1-the-realtime-web-with-gevent')
+
     config.add_static_view('static', 'static', cache_max_age=3600)
 
     config.add_route('favicon', '/favicon.ico')

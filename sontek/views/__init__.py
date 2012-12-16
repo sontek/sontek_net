@@ -12,6 +12,17 @@ def index(request):
     return {}
 
 @view_config(
+    route_name='bad_link_gevent'
+)
+def bad_link_gevent(request):
+    return HTTPMovedPermanently(
+        location = request.route_url(
+            'hiero_entry_detail'
+            , slug='pycon-sprints-part-1-the-realtime-web-with-gevent-socket-io-redis-and-django'
+        )
+    )
+
+@view_config(
     route_name='old_detail'
 )
 def old_detail(request):
