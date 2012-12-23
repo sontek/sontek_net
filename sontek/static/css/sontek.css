@@ -24,3 +24,7 @@ ul.index li a {
   vertical-align: middle;
   line-height: 2em;
 }
+
+ul.categories {
+  list-style: none !important;
+}

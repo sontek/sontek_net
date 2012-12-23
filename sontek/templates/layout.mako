@@ -10,6 +10,7 @@
     <!-- Le styles -->
     <link href="${request.static_url('hiero:static/assets/css/bootstrap.css')}" rel="stylesheet">
     <link href="${request.static_url('hiero:static/assets/css/bootstrap-responsive.css')}" rel="stylesheet">
+    <link href="${request.static_url('sontek:static/css/sontek.css')}" rel="stylesheet">
     <link href="${request.static_url('sontek:static/css/sourcehighlight.css')}" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -41,7 +42,7 @@
             <!-- this div keeps the content centered -->
           </div>
           <div class="span8">
-            <h3>John Anderson's random thoughts</h3>
+            <h3><a href="${request.route_url('index')}">John Anderson's random thoughts</a></h3>
           </div>
         </div>
         <div class="row-fluid">
@@ -53,11 +54,20 @@
             ${next.body()}
           </div>
           <div class="span2">
-            <strong>Categories</strong>
-            <ul>
-            % for category in categories:
-              <li><a href="${request.route_url('hiero_entry_category', slug=category.slug)}">${category.title}</a></li>
-            % endfor
+            <div>
+              <strong>My Blogs</strong>
+              <ul class="categories">
+              % for category in categories:
+                <li><a href="${request.route_url('hiero_entry_category', slug=category.slug)}">${category.title}</a></li>
+              % endfor
+              </ul>
+            </div>
+            <strong>My Links</strong>
+            <ul class="categories">
+              <li><a href="http://twitter.com/sontek">Twitter</a></li>
+              <li><a href="http://github.com/sontek">Github</a></li>
+              <li><a href="http://linkedin.com/in/sontek">LinkedIn</a></li>
+              <li><a href="http://eventray.com/">EventRay</a></li>
             </ul>
           </div>
         </div>
