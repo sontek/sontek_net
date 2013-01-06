@@ -3,13 +3,19 @@ from pkg_resources          import resource_filename
 from pyramid.view           import view_config
 from pyramid.httpexceptions import HTTPMovedPermanently
 
+from sontek.models          import Entry
+
 
 @view_config(
     route_name='index'
     , renderer='sontek:templates/index.mako'
 )
 def index(request):
-    return {}
+    query = Entry.get_all_active(request)[:10]
+
+    return {
+        'entries': query
+    }
 
 @view_config(
     route_name='bad_link_gevent'
