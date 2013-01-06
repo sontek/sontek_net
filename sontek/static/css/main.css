@@ -1,0 +1,143 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #222;
+    font-family: Arial, Sans-Serif;
+    font-size: 19px;
+    color: #FFF;
+}
+
+#menu a, #main-footer a, #main-footer a:visited, #menu a:visited  {
+    color: #FFF;
+    text-decoration: none;
+}
+
+#menu a:hover, #main-footer a:hover {
+    text-decoration: underline !important;
+}
+
+#main-container {
+    background: url("/static/img/body-top-bg.png") #000 repeat-x;
+    float: left;
+    width: 100%;
+}
+
+#main-content, #main-footer-content {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+#main-header {
+    height: 90px;
+    display: block;
+}
+
+#main-header #logo {
+    float: left;
+}
+
+#main-header #menu {
+    padding-top: 20px;
+    float: right;
+}
+
+#main-header #menu ul {
+    list-style: none;
+}
+
+#main-header #menu li {
+    display: inline;
+    padding-right: 15px;
+}
+
+.blog-body {
+    background-color: #FFF;
+    color: #000;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#main-body {
+    margin-left: 35px;
+    clear: both;
+}
+
+#main-body-left {
+    float: left;
+    width: 700px;
+}
+
+#main-body-right {
+    float: right;
+}
+
+#main-footer {
+    clear: both;
+    min-height:200px;
+    background: url("/static/img/footer-bg.png") repeat-x;
+}
+
+#main-footer-content {
+    padding-top: 70px;
+    padding-left: 65px;
+}
+
+.contact-label { 
+    width: 110px;
+    float: left; 
+    clear: both;
+}
+.contact-info {
+    width: 220px;
+    float:left;
+}
+
+.green-header {
+    color: #51A900;
+    padding: 10px 0;
+}
+
+#main-footer-content .left {
+    float: left;
+}
+.entry ul {
+   padding-left: 35px;
+}
+
+a h1 {
+  color: #2a4260;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+
+h2 {
+  font-size: 2em;
+  font-weight: 900;
+  line-height: 1.3;
+  margin: 0.8em 0 0.0455em 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.entry-content {
+  line-height: 1.55em;
+  margin: 1em 0;
+  margin-bottom: 30px;
+  border-bottom: solid 3px;
+}
+
+.entry-content p {
+  line-height: 1.55em;
+  margin: 1.2em 0;
+}
+
+.entry-content a, .entry-content a:visited  {
+    color: #2a4260;
+    text-decoration: underline;
+}
+
+a:hover {
+    text-decoration: none !important;
+}

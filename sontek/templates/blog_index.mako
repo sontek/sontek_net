@@ -1,7 +1,7 @@
-<%inherit file="sontek:templates/layout.mako"/>
+<%inherit file="sontek:templates/layout2.mako"/>
 
 <%namespace name="utils" file="hiero:templates/blog_utilities.mako"/>
-
+<div class="blog-body">
 % if entries:
   % for entry in entries:
     ${utils.render_entry(entry)}
@@ -16,3 +16,4 @@
 % else:
   No Entries Found
 % endif
+</div>
