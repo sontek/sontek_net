@@ -18,6 +18,89 @@ def index(request):
     }
 
 @view_config(
+    route_name='projects'
+    , renderer='sontek:templates/projects.mako'
+)
+def projects(request):
+    projects = [
+        dict(
+            name="PyQuil"
+            , description="A Python/GTK SQL query application. Allows you to inspect your databases and query them easily."
+            , tags = ["Python", "GTK", "SQLAlchemy"]
+            , url = "https://github.com/sontek/PyQuil"
+            , screenshot = "pyquil.png"
+        )
+        , dict(
+            name="gevent-socketio"
+            , description="""A WebSocket-like abstraction that
+            enables real-time communication between a browser and a gevent
+            server. I'm co-maintainer"""
+            , tags = ["Python", "gevent", "socket.io"]
+            , url = "https://github.com/abourget/gevent-socketio"
+        )
+        , dict(
+            name="SQLAlchemy Traversal"
+            , description="Automatically generate REST API from SQLAlchemy models"
+            , tags = ["Python", "Pyramid", "SQLAlchemy", "Mako"]
+            , url = "https://github.com/sontek/sqlalchemy_traversal"
+        )
+        , dict(
+            name="Hiero"
+            , description="Generic blog engine written in Pyramid, Mako, and SQLAlchemy"
+            , tags = ["Python", "Pyramid", "SQLAlchemy", "Mako"]
+            , url = "https://github.com/sontek/hiero"
+        )
+        , dict(
+            name="Horus"
+            , description="Generic user authentication and registration library for Pyramid"
+            , tags = ["Python", "Pyramid", "SQLAlchemy", "Mako"]
+            , url = "https://github.com/sontek/horus"
+        )
+        , dict(
+            name="Snowjob"
+            , description="""A cross platform (Linux, Mac, Windows, Android)
+            script that makes your terminal snow. Python2 and Python3 compatible.
+            """
+            , tags = ["Python"]
+            , url = "https://github.com/sontek/snowjob"
+            , screenshot = "snowjob.png"
+        )
+        , dict(
+            name="Pyramid Mustache"
+            , description="""A Pyramid renderer for the mustache templating
+            language. Allows you to share client and server templates"""
+            , tags = ["Python", "Pyramid", "Javascript"]
+            , url = "https://github.com/sontek/pyramid_mustache"
+        )
+        , dict(
+            name="OAuth2 Client"
+            , description="""A small OAuth2 client compatible with the final
+            draft"""
+            , tags = ["Python", "OAuth2"]
+            , url = "https://github.com/sontek/oauth2_client"
+        )
+        , dict(
+            name="OAuth2 Provider"
+            , description="""A small OAuth2 generic provider compatible with
+            the final draft, works with any web framework."""
+            , tags = ["Python", "OAuth2"]
+            , url = "https://github.com/sontek/oauth2_provider"
+        )
+        , dict(
+            name="Pymemmon"
+            , description="""A small python script that will monitor memory
+            usage and kill processes if they reach the max. Can e-mail alerts.
+            """
+            , tags = ["Python"]
+            , url = "https://github.com/sontek/pymemmon"
+        )
+    ]
+
+    return {
+        'projects': projects
+    }
+
+@view_config(
     route_name='bad_link_gevent'
 )
 def bad_link_gevent(request):

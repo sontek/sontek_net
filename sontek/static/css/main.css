@@ -141,3 +141,38 @@ h2 {
 a:hover {
     text-decoration: none !important;
 }
+
+.project {
+  width: 270px;
+  float: left;
+  padding: 15px;
+  margin: 10px;
+  background-color: #FFF;
+  color: #000;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  height: 230px;
+}
+
+.project h2 {
+  padding: 0;
+  margin: 0;
+  font-size: 23px;
+}
+
+.tags span {
+  background-color: #51A900;
+  padding: 5px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  display: block;
+  float: left;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+
+.screenshot {
+  float: right;
+}
