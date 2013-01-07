@@ -19,7 +19,7 @@
                             <li><a href="${request.route_url('index')}">Home</a></li>
                             <li><a href="${request.route_url('hiero_entry_category', slug='tech')}">Tech Blog</a></li>
                             <li><a href="${request.route_url('hiero_entry_category', slug='personal')}">Personal Blog</a></li>
-                            <li><a href="#">Projects</a></li>
+                            <li><a href="${request.route_url('projects')}">Projects</a></li>
                             <li><a href="#">Resumé</a></li>
                             <li><a href="#">About</a></li>
                         </ul>
