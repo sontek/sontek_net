@@ -89,6 +89,7 @@
                 , "Created a library that generates json objects from gettext po files"
                 , "Managed and Automated the complete deployment of the system using Fabric"
                 , "Using an EventAggregator and socket.io I created a way to allow users to collaborate on organizing their conference"
+                , "Created a translation system that worked client-side and server side and allowed users to translate their own dynamic data"
             ],
             "skillKeys": [
                 { "key": "python" },
