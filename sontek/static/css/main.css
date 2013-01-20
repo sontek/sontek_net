@@ -101,3 +101,32 @@ pre {
 .entry-content {
   border-bottom: dashed #CCC;
 }
+
+
+.resume .contact ul, .resume .contact ul li {
+  list-style: none;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.resume .contact {
+  float: right;
+  border: solid 1px #CCC;
+  padding: 10px;
+}
+
+.resume .exp {
+  padding: 10px;
+}
+
+.resume .exp ul {
+  list-style-type: square;
+}
+
+ul.skills {
+  list-style: none !important;
+}
+
+.skills li {
+  float: left;
+}
