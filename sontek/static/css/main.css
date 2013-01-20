@@ -135,3 +135,11 @@ ul.skills {
 .about img{
   max-width: 400px;
 }
+
+.rss {
+  width: 32px;
+  text-decoration: none;
+  margin: 0 auto;
+  display: block;
+  border: 0;
+}

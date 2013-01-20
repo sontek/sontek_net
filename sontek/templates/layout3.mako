@@ -6,6 +6,10 @@
   <!--<script src="/theme/js/less.js" type="text/javascript"></script>-->
   <link href="${request.static_url('sontek:static/css/sourcehighlight.css')}" rel="stylesheet">
   <link href="${request.static_url('sontek:static/css/main.css')}" rel="stylesheet">
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="${request.route_url('hiero_entry_rss')}">
+
+
+  
 
   <title>sontek's humble adode - John Anderson</title>
   <meta charset="utf-8" />
@@ -17,7 +21,8 @@
     </figure>
 
     <div class="user_meta">
-            <h1 id="user"><a href="#" class="">John Anderson</a></h1>
+      <h1 id="user"><a href="#" class="">John Anderson</a></h1>
+      <a class="rss" href="${request.route_url('hiero_entry_rss')}"><img src="${request.static_url('sontek:static/img/rss.png')}" /></a>
       <h2>Open Source Hacker</h2>
       <ul>
           <li><a href="${request.route_url('index')}">Home</a></li>
