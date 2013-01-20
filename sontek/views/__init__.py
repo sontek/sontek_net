@@ -22,6 +22,13 @@ def index(request):
     }
 
 @view_config(
+    route_name='about'
+    , renderer='sontek:templates/about.mako'
+)
+def about(request):
+    return {}
+
+@view_config(
     route_name='resume'
     , renderer='sontek:templates/resume.mako'
 )

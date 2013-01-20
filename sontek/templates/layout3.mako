@@ -26,7 +26,7 @@
           <li><a href="${request.route_url('hiero_entry_category', slug='personal')}">Personal Blog</a></li>
           <li><a href="${request.route_url('projects')}">Projects</a></li>
           <li><a href="${request.route_url('resume')}">Resumé</a></li>
-          <li><a href="#">About</a></li>
+          <li><a href="${request.route_url('about')}">About</a></li>
       </ul>
     </div>
     <footer>
