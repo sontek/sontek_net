@@ -131,3 +131,7 @@ ul.skills {
 .skills li {
   float: left;
 }
+
+.about img{
+  max-width: 400px;
+}

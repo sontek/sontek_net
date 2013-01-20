@@ -7,3 +7,11 @@
 <p>Python and Vim are my tools of choice when it comes to solving most problems but I also have experience developing .NET applications using C# and Visual Basic</p>
 <p>I'm married with a son who was born July 5th, 2011 and currently have another baby on the way!</p.
 
+<br />
+<div class="about">
+  <img src="${request.static_url('sontek:static/img/john-web.jpg')}" />
+  <img src="${request.static_url('sontek:static/img/jessie-web.jpg')}" />
+  <br />
+  <img src="${request.static_url('sontek:static/img/graham-web.jpg')}" />
+</div>
+
