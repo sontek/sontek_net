@@ -10,6 +10,9 @@
   border-radius: 10px;
   height: 230px;
 }
+.project p {
+  width: auto !important;
+}
 
 .project h2 {
   padding: 0;
@@ -89,4 +92,8 @@ pre {
 
 #posts {
   width: 70%;
+}
+
+#sidebar {
+  position: absolute !important;
 }
