@@ -8,7 +8,7 @@
   <link href="${request.static_url('sontek:static/css/sourcehighlight.css')}" rel="stylesheet">
   <link href="${request.static_url('sontek:static/css/main.css')}" rel="stylesheet">
 
-  <title>SONTEK.NET</title>
+  <title>sontek's humble adode - John Anderson</title>
   <meta charset="utf-8" />
 </head>
 <body>
