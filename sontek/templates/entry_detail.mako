@@ -1,4 +1,4 @@
-<%inherit file="sontek:templates/layout2.mako"/>
+<%inherit file="sontek:templates/layout3.mako"/>
 
 <%namespace name="utils" file="hiero:templates/blog_utilities.mako" />
 

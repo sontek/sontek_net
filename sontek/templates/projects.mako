@@ -1,4 +1,4 @@
-<%inherit file="sontek:templates/layout2.mako"/>
+<%inherit file="sontek:templates/layout3.mako"/>
 
 % for project in projects:
   <div class="project">

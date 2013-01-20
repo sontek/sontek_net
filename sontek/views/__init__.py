@@ -5,6 +5,10 @@ from pyramid.httpexceptions import HTTPMovedPermanently
 
 from sontek.models          import Entry
 
+import os
+import json
+
+here = os.path.dirname(__file__)
 
 @view_config(
     route_name='index'
@@ -16,6 +20,29 @@ def index(request):
     return {
         'entries': query
     }
+
+@view_config(
+    route_name='resume'
+    , renderer='sontek:templates/resume.mako'
+)
+def resume(request):
+    with open(os.path.join(here, '../static/resume.json')) as f:
+        content = f.read()
+        data = json.loads(content)
+        dev = data['developer']
+        contact = data['contact']
+        preamble = data['preamble']
+        catalog = data['catalog']
+        experience = data['experiences']
+
+    return dict(
+        dev=dev
+        , contact=contact
+        , preamble=preamble
+        , catalog=catalog
+        , experience=experience
+    )
+
 
 @view_config(
     route_name='projects'

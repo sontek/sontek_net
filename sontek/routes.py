@@ -7,6 +7,7 @@ def includeme(config):
 
     config.add_route('favicon', '/favicon.ico')
     config.add_route('index', '/')
+    config.add_route('resume', '/resume')
     config.add_route('projects', '/projects')
     config.add_view('sontek.views.favicon_view', route_name='favicon')
 
