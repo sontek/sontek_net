@@ -82,3 +82,11 @@ h2 {
 .clear {
   clear: both;
 }
+
+pre {
+  width: 100% !important;
+}
+
+#posts {
+  width: 70%;
+}
