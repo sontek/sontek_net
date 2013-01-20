@@ -98,6 +98,9 @@ pre {
 #sidebar {
   position: absolute !important;
 }
+#sidebar ul {
+  margin-top: 10px !important;
+}
 
 .entry-content {
   border-bottom: dashed #CCC;
