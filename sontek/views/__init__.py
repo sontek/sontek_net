@@ -32,6 +32,10 @@ def about(request):
     route_name='resume'
     , renderer='sontek:templates/resume.mako'
 )
+@view_config(
+    route_name='resume.html'
+    , renderer='sontek:templates/resume_empty.mako'
+)
 def resume(request):
     with open(os.path.join(here, '../static/resume.json')) as f:
         content = f.read()

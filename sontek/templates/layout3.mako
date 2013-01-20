@@ -4,7 +4,6 @@
   <link rel="stylesheet" type="text/css" href="${request.static_url('sontek:static/css/svbtle.css')}">
   <!--<link rel="stylesheet/less" type="text/css" href="/theme/css/style.less">-->
   <!--<script src="/theme/js/less.js" type="text/javascript"></script>-->
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:800,400,300|Inconsolata' rel='stylesheet' type='text/css'>
   <link href="${request.static_url('sontek:static/css/sourcehighlight.css')}" rel="stylesheet">
   <link href="${request.static_url('sontek:static/css/main.css')}" rel="stylesheet">
 
