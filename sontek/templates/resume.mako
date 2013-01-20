@@ -6,7 +6,19 @@
   <div class="contact">
     <ul>
       % for c in contact:
-        <li>${c['method']} - ${c['value']}</li>
+      <li>
+        % if c['method'] == 'Github':
+          <a href="http://github.com/${c['value']}">${c['method']}</a>
+        % elif c['method'] == 'Twitter':
+          <a href="http://twitter.com/${c['value']}">${c['method']}</a>
+        % elif c['method'] == 'LinkedIn':
+          <a href="http://linkedin.com/in/${c['value']}">${c['method']}</a>
+        % elif c['method'] == 'Email':
+          <a href="mailto:${c['value']}">${c['value']}</a>
+        % else:
+          ${c['method']} ${c['value']}
+        % endif
+      </li>
       % endfor
     </ul>
   </div>

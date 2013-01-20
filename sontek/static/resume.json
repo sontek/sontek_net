@@ -6,9 +6,9 @@
     },
     "contact": [
         { "method": "Email", "value": "sontek@gmail.com" },
-        { "method": "Cell", "value": "770-500-9074" },
         { "method": "LinkedIn", "value": "sontek" },
-        { "method": "Github", "value": "sontek" }
+        { "method": "Github", "value": "sontek" },
+        { "method": "Twitter", "value": "sontek" }
     ],
     "preamble": { 
         "title": "Open Source Hacker",
@@ -20,12 +20,13 @@
             "skills": [
                 { "key": "python", "name": "Python" },
                 { "key": "csharp", "name": "C#" },
-                { "key": "javascript", "name": "JavaScript / ECMAScript" },
+                { "key": "javascript", "name": "JavaScript" },
+                { "key": "sql", "name": "SQL" },
                 { "key": "xml", "name": "XML/XSLT" },
                 { "key": "bash", "name": "Bash" }
             ]
         },
-        { 
+        {
             "name": "Frameworks",
             "skills": [
                 { "key": "django", "name": "Django", "href": "http://www.djangoproject.com/" },
@@ -73,15 +74,45 @@
     "experiences": [
         {
             "type": "professional",
+            "start": 2012,
+            "end": 2013,
+            "company": "EventRay",
+            "title": "Founder, CTO",
+            "description": "Founded a start-up with a team of 4, designed the architecture, and all the requirements.",
+            "accomplishments": [
+                "Large Pyramid/Python application sitting on top of SQLAlchemy, Celery, Redis, Nginx, and Gunicorn."
+                , "The web application works completely offline because it is developed all client-side using Backbone.js"
+                , "Dynamic survey and registration form builder with complete server and client side validation for conferences"
+                , "Ad-Hoc Reporting system utilizing Backbone.js and D3.js"
+                , "Created a traversal system for automatically generating a RESTful API based on SQLAlchemy models"
+                , "Mustache renderer for Pyramid so that our templates could be shared between the layers"
+                , "Created a library that generates json objects from gettext po files"
+                , "Managed and Automated the complete deployment of the system using Fabric"
+                , "Using an EventAggregator and socket.io I created a way to allow users to collaborate on organizing their conference"
+            ],
+            "skillKeys": [
+                { "key": "python" },
+                { "key": "javascript" },
+                { "key": "postgresql" },
+                { "key": "celery" },
+                { "key": "redis" },
+                { "key": "pyramid" },
+                { "key": "backbone" },
+                { "key": "nginx" },
+                { "key": "vim" }
+            ]
+        },
+        {
+            "type": "professional",
             "start": 2011,
             "end": 2012,
-            "company": "Pictage",
+            "company": "Pictage (ShootQ)",
             "title": "Senior Developer",
             "description": "Developed web applications and services for professional photographers.",
             "accomplishments": [
             "Large Turbogears applications utilizing SQLAlchemy, Celery, Redis, MongoDB, and plenty of javascript. Each developer was in charge of the full stack of whatever they worked on.",
             "Integrated with Amazon S3, Facebook, Twitter, and Salesforce",
-            "ShootQ - A web service used by photographers to manage their business and CRM data.  Worked with a variety of technologies to solve unique problems from caching and document storage in MongoDB to an asynchronous message passing system for distributing asynchronous work.",
+            "ShootQ - A web service used by photographers to manage their business and CRM data.  Worked with a variety of technologies to solve unique scalability problems, including varnish, redis, and RabbitMQ.",
             "Nimbus and Atrium - A unified “website/blog” and “customer identity” platform used by photographers to establish online presence for their businesses."
             ],
             "skillKeys": [
@@ -159,46 +190,6 @@
                 { "key": "jquery" },
                 { "key": "sqlserver" },
                 { "key": "vim" }
-            ]
-        },
-        {
-            "type": "personal",
-            "start": 2001,
-            "company": "Open Source",
-            "title": "Ninja Hacker",
-            "description": "I try to help improve and work on any open source projects that I use.",
-            "accomplishments": [
-"PyQuil - Crossplatform query analyzer",
-"Django - I contribute many patches to Django and was part of the PyCon 2011 sprints",
-"django-tictactoe - A realtime multiplayer tic tac toe game using redis, gevent, and socketio.",
-"django-tekblog - A blog engine using django and pygments for syntax highlighting",
-"django-tekextensions - A set of template tags, generic views, and extensions to django",
-"weechat - I maintain a couple of plugins to a console based IRC client",
-"coherence - A upnp server that works with xbox 360"
-            ],
-            "skillKeys": [
-                { "key": "csharp" },
-                { "key": "javascript" },
-                { "key": "xml" },
-                { "key": "python" },
-                { "key": "redis" },
-                { "key": "celery" },
-                { "key": "django" },
-                { "key": "flask" },
-                { "key": "appengine" },
-                { "key": "postgresql" },
-                { "key": "mysql" },
-                { "key": "sqlalchemy" },
-                { "key": "gtk" },
-                { "key": "gevent" },
-                { "key": "git" },
-                { "key": "svn" },
-                { "key": "vim" },
-                { "key": "nginx" },
-                { "key": "apache" },
-                { "key": "gunicorn" },
-                { "key": "linux" },
-                { "key": "socketio" }
             ]
         }
     ]
