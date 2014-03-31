@@ -66,7 +66,7 @@ html_sidebars = {
         'social.html',
         'recent.html',
         'searchbox.html',
-        'categories.html'
+        'categories.html',
         'tags.html',
     ]
 }
