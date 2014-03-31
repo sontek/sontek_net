@@ -5,5 +5,6 @@ Hello World!
 
 .. author:: default
 .. categories:: none
-.. tags:: none
+.. tags:: python, vim, emacs
+.. categories:: tech
 .. comments::
