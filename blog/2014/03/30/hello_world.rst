@@ -1,6 +1,10 @@
 Hello World!
 ============
+This is a test blog post.
 
+* one
+* two
+* three
 
 
 .. author:: default
