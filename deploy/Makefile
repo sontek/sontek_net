@@ -16,7 +16,7 @@ auth_keys:
 build: auth_keys ansible
 	( \
 	ansible --version ;\
-	vagrant up ;\
+	vagrant up --no-provision ;\
 	vagrant provision ;\
 )
 
