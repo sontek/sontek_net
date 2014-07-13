@@ -30,3 +30,6 @@ pip-log.txt
 
 production.ini
 blog/blog
+deploy/src
+.vagrant
+authorized_keys

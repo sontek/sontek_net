@@ -1,0 +1,38 @@
+vm_url = ENV.fetch('VAGRANT_IMAGE_PATH', 'https://dl.dropboxusercontent.com/u/31435348/fedora20.box')
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "sontek_net"
+    config.vm.box_url = vm_url
+    config.vm.network :private_network, ip: "192.168.21.253"
+    config.ssh.forward_agent = true
+
+    config.vm.provider :virtualbox do |vb|
+        # boot with headless mode
+        vb.gui = false
+
+        # Use VBoxManage to customize the VM. For example to change memory:
+        vb.customize [
+          "modifyvm", :id, "--memory", "2048", "--cpus", "2",
+        ]
+
+    end
+
+    # if you have multiple
+    # Share an additional folder to the guest VM. The first argument is the
+    # folder on the host, second is the folder on the guest.
+    config.vm.synced_folder 'src/', '/opt/src', :nfs => false
+
+    config.vm.provision :ansible do |ansible|
+        ansible.playbook = 'vagrant.yml'
+        ansible.verbose = true
+
+        ansible.verbose = 'vvv'
+        ansible.extra_vars = {
+            is_vagrant: true,
+            ansible_ssh_user: 'vagrant',
+            ansible_connection: 'ssh',
+            ansible_ssh_args: '-o ForwardAgent=yes -vvvv'
+        }
+    end
+
+end

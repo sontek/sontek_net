@@ -1,0 +1,10 @@
+---
+- hosts: vagrant
+  user: vagrant
+  vars:
+    user_group: sontek_dev
+    is_vagrant: True
+
+  roles:
+    - common
+    - sontek

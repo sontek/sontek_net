@@ -1,0 +1,14 @@
+---
+- name: Install nginx packages
+  sudo: true
+  yum: name={{item}}
+       state=latest
+
+  with_items:
+    - nginx
+
+- name: remove default nginx site
+  sudo: true
+  action: file path=/etc/nginx/sites-enabled/default state=absent
+  tags: nginx
+
