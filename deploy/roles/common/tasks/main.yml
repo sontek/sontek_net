@@ -10,6 +10,10 @@
        state=latest
   with_items:
     - git
+    - libxml2
+    - libxml2-devel
+    - libxslt
+    - libxslt-devel
     - python-devel
     - python-setuptools
 
@@ -54,3 +58,15 @@
   with_items:
     - pip
     - virtualenv
+
+- name: setup the sysctl.conf
+  sudo: true
+  template: src=sysctl.conf 
+            dest=/etc/sysctl.conf
+  notify: reload sysctl
+
+- name: setup the limits.conf
+  sudo: true
+  template: src=limits.conf 
+            dest=/etc/security/limits.conf
+  notify: reload sysctl
