@@ -44,7 +44,12 @@
 
 - name: setup selinux permissions
   sudo: true
-  command: chcon -R -t httpd_sys_content_t /opt/src/sontek_net/blog/blog/html
+  command: chcon -R -h system_u:object_r:httpd_sys_content_t /opt/src/sontek_net/blog/blog/html
+  when: is_vagrant is not defined or not is_vagrant
+
+- name: setup selinux permissions
+  sudo: true
+  command: chcon -R -h root:object_r:httpd_sys_content_t /opt/src/sontek_net/blog/blog/html
   when: is_vagrant is not defined or not is_vagrant
 
 - name: disable selinux
@@ -82,3 +87,8 @@
 - name: allow http on the firewall
   sudo: true
   command: firewall-cmd --add-service=http
+
+- name: ensure nginx is started
+  sudo: true
+  service: name=nginx
+           state=started
