@@ -8,8 +8,6 @@ TL;DR::
   $ cd dotfiles
   $ ./install.sh vim
 
-Download `PDF Version <http://sontek.net/media/uploads/vim.pdf>`_ 
-
 ============
 Intro
 ============
