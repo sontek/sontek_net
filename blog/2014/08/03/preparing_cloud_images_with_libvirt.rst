@@ -54,7 +54,7 @@ a disk to install the virtual server into. Resizing an image isn't an impossible
 task but it is much easier to choose a reasonable size for the purposed it will
 be used for.
 
-I primarily use 8gb disks that way we can fit all the system components required
+I primarily use 8 GB disks that way we can fit all the system components required
 as well as our own web applications. Any large files should be placed in a SAN
 or something like Dreamhost's dreamobjects.
 
