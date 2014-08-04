@@ -8,18 +8,18 @@ Why would you want to do this?
 Linux distributions like Fedora and Ubuntu already ship "cloud" images and most
 providers also have their own custom images for you to use, but I find it much
 more comforting to have full control of the software that is installed and I
-like the ability easily apply new security patches to base images.
+like the ability to easily apply new security patches to base images.
 
 I wouldn't use images to replace config management (CM) with something like
 `Salt <http://www.saltstack.com/>`_  or `Ansible <http://www.ansible.com/>`_
-but they are nice to give sane system defaults in things grub.conf, sysctl.conf,
+but they are nice to give sane system defaults in things like grub.conf, sysctl.conf,
 and shipping a chef or salt agent so that your CM engine can communicate with
 your server right away.
 
 Setting up your environment
 -----------------------------------
 The first thing you need to do is get a minimal install disk for the Linux
-distribution you want to use, I prefer using Fedora netinst disks but another
+distribution you want to use. I prefer using Fedora netinst disks but another
 popular option is Ubuntu Server.
 
 To get the latest Fedora here, you can choose "netinst" under Direct Downloads:
@@ -43,8 +43,8 @@ Ubuntu:
 
     apt-get install virtinst virt-viewer
 
-If you prefer a graphical user interface may use virt-manager instead, but I try
-to keep everything in the CLI that way it can be repeated easily.
+If you prefer a graphical user interface, you may use virt-manager instead, but I try
+to keep everything in the CLI; that way it can be repeated easily.
 
 
 Preparing your disk
