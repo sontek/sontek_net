@@ -133,7 +133,7 @@ Ubuntu:
       /dev/mapper/ubuntu--vg-root: clean, 57106/441504 files, 286779/1764352 blocks
       /dev/sda1: clean, 230/62248 files, 39833/248832 blocks
 
-Preparing for the cloud
+Preparing image for openstack
 ---------------------------------------------
 To prepare a virtual machine for the cloud, you will need to install the
 ``cloud-init`` package, which allows the cloud providers to inject certain system
@@ -160,6 +160,10 @@ You should also verify the user setting in this same config and define the user
 you plan to use, it will be where the authorized_keys file is setup for when
 the cloud provider injects your SSH key into the server.
 
+cloud-init will not create the user for you, it will just assign the SSH keypair
+and reset the password. So make sure the user defined in cloud.cfg is also
+created on the system.
+
 Once you have your cloud-init settings the way you want them just shutdown and
 run the sysprep command.
 
@@ -175,8 +179,85 @@ On the host machine:
 
     virt-sysprep -d base_server
 
-And now your image is ready to be uploaded to the cloud!
 
+Uploading your image to openstack
+---------------------------------------------
+Using the glance API it is very straight forward to upload the image to
+openstack. Just run the following command:
+
+.. sourcecode:: bash
+
+    glance image-create --name base_server --disk-format=qcow2 \
+    --container-format=bare --is-public=True --file server.qcow2 --progress
+
+Once the image upload completes you will be able to use it immediately within
+nova. You can reference it by name or by the id from `glance image-list`.
+
+To create your first instance from the image:
+
+.. sourcecode:: bash
+
+    nova boot --flavor m1.tiny --image base_server --key-name devops \
+    --security-groups free_for_all test_server
+
+Obviously the security groups, key name, and flavors are based on your
+installation of openstack but can all easily be queried from the nova API:
+
+.. sourcecode:: bash
+
+    nova flavor-list
+    nova secgroup-list
+    nova keypair-list
+
+
+Modifying an image
+---------------------------------------------
+Once you have ran sysprep on the image it can no longer be booted without
+being provided the cloud-init metdata, so to edit an existing image you need
+to use `virt-rescue`.
+
+First, check what the mount points should be:
+
+.. sourcecode:: bash
+
+    $ virt-rescue -a server.qcow2 --suggest
+
+Which should output something similar to this:
+
+.. sourcecode:: bash
+
+    mount /dev/mapper/ubuntu--vg-root /sysroot/
+    mount /dev/sda1 /sysroot/boot
+    mount --bind /dev /sysroot/dev
+    mount --bind /dev/pts /sysroot/dev/pts
+    mount --bind /proc /sysroot/proc
+    mount --bind /sys /sysroot/sys
+
+Save those commands, you will need them later. Next run the following:
+
+.. sourcecode:: bash
+
+    virt-rescue -a server.qcow2
+
+This brings up a shell that looks like this:
+
+.. sourcode:: bash
+
+    I have no name!@(none):/# 
+
+Run the previous mount commands in that shell and then run:
+
+.. sourcecode:: bash
+
+    chroot /sysroot
+    /bin/bash
+
+You now have a working shell in your base image for editing configuration.
+This shell does not have networking access or anything so you are limited
+on what you can do but if you need to add new users, update cloud.cfg, or
+anything like that it is perfect.
+
+You can run the glance-upload immediately after making changes in that shell.
 
 .. author:: default
 .. categories:: devops
