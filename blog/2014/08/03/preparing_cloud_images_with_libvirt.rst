@@ -49,22 +49,22 @@ to keep everything in the CLI; that way it can be repeated easily.
 
 Preparing your disk
 -----------------------------------
-Now that you have a base ISO and the tools necessary, let's get started by creating
+Now that you have a base ISO and the tools necessary lets get started by creating
 a disk to install the virtual server into. Resizing an image isn't an impossible
-task but it is much easier to choose a reasonable size disk for the purpose it will
+task but it is much easier to choose a reasonable size for the purposed it will
 be used for.
 
-I primarily use 8 GB disks -- that way we can fit all the system components required
+I primarily use 8gb disks that way we can fit all the system components required
 as well as our own web applications. Any large files should be placed in a SAN
 or something like Dreamhost's dreamobjects.
 
-The other big decision you must make upfront is what disk format you want to use,
-the trade-off is disk space vs performance. The two primary formats are
+The other big decision you must make upfront is what disk format you want to use 
+-- the trade-off is disk space vs performance. The two primary formats are
 qcow2 (QEMU Copy on Write) and Raw. qcow2 is great if you have limited disk space
-and don't want to allocate the full 8gb up front. Raw is preferred if you want
+and don't want to allocate the full 8 GB up front. Raw is preferred if you want
 the best performance.
 
-If you choose qcow2 you also need to make sure you have qemu-img:
+If you choose qcow2, you'll also need to make sure you have ``qemu-img``:
 
 Fedora:
 
@@ -94,17 +94,17 @@ Create a qcow2 disk:
 
 Installing your distribution onto the disk
 ---------------------------------------------
-We will use the virt-install command to get the distribution installed
+We will use the ``virt-install`` command to get the distribution installed
 onto the disk image.
 
-To use qcow2:
+To install Fedora on a qcow2 disk image:
 
 .. sourcecode:: bash
 
     virt-install --name base_server --ram 1024 --cdrom=./Fedora-20-x86_64-netinst.iso \
     --disk path=./server.qcow2,format=qcow2
 
-To use raw:
+To install Ubuntu Server on a raw disk image:
 
 .. sourcecode:: bash
 
@@ -121,7 +121,7 @@ Fedora:
 
 Ubuntu:
 
-- Be sure to select OpenSSH server, it wont install it by default
+- Be sure to select OpenSSH server, it won't install it by default. 
 - On Ubuntu 12.04 there is a bug that makes it hang after running fsck. You
   will need to edit grub to get it to boot, hit _e_ at the boot prompt and
   add "nomodeset" on the linux line. You will know you need to do this if your
@@ -135,8 +135,8 @@ Ubuntu:
 
 Preparing for the cloud
 ---------------------------------------------
-To prepare a virtual machine for the cloud you will need to install the
-cloud-init package, which allows the cloud providers to inject certain system
+To prepare a virtual machine for the cloud, you will need to install the
+``cloud-init`` package, which allows the cloud providers to inject certain system
 settings when creating servers based on the image.  These are things like
 hostname and ssh keys.
 
