@@ -1,7 +1,7 @@
-Preparing cloud images with libvirt
-===================================
+Preparing custom images for openstack
+========================================
 This article will show you how to use libvirt to create base images that can be
-uploaded to the cloud (Rackspace) or an OpenStack private cloud.
+uploaded to OpenStack.
 
 Why would you want to do this?
 -----------------------------------
@@ -152,10 +152,9 @@ On Ubuntu:
 
     apt-get install cloud-init
 
-Then you need to just configure cloud-init for the provider you will be using
-your image on.  You can check /etc/cloud/cloud.cfg and update the
-datasources_list section. OpenStack uses EC2 metadata, so include EC2 metadata
-if you are installing on OpenStack.
+Then you need to just configure cloud-init by editing /etc/cloud/cloud.cfg and
+update the datasources_list section to include EC2. OpenStack uses EC2 metadata
+for cloud-init.
 
 You should also verify the user setting in this same config and define the user
 you plan to use, it will be where the authorized_keys file is setup for when
