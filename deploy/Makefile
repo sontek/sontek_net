@@ -1,27 +1,25 @@
 HERE = $(shell pwd)
 ANSIBLE = $(VENV)/bin/ansible
 
-.PHONY: all build clean auth_keys
+.PHONY: all build clean
 
-all: build
+all: 
+	echo "Please run make local or make vagrant"
 
-clean:
+virtualenv:
+	virtualenv $(ANSIBLE)
+	$(ANSIBLE)/bin/pip install ansible
+
+vagrant: viirtualenv
+	$(ANSIBLE)/bin/ansible --version
+	vagrant up --no-provision
+	vagrant provision
+	$(ANSIBLE)/bin/ansible-playbook vagrant.yml --private-key=./files/vagrant.priv
+
+local: virtualenv
+	$(ANSIBLE)/bin/ansible --version
+	$(ANSIBLE)/bin/ansible-playbook local.yml
+
+clean-vagrant:
 	vagrant destroy
 	rm authorized_keys
-
-auth_keys:
-	cat ~/.ssh/id_rsa.pub > $(HERE)/authorized_keys
-	cat files/vagrant.pub >> $(HERE)/authorized_keys
-
-build: auth_keys ansible
-	( \
-	ansible --version ;\
-	vagrant up --no-provision ;\
-	vagrant provision ;\
-)
-
-ansible:
-	( \
-	ARCHFLAGS="-Wno-error=unused-command-line-argument-hard-error-in-future" pip install ansible ;\
-	ansible --version ;\
-)
