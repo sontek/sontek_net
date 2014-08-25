@@ -21,19 +21,4 @@ Vagrant.configure("2") do |config|
     # Share an additional folder to the guest VM. The first argument is the
     # folder on the host, second is the folder on the guest.
     config.vm.synced_folder 'src/', '/opt/src', :nfs => false
-
-    config.vm.provision :ansible do |ansible|
-        ansible.playbook = 'vagrant.yml'
-        ansible.verbose = true
-        ansible.inventory_path = './hosts'
-        ansible.limit = 'all'
-        ansible.verbose = 'vvv'
-        ansible.extra_vars = {
-            is_vagrant: true,
-            ansible_ssh_user: 'vagrant',
-            ansible_connection: 'ssh',
-            ansible_ssh_args: '-o ForwardAgent=yes -vvvv'
-        }
-    end
-
 end
