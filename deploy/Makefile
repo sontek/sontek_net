@@ -1,5 +1,5 @@
 HERE = $(shell pwd)
-ANSIBLE = $(VENV)/bin/ansible
+VENV = .venv
 
 .PHONY: all build clean
 
@@ -7,18 +7,18 @@ all:
 	echo "Please run make local or make vagrant"
 
 virtualenv:
-	virtualenv $(ANSIBLE)
-	$(ANSIBLE)/bin/pip install ansible
+	virtualenv $(VENV) --system-site-packages
+	$(VENV)/bin/pip install ansible
 
 vagrant: viirtualenv
-	$(ANSIBLE)/bin/ansible --version
+	$(VENV)/bin/ansible --version
 	vagrant up --no-provision
 	vagrant provision
-	$(ANSIBLE)/bin/ansible-playbook vagrant.yml --private-key=./files/vagrant.priv
+	$(VENV)/bin/ansible-playbook vagrant.yml --private-key=./files/vagrant.priv
 
 local: virtualenv
-	$(ANSIBLE)/bin/ansible --version
-	$(ANSIBLE)/bin/ansible-playbook local.yml
+	$(VENV)/bin/ansible --version
+	$(VENV)/bin/ansible-playbook local.yml
 
 clean-vagrant:
 	vagrant destroy

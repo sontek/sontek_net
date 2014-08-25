@@ -45,17 +45,17 @@
 - name: setup selinux permissions
   sudo: true
   command: chcon -R -h system_u:object_r:httpd_sys_content_t /opt/src/sontek_net/blog/blog/html
-  when: is_vagrant is not defined or not is_vagrant
+  when: enable_selinux
 
 - name: setup selinux permissions
   sudo: true
   command: chcon -R -h root:object_r:httpd_sys_content_t /opt/src/sontek_net/blog/blog/html
-  when: is_vagrant is not defined or not is_vagrant
+  when: enable_selinux
 
 - name: disable selinux
   sudo: true
   command: setenforce 0
-  when: is_vagrant is defined and is_vagrant
+  when: not enable_selinux
 
 - name: Install nginx packages
   sudo: true

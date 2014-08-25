@@ -5,6 +5,7 @@
     user_group: sontek_dev
     is_vagrant: True
     hostname: localsontek
+    enable_selinux: False
   roles:
     - common
     - sontek
