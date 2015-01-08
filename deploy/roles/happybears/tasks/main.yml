@@ -1,0 +1,19 @@
+- name: downloading source of happybears locally
+  local_action: git
+       repo=https://github.com/sontek/happybears.git
+       dest=src/happybears
+       accept_hostkey=true
+  when: is_vagrant is defined and is_vagrant
+
+- name: downloading source of services remotely
+  git:
+       repo=https://github.com/sontek/happybears.git
+       dest=/opt/src/happybears
+       accept_hostkey=true
+  when: is_vagrant is not defined or not is_vagrant
+
+- name: setup the happybears nginx conf
+  sudo: true
+  template: src=happybears_nginx.conf
+            dest=/etc/nginx/conf.d/happybears.conf
+  notify: restart nginx
