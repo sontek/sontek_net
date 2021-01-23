@@ -34,3 +34,4 @@ deploy/src
 .vagrant
 authorized_keys
 .venv
+.node_modules/

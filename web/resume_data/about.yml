@@ -1,0 +1,26 @@
+name: John M. Anderson
+description: Full-stack software developer who loves DevOps, Python, and Rust.
+
+location:
+  city: Luquillo, PR
+
+contact:
+  website: https://sontek.net
+  email: john@sontek.net
+  linkedin: https://www.linkedin.com/in/sontek
+  github: https://github.com/sontek
+  twitter: https://twitter.com/sontek
+  stackoverflow: https://stackoverflow.com/users/17176/sontek
+
+skills:
+  - Linux
+  - Python
+  - Postgres
+  - Redis
+  - Memcached
+  - Ansible
+  - Docker
+  - AWS
+  - React.js
+  - react-native
+  - electron
