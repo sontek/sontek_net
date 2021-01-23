@@ -1,29 +1,11 @@
-FROM python:3.9-alpine as build
-ENV POETRY_VIRTUALENVS_CREATE=false
-
+# Using buster-slim because google-closure-compiler-linux
+# is dynamically linked to glibc.
+# TODO: Check if buster-slim or alpine with glibc is smaller
+FROM node:15-buster-slim as dev
 WORKDIR /srv
-RUN apk add --update gcc musl-dev libffi-dev openssl-dev make yaml-dev
-RUN pip install --upgrade pip setuptools poetry
-
-COPY pyproject.toml poetry.lock ./
-RUN poetry install --no-dev
-RUN poetry export -f requirements.txt -o requirements.txt --without-hashes
-RUN pip wheel -w wheelhouse -r requirements.txt
-
-EXPOSE 8000
-COPY . .
-RUN poetry build
-FROM build as dev
-
-WORKDIR /srv
-RUN poetry install
-CMD [ "uvicorn", "stkweb.server:app", "--host", "0.0.0.0", "--reload" ]
-
-FROM python:3.9-alpine as prod
-WORKDIR /srv
-COPY --from=build /srv/wheelhouse/ ./wheelhouse
-COPY --from=build /srv/dist/ ./dist
-RUN pip install dist/*.whl --find-links ./wheelhouse
-
-CMD [ "gunicorn", "--worker-class", "uvicorn.workers.UvicornWorker", "stkweb.server:app", "--bind", "0.0.0.0" ]
-
+COPY package.json yarn.lock ./
+RUN yarn
+COPY . ./
+RUN yarn build
+EXPOSE 3000
+CMD ["yarn", "start"]

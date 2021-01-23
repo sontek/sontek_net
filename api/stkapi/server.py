@@ -1,3 +1,4 @@
+import os
 import yaml
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,8 +8,8 @@ cwd = Path(__file__)
 app = FastAPI()
 
 origins = [
-    "http://localhost",
-    "http://localhost:8000",
+    f"http://{os.environ['STK_HOSTNAME']}/",
+    f"https://{os.environ['STK_HOSTNAME']}/"
 ]
 
 app.add_middleware(
@@ -32,7 +33,6 @@ async def resume():
     with open(resume_path / 'projects.yml') as f:
         project_data = yaml.load(f, Loader=Loader)
 
-    breakpoint()
     return {"message": "Hello World"}
 
 @app.get("/hello")

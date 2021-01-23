@@ -1,22 +1,42 @@
 version: "3.9"
 services:
-  stkweb:
+  web:
     build:
       target: dev
       context: ./web/
-
+    ports:
+      - "3000:3000"
     volumes:
-      - "./web/:/srv"
+      - "./web/:/srv/"
+      - "./shared_volume/web:/srv/dist/"
+      # overwrite the volume to still keep
+      # node_modules in the container
+      - "/srv/node_modules"
 
-  stknginx:
+  api:
+    build:
+      target: dev
+      context: ./api/
+    environment:
+      - STK_HOSTNAME=sontek.local
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./api/:/srv"
+      - "./shared_volume/:/shared_volume"
+
+  nginx:
     build:
       context: ./nginx/
     ports:
       - "80:80"
+      - "443:443"
     environment:
-      - STK_WEB_HOST=stkweb
+      - STK_HOSTNAME=sontek.local
+      - STK_API_HOST=api
     volumes:
       - "./nginx/default.conf:/etc/nginx/conf.d/default.conf.template"
+      - "./shared_volume/:/usr/share/nginx/html/"
     depends_on:
-      - stkweb
+      - web
 

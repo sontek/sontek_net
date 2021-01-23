@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "stkweb"
+name = "stkapi"
 version = "0.1.0"
 description = ""
 authors = ["John Anderson <sontek@gmail.com>"]

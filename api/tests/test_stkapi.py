@@ -1,4 +1,4 @@
-from stkweb import __version__
+from stkapi import __version__
 
 
 def test_version():

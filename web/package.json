@@ -1,0 +1,44 @@
+{
+  "name": "stkweb",
+  "version": "1.0.0",
+  "author": "John Anderson",
+  "description": "Web from sontek.net",
+  "license": "ISC",
+  "main": "index.js",
+  "browserslist": [
+    "defaults"
+  ],
+  "scripts": {
+    "dev:js": "rollup -c -w",
+    "dev:css": "postcss app/css/index.css -o app/bundle.css -w",
+    "dev:server": "browser-sync app --files \"app/**/*, !app/css/**, !app/js/**\" --no-open --no-notify",
+    "prod:server": "browser-sync dist --no-open --no-notify --no-ghost-mode",
+    "build:pre:js": "rollup -c --environment NODE_ENV:production",
+    "build": "rimraf dist && concurrently yarn:build:pre:* && concurrently yarn:build:post:*",
+    "start": "concurrently --kill-others yarn:dev:*",
+    "production": "yarn run build && yarn run prod:server"
+  },
+  "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@rollup/plugin-node-resolve": "^11.1.0",
+    "@web/rollup-plugin-html": "^1.4.0",
+    "browser-sync": "^2.26.13",
+    "concurrently": "^5.3.0",
+    "cssnano": "^4.1.10",
+    "import-http": "^0.3.1",
+    "postcss": "^8.2.4",
+    "postcss-cli": "^8.3.1",
+    "postcss-easings": "^3.0.1",
+    "postcss-import": "^14.0.0",
+    "postcss-import-url": "^6.0.0",
+    "postcss-preset-env": "6.7.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.38.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-postcss": "^4.0.0",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "dependencies": {}
+}
