@@ -1,15 +1,37 @@
 version: "3.9"
-services:
-  stkapi:
-    image: sontek/stkapi
 
-  stknginx:
-    image: sontek/stknginx
+volumes:
+  fe-data:
+
+services:
+  web:
+    build:
+      context: ./web/
+    image: sontek/web:prod
+    volumes:
+       - fe-data:/srv/dist
+
+  api:
+    build:
+      context: ./api/
+    image: sontek/api:prod
+    environment:
+      - STK_HOSTNAME=sontek.net
+    ports:
+      - "8000:8000"
+
+  nginx:
+    build:
+      context: ./nginx/
+    image: sontek/nginx:prod
     ports:
       - "80:80"
       - "443:443"
     environment:
-      - STK_API_HOST=stkapi
       - STK_HOSTNAME=sontek.net
+      - STK_API_HOST=api
+    volumes:
+       - fe-data:/usr/share/nginx/html/
     depends_on:
-      - stkapi
+      - web
+

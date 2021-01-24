@@ -4,7 +4,8 @@ import { terser } from "rollup-plugin-terser";
 import compiler from "@ampproject/rollup-plugin-closure-compiler";
 import { default as importHTTP } from "import-http/rollup";
 import babel from "rollup-plugin-babel";
-import html from "@web/rollup-plugin-html";
+import copy from "rollup-plugin-copy";
+
 
 const assets = ["index"];
 
@@ -13,13 +14,11 @@ export default assets.map((name, index) => {
   /* PROD CONFIG */
   if (process.env.NODE_ENV === "production") {
     config = {
-      input: `app/js/${name}`.js,
+      input: `app/js/${name}.js`,
       output: {
         dir: "dist",
         format: "esm",
         sourcemap: true,
-        entryFileNames: "[name].[hash].js",
-        chunkFileNames: "[name].[hash].js",
       },
       plugins: [
         resolve(),
@@ -34,19 +33,21 @@ export default assets.map((name, index) => {
         }),
         compiler(),
         terser(),
-        html({ input: `app/${name}.html` }),
+        copy({
+          targets: [
+            { src: 'app/index.html', dest: 'dist' },
+          ]
+        }),
       ],
     };
   } else {
-  /* DEV CONFIG */
+    /* DEV CONFIG */
     config = {
-      input: `app/js/${name}`.js,
+      input: `app/js/${name}.js`,
       output: {
         dir: "dist",
         format: "esm",
         sourcemap: "inline",
-        entryFileNames: "[name].[hash].js",
-        chunkFileNames: "[name].[hash].js",
       },
       plugins: [
         resolve(),
@@ -66,7 +67,11 @@ export default assets.map((name, index) => {
             ],
           ],
         }),
-        html({ input: `app/${name}.html` }),
+        copy({
+          targets: [
+            { src: 'app/index.html', dest: 'dist' },
+          ]
+        }),
       ],
       watch: {
         exclude: ["node_modules/**"],

@@ -17,18 +17,14 @@ https://easings.net
 */
 
 :root {
-  --surface: lch(10 0 0);
+  --surface: hsl(0, 5%, 10%);
   --text: lch(80 0 0);
-  --brand: lch(64 40 347);
+  --brand: hsl(188, 55%, 44%);
 
   @media (prefers-color-scheme: light) {
     --surface: lch(98 0 0);
     --text: lch(30 0 0);
-    --brand: lch(65 64 350);
-
-    @media (dynamic-range: high) {
-      --brand: color(display-p3 1 0 1);
-    }
+    --brand: hsl(188, 55%, 54%);
   }
 }
 
