@@ -10,10 +10,10 @@
   ],
   "scripts": {
     "dev:js": "rollup -c -w",
-    "dev:css": "postcss app/css/index.css -o dist/bundle.css -w",
+    "dev:css": "postcss app/css/index.css -o dist/index.css -w",
     "dev:server": "browser-sync app --files \"app/**/*, !app/css/**, !app/js/**\" --no-open --no-notify",
     "prod:server": "browser-sync dist --no-open --no-notify --no-ghost-mode",
-    "build:pre:css": "postcss app/css/index.css -o dist/bundle.css --env production",
+    "build:pre:css": "postcss app/css/index.css -o dist/index.css --env production",
     "build:pre:js": "rollup -c --environment NODE_ENV:production",
     "build": "rimraf dist && concurrently yarn:build:pre:* && concurrently yarn:build:post:*",
     "start": "rimraf dist/* && concurrently --kill-others yarn:dev:*",

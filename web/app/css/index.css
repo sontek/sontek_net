@@ -81,3 +81,7 @@ p {
 ::selection {
   background-color: var(--brand);
 }
+
+.center {
+  text-align: center;
+}
