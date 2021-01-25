@@ -2,6 +2,7 @@ version: "3.9"
 
 volumes:
   fe-data:
+  certbot-data:
 
 services:
   web:
@@ -9,7 +10,7 @@ services:
       context: ./web/
     image: sontek/web:prod
     volumes:
-       - fe-data:/srv/dist
+       - fe-data:/fe-data
 
   api:
     build:
@@ -31,7 +32,9 @@ services:
       - STK_HOSTNAME=sontek.net
       - STK_API_HOST=api
     volumes:
-       - fe-data:/usr/share/nginx/html/
+      - fe-data:/usr/share/nginx/html/
+      - /certbot-data/certbot/conf:/etc/letsencrypt
+      - /certbot-data/certbot/www:/var/www/certbot
     depends_on:
       - web
 

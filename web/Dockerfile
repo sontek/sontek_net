@@ -7,11 +7,11 @@ COPY package.json yarn.lock ./
 RUN yarn
 COPY . ./
 RUN yarn build
-RUN cp -R dist/ dist_backup/
 EXPOSE 3000
 CMD ["yarn", "start"]
 
 FROM alpine as prod
 WORKDIR /srv
-COPY --from=dev /srv/dist /srv/dist_backup
-CMD ["cp", "-R", "/srv/dist_backup/", "/srv/dist/web"]
+RUN apk add rsync --update
+COPY --from=dev /srv/dist/ /srv/dist/
+CMD ["rsync", "-vh", "-a", "--delete", "/srv/dist/", "/fe-data/web/"]
