@@ -1,5 +1,8 @@
 Writing tests for Pyramid and SQLAlchemy
 ========================================
+:category: python
+:tags: python, pyramid, sqlalchemy
+:date: 2011-12-01
 
 TL;DR:  Putting it all together, the full code can be found here: https://gist.github.com/1420255
 
@@ -295,7 +298,4 @@ Resources
 
 |copy| John Anderson <sontek@gmail.com> 2011
 
-.. author:: default
-.. categories:: python
-.. tags:: python, pyramid, sqlalchemy
-.. comments::
+

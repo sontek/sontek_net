@@ -16,6 +16,8 @@ services:
     build:
       context: ./api/
     image: sontek/api:prod
+    volumes:
+       - fe-data:/fe-data
     environment:
       - STK_HOSTNAME=sontek.net
     ports:
@@ -37,4 +39,4 @@ services:
       - /certbot-data/certbot/www:/var/www/certbot
     depends_on:
       - web
-
+      - api

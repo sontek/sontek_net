@@ -1,5 +1,9 @@
 Preparing custom images for OpenStack
 ========================================
+:category: devops
+:tags: linux, openstack, libvirt
+:date: 2014-08-03
+
 This article will show you how to use libvirt to create base images that can be
 uploaded to OpenStack.
 
@@ -212,8 +216,4 @@ installation of OpenStack but can all easily be queried from the nova API:
 And you are done! You'll be able to re-use your new image as a base for all
 new instances you spin up in openstack!
 
-.. author:: default
-.. categories:: devops
-.. tags:: linux, openstack, libvirt
-.. comments::
 

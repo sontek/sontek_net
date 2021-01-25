@@ -1,5 +1,9 @@
 Turning Vim into a modern Python IDE
 ====================================
+:category: python
+:tags: vim, python
+:date: 2011-05-07
+
 .. contents::
 
 TL;DR::
@@ -309,7 +313,5 @@ If you want to find a new color scheme just go to http://code.google.com/p/vimco
 |copy| John Anderson <sontek@gmail.com> 2011
 
 
-.. author:: default
-.. categories:: python
-.. tags:: vim, python
-.. comments::
+
+

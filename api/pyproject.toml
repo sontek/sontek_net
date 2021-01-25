@@ -12,9 +12,11 @@ fastapi = "^0.63.0"
 PyYAML = "5.4.1"
 uvloop = "^0.14.0"
 httptools = "^0.1.1"
+pelican = "^4.5.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+supervisor = "^4.2.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

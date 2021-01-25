@@ -1,5 +1,8 @@
 Caesar Cipher in Python
 =======================
+:category: none
+:tags: python, interviews
+:date: 2010-11-15
 
 I'm currently teaching my wife to code and one of the problems that we worked on to teach her some fundamental programming concepts was re-implementing the caesar cipher in python. It was fun not only to code but to also start sending each other "secret" messages!
 
@@ -115,7 +118,3 @@ This would prove that you are a decent problem solver and have enough of the lan
 
 Do get more information on string.letters and string.maketrans you can visit their documentation [here](http://docs.python.org/library/string.html)
 
-.. author:: default
-.. categories:: none
-.. tags:: python, interviews
-.. comments::

@@ -1,13 +1,17 @@
 #!/usr/bin/env sh
 set -eu
 
-domains="sontek.net,www.sontek.net"
+domains="$STK_HOSTNAME,www.$STK_HOSTNAME"
 rsa_key_size=4096
 conf_path="/etc/letsencrypt/"
 web_path="/var/www/certbot/"
 email="john@sontek.net"
 
-if [ -d "$conf_path/live/sontek.net/" ]; then
+echo "+===== ENV VARS $STK_HOSTNAME"
+if [[ $STK_HOSTNAME == "sontek.local" ]]; then
+  echo "Not running LetsEncrypt since we are in dev"
+  envsubst < /etc/nginx/conf.d/http.conf.template > /etc/nginx/conf.d/default.conf 
+elif [ -d "$conf_path/live/$STK_HOSTNAME/" ]; then
   echo "### Existing data found for $domains. Not running certbot. Using SSL nginx"
   envsubst < /etc/nginx/conf.d/ssl.conf.template > /etc/nginx/conf.d/default.conf 
 else

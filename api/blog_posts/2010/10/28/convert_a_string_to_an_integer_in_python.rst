@@ -1,5 +1,8 @@
 Convert a string to an integer in Python
 ========================================
+:category: python
+:tags: python, interviews
+:date: 2010-10-28
 
 A fun interview question some developers like to ask is to have you convert ascii characters to an integer without using built in methods like string.atoi or int().
 
@@ -48,6 +51,7 @@ So if we have the string '1234', we can get each of the individual numbers by lo
     ... 
     >>> print num_list
     [1, 2, 3, 4]
+
 but now how to we combine all these together to get 1234?  You can't just add them up because you'll just get 1+2+3+4 = 10.
 
 So, we have to get 1000 + 200 + 30 + 4, which is a simple problem to solve. Its just number times 10 to the nth power, so the final solution is:
@@ -70,7 +74,3 @@ This code is a little verbose though, lets make it a dirty nasty one liner!
     >>> sum([(ord(n)-ord('0')) * (10 ** i) for i,n in enumerate(reversed('1234'))])
     1234
 
-.. author:: default
-.. categories:: python
-.. tags:: python, interviews
-.. comments::

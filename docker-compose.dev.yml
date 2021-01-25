@@ -25,7 +25,7 @@ services:
       - "8000:8000"
     volumes:
       - "./api/:/srv"
-      - "./shared_volume/:/shared_volume"
+      - "./shared_volume/blog:/srv/output/"
 
   nginx:
     build:

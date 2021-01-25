@@ -18,21 +18,25 @@ RUN python3 -c "import yaml; yaml.CLoader"
 EXPOSE 8000
 COPY . .
 RUN poetry build
+RUN pelican
 
 FROM build as dev
 WORKDIR /srv
 RUN poetry install
-CMD [ "uvicorn", "stkapi.server:app", "--host", "0.0.0.0", "--reload" ]
+CMD ["supervisord", "-n", "-c", "supervisor.ini"]
 
 FROM python:3.9-slim-buster as prod
 WORKDIR /srv
+RUN apt update
+RUN apt install rsync -y
 COPY --from=build /srv/wheelhouse/ ./wheelhouse
 COPY --from=build /srv/dist/ ./dist
+COPY --from=build /srv/output/ ./output/
 RUN pip3 install --no-index --find-links ./wheelhouse/ wheelhouse/*.whl
 RUN pip3 install --no-index --find-links ./wheelhouse/ dist/*.whl
 
 # verify that YAML is fast.
 RUN python3 -c "import yaml; yaml.CLoader"
 
-CMD [ "gunicorn", "--worker-class", "uvicorn.workers.UvicornWorker", "stkapi.server:app", "--bind", "0.0.0.0" ]
-
+COPY docker-entrypoint.sh /
+ENTRYPOINT /docker-entrypoint.sh

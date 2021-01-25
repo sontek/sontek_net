@@ -1,5 +1,9 @@
 Tips and Tricks for the Python Interpreter
 ==========================================
+:category: python
+:tags: python
+:date: 2010-12-28
+
 I have seen a lot of people switch over to using ipython, bpython, etc
 to get auto-complete support without realizing that the standard
 interpreter does have this functionality.
@@ -126,7 +130,5 @@ If you want to see my complete ~/.pythonrc.py you can get it on
 
 
 
-.. author:: default
-.. categories:: python
-.. tags:: python
-.. comments::
+
+

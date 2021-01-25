@@ -39,3 +39,4 @@ node_modules/
 app/bundle.css
 app/bundle.js
 yarn-error.log
+api/output/
