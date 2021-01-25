@@ -1,0 +1,42 @@
+version: "3.9"
+
+volumes:
+  fe-data:
+  certbot-data:
+
+services:
+  web:
+    build:
+      context: ./web/
+    image: sontek/web:prod
+    volumes:
+       - fe-data:/fe-data
+
+  api:
+    build:
+      context: ./api/
+    image: sontek/api:prod
+    volumes:
+       - fe-data:/fe-data
+    environment:
+      - STK_HOSTNAME=sontek.net
+    ports:
+      - "8000:8000"
+
+  nginx:
+    build:
+      context: ./nginx/
+    image: sontek/nginx:prod
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - STK_HOSTNAME=sontek.net
+      - STK_API_HOST=api
+    volumes:
+      - fe-data:/usr/share/nginx/html/
+      - /certbot-data/certbot/conf:/etc/letsencrypt
+      - /certbot-data/certbot/www:/var/www/certbot
+    depends_on:
+      - web
+      - api

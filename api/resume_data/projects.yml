@@ -1,0 +1,36 @@
+projects:
+  - name: gevent-socketio
+    url: https://github.com/abourget/gevent-socketio/graphs/contributors
+    description: >
+      A WebSocket-like abstraction that enables real-time communication
+      between a browser and a gevent server. I was co-maintainer and have
+      contributed the most code to the project.
+
+  - name: snowmachine
+    url: https://github.com/sontek/snowmachine
+    description: >
+      A cross platform (Linux, Mac, Windows, Android) script that makes
+      your terminal snow. Python2 and Python3 compatible
+
+  - name: Bulby
+    url: https://github.com/sontek/bulby
+    description: >
+      Python library for managing the phillips hue lightbulbs
+
+  - name: OAuth2 Client
+    url: https://github.com/sontek/oauth2_client
+    description: >
+      A small OAuth2 client compatible with the final draft. Developed
+      mostly to try to implement something completely off of a spec.
+
+  - name: OAuth2 Provider
+    url: https://github.com/sontek/oauth2_provider
+    description: >
+      A small OAuth2 provider compatible with the final draft. Developed
+      mostly to try to implement something completely off of a spec.
+
+  - name: PyQuil
+    url: https://github.com/sontek/PyQuil
+    description: >
+      A Python/GTK SQL query application. Allows you to inspect your
+      databases and query them easily

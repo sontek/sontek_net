@@ -1,3 +1,0 @@
-- name: reload sysctl
-  sudo: true
-  command: sysctl -p
