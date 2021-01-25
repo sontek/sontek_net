@@ -12,7 +12,7 @@ prod:
 	docker-compose -f docker-compose.prod.yml build
 	docker-compose -f docker-compose.prod.yml push
 	docker-compose -f docker-compose.prod.yml --context sontek_net pull
-	docker-compose -f docker-compose.prod.yml --context sontek_net up
+	docker-compose -f docker-compose.prod.yml --context sontek_net up -d
 
 reload_nginx:
 	docker exec -ti sontek_net_nginx_1 docker-entrypoint.d/docker-entrypoint.sh
