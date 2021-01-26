@@ -40,10 +40,11 @@ body {
   background: var(--surface);
   color: var(--text);
   font-family: system-ui, sans-serif;
-  padding: var(--body-padding)
+  padding: var(--body-padding);
+  margin: 0;
 }
 
-body,p,ol,ul,dl,dd,dt,figure,
+p,dl,dd,dt,figure,
 h1,h2,h3,h4,h5,h6,small {
   margin: 0;
   padding: 0;
