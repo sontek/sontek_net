@@ -9,8 +9,13 @@
   --link-u-low: hsl(200, 100%, 13%);
 
   /* mobile variables */
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 1000px) {
     --body-padding: 15px;
+  }
+
+  @media only screen and (max-width: 800px) {
+    --body-padding: 5px;
+    --content-width: 100%;
   }
 
   @media (prefers-color-scheme: light) {
@@ -35,12 +40,14 @@ body {
   background: var(--surface);
   color: var(--text);
   font-family: system-ui, sans-serif;
-  padding: var(--body-padding)
+  padding: var(--body-padding);
+  margin: 0;
 }
 
-body,p,ul,dl,dd,dt,figure,
+p,dl,dd,dt,figure,
 h1,h2,h3,h4,h5,h6,small {
   margin: 0;
+  padding: 0;
 }
 
 h1 {
@@ -126,6 +133,10 @@ pre {
 .grid {
   display: flex;
   flex-direction: row;
+  @media only screen and (max-width: 1000px) {
+    display: block;
+  }
+
   flex-wrap: wrap;
   width: 100%;
   justify-content: flex-start;
@@ -141,3 +152,26 @@ pre {
   flex: 1;
 }
 
+#banner a {
+  background: linear-gradient(to right, var(--link-u-high), var(--link-u-low));
+  background-size: 300% 30%;
+  background-repeat: no-repeat;
+  background-position: 0% 100%;
+}
+
+#banner h1 {
+  margin: 0;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: max-content auto;
+}
+
+dt {
+  grid-column-start: 1;
+}
+
+dd {
+  grid-column-start: 2;
+}
