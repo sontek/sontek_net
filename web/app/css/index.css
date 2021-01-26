@@ -17,8 +17,7 @@ https://easings.net
 */
 
 img#profile {
-  width: 10rem;
-  max-width: 10rem;
+  width: 200px;
   border-radius: 50%;
 }
 

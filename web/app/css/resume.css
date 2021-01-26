@@ -1,0 +1,40 @@
+
+.loading {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 3px dotted var(--text);
+  border-radius: 50%;
+  border-top-color: var(--brand);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { -webkit-transform: rotate(360deg); 
+  }
+}
+
+h1, h2, h3 {
+  margin-top: 0;
+  margin-bottom: .25em;
+}
+
+.resume .col {
+  align-items: flex-start;
+  margin-right: 50px;
+}
+
+.resume .container {
+  max-width: 45em;
+}
+.skills {
+  margin-top: 10px;
+}
+.skill {
+  display: inline-block;
+  padding: 10px;
+  background-color: var(--surface-accent);
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}

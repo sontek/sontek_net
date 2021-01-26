@@ -170,6 +170,7 @@ dl {
 
 dt {
   grid-column-start: 1;
+  padding-right: 5px;
 }
 
 dd {

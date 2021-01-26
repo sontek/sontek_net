@@ -33,5 +33,9 @@ async def resume():
     with open(resume_path / 'projects.yml') as f:
         project_data = yaml.load(f, Loader=Loader)
 
-    return {"message": "Hello World"}
+    return {
+        'about': about_data,
+        'history': history_data,
+        'projects': project_data,
+    }
 
