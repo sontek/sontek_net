@@ -9,7 +9,7 @@
   --link-u-low: hsl(200, 100%, 13%);
 
   /* mobile variables */
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 800px) {
     --body-padding: 15px;
   }
 
@@ -126,6 +126,10 @@ pre {
 .grid {
   display: flex;
   flex-direction: row;
+  @media only screen and (max-width: 1000px) {
+    display: block;
+  }
+
   flex-wrap: wrap;
   width: 100%;
   justify-content: flex-start;
@@ -139,5 +143,16 @@ pre {
   flex-direction: column;
   flex-basis: 100%;
   flex: 1;
+}
+
+#banner a {
+  background: linear-gradient(to right, var(--link-u-high), var(--link-u-low));
+  background-size: 300% 30%;
+  background-repeat: no-repeat;
+  background-position: 0% 100%;
+}
+
+#banner h1 {
+  margin: 0;
 }
 
