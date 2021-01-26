@@ -3,7 +3,8 @@
 # TODO: Check if buster-slim or alpine with glibc is smaller
 FROM node:15-buster-slim as dev
 WORKDIR /srv
-COPY package.json yarn.lock ./
+COPY package.json ./
+COPY yarn.lock ./
 RUN yarn
 COPY . ./
 RUN yarn build

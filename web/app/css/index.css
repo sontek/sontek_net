@@ -16,9 +16,33 @@ only imports what you use
 https://easings.net
 */
 
-@media (orientation: landscape) {
-  body {
-    grid-auto-flow: column;
-  }
+img#profile {
+  max-width: 10rem;
+  border-radius: 100% 0px 100% 100%;
 }
 
+svg {
+  fill: currentColor;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.social a {
+  width: 30px;
+  display: inline-block;
+  margin: 8px;
+}
+
+.github {
+  color: var(--text);
+}
+
+.youtube {
+  /* color: #FF0000; */
+  color: var(--text);
+}
+
+.twitter {
+  /* color: #1DA1F2; */
+  color: var(--text);
+}

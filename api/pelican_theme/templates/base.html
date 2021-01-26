@@ -5,6 +5,7 @@
         <meta name="description" content="Blog about Python, Rust, Linux, Devops, and overall software development">
         <link rel="stylesheet" href="/css/base.css">
         <link rel="stylesheet" href="/css/syntax.css">
+        <link rel="stylesheet" href="/css/blog.css">
         {% block head %}
         <title>{% block title %}{{ SITENAME }}{% endblock title %}</title>
         <meta charset="utf-8" />
@@ -36,9 +37,24 @@
 </head>
 
 <body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="{{ SITEURL }}/">{{ SITENAME }}{% if SITESUBTITLE %} <strong>{{ SITESUBTITLE }}</strong>{% endif %}</a></h1>
-        </header><!-- /#banner -->
+        <div class="grid">
+            <div class="col">
+                <header id="banner" class="body">
+                        <h1><a href="{{ SITEURL }}/">{{ SITENAME }}{% if SITESUBTITLE %} <strong>{{ SITESUBTITLE }}</strong>{% endif %}</a></h1>
+                </header><!-- /#banner -->
+            </div>
+            <div class="col menu">
+              <nav>
+                <ul>
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/blog">Blog</a></li>
+                  <li><a href="/resume">Resume</a></li>
+                  <li><a href="/contact">Contact</a></li>
+                </ul>
+              </nav>
+            </div>
+        </div>
+        {#
         <nav id="menu"><ul>
         {% for title, link in MENUITEMS %}
             <li><a href="{{ link }}">{{ title }}</a></li>
@@ -54,8 +70,11 @@
           {% endfor %}
         {% endif %}
         </ul></nav><!-- /#menu -->
-        {% block content %}
-        {% endblock %}
+        #}
+        <div class="container">
+                {% block content %}
+                {% endblock %}
+        </div>
         <footer id="contentinfo" class="body">
                 <address id="about" class="vcard body">
                 </address><!-- /#about -->
