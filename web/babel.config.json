@@ -1,0 +1,54 @@
+{
+  "env": {
+    "production": {
+      "plugins": [
+          [
+            "@babel/transform-react-jsx",
+            { "pragma": "h" }
+          ],
+          ["@babel/plugin-transform-runtime", {
+             "regenerator": true
+          }]
+      ],
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "browsers": [
+                ">0.25%",
+                "not op_mini all"
+              ]
+            }
+          }
+        ]
+      ]
+    },
+    "development": {
+      "plugins": [
+          [
+            "@babel/transform-react-jsx",
+            { "pragma": "h" }
+          ],
+          ["@babel/plugin-transform-runtime", {
+             "regenerator": true
+          }]
+      ],
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "modules": false,
+            "targets": {
+              "browsers": [
+                ">0.25%",
+                "not op_mini all"
+              ]
+            }
+          }
+        ]
+      ]
+    }
+  }
+}
+

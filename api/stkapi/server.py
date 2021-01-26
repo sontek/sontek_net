@@ -35,7 +35,3 @@ async def resume():
 
     return {"message": "Hello World"}
 
-@app.get("/hello")
-async def main():
-    return {"message": "Hello World"}
-

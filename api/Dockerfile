@@ -16,6 +16,7 @@ RUN ./wheely.sh
 RUN python3 -c "import yaml; yaml.CLoader"
 
 EXPOSE 8000
+EXPOSE 9001
 COPY . .
 RUN poetry build
 RUN pelican
@@ -23,7 +24,7 @@ RUN pelican
 FROM build as dev
 WORKDIR /srv
 RUN poetry install
-CMD ["supervisord", "-n", "-c", "supervisor.ini"]
+CMD ["supervisord", "-n", "-c", "supervisord.conf"]
 
 FROM python:3.9-slim-buster as prod
 WORKDIR /srv

@@ -3,82 +3,66 @@ import postcss from "rollup-plugin-postcss";
 import { terser } from "rollup-plugin-terser";
 import compiler from "@ampproject/rollup-plugin-closure-compiler";
 import { default as importHTTP } from "import-http/rollup";
-import babel from "rollup-plugin-babel";
+import babel from "@rollup/plugin-babel";
 import copy from "rollup-plugin-copy-watch";
+import filesize from "rollup-plugin-filesize";
+import commonjs from '@rollup/plugin-commonjs';
+import replace from '@rollup/plugin-replace';
 
 
-const assets = ["index"];
+const assets = ["index", "resume"];
 
 export default assets.map((name, index) => {
   let config;
-  /* PROD CONFIG */
-  if (process.env.NODE_ENV === "production") {
-    config = {
-      input: `app/js/${name}.js`,
-      output: {
-        dir: "dist",
-        format: "esm",
-        sourcemap: true,
+  const production = process.env.NODE_ENV === "production";
+  let devSettings = {
+      'watch': {
+        'exclude': ["node_modules/**"],
       },
-      plugins: [
-        resolve(),
-        importHTTP(),
-        postcss({
-          extract: `app/css/${name}.css`,
-          minimize: { preset: "default" },
-        }),
-        babel({
-          exclude: "node_modules/**",
-          presets: [["@babel/env", { modules: false }]],
-        }),
-        compiler(),
-        terser(),
-        copy({
-          targets: [
-            { src: 'app/public/**/*', dest: 'dist' },
-          ]
-        }),
-      ],
-    };
-  } else {
-    /* DEV CONFIG */
-    config = {
-      input: `app/js/${name}.js`,
-      output: {
-        dir: "dist",
-        format: "esm",
-        sourcemap: "inline",
-      },
-      plugins: [
-        resolve(),
-        importHTTP(),
-        postcss({
-          extract: `app/css/${name}.css`,
-        }),
-        babel({
-          exclude: "node_modules/**",
-          presets: [
-            [
-              "@babel/env",
-              {
-                targets: { esmodules: true },
-                bugfixes: true,
-              },
-            ],
-          ],
-        }),
-        copy({
-          watch: 'app/public/**/*',
-          targets: [
-            { src: 'app/public/**/*', dest: 'dist' },
-          ]
-        }),
-      ],
-      watch: {
-        exclude: ["node_modules/**"],
-      },
-    };
-  }
+  };
+  config = {
+    input: `app/js/${name}.js`,
+    output: {
+      dir: "dist/js/",
+      format: "esm",
+      sourcemap: production ? true : "inline",
+    },
+    plugins: [
+      replace({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      }),
+      resolve({
+        browser: true,
+        dedupe: ["preact"],
+        extensions: [".js", ".jsx"],
+      }),
+      importHTTP(),
+      production && postcss({
+        extract: `app/css/${name}.css`,
+        minimize: { preset: "default" },
+      }),
+      !production && postcss({
+        extract: `app/css/${name}.css`,
+      }),
+      babel({
+        exclude: "node_modules/**",
+        babelHelpers: 'runtime',
+      }),
+      commonjs({
+        include: ['node_modules/**']
+      }),
+      production && compiler(),
+      production && terser(),
+      copy({
+        watch: production ? null : "app/public/**/*",
+        targets: [
+          { src: 'app/public/**/*', dest: 'dist' },
+        ]
+      }),
+      filesize(),
+      !production && devSettings, 
+    ],
+  };
   return config;
 });
 
