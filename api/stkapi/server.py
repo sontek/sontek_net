@@ -22,7 +22,7 @@ app.add_middleware(
 
 @app.get("/resume")
 async def resume():
-    resume_path = cwd.parent.parent / 'resume_data/'
+    resume_path = cwd.parent / 'resume_data/'
 
     with open(resume_path / 'about.yml') as f:
         about_data = yaml.load(f, Loader=Loader)
