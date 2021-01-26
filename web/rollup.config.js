@@ -34,8 +34,9 @@ export default assets.map((name, index) => {
         compiler(),
         terser(),
         copy({
+          watch: 'app/public/**/*',
           targets: [
-            { src: 'public/**/*', dest: 'dist' },
+            { src: 'app/public/**/*', dest: 'dist' },
           ]
         }),
       ],
