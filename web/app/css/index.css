@@ -17,6 +17,7 @@ https://easings.net
 */
 
 img#profile {
+  width: 10rem;
   max-width: 10rem;
   border-radius: 100% 0px 100% 100%;
 }
@@ -25,12 +26,17 @@ svg {
   fill: currentColor;
   height: 1.5rem;
   width: 1.5rem;
+  vertical-align: middle;
+}
+
+.social {
+  margin-top: 20px;
 }
 
 .social a {
-  width: 30px;
   display: inline-block;
   margin: 8px;
+  min-width: 120px;
 }
 
 .github {

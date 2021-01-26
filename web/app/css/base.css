@@ -1,8 +1,8 @@
 :root {
   --surface: hsl(0, 5%, 10%);
-  --surface-accent: hsl(0, 5%, 20%);
+  --surface-accent: hsl(0, 5%, 15%);
   --text: hsl(0, 0%, 77%);
-  --brand: hsl(200, 100%, 43%);
+  --brand: hsl(200, 100%, 53%);
   --content-width: 35em;
   --body-padding: 64px;
   --link-u-high: hsl(200, 100%, 13%);
@@ -111,13 +111,6 @@ pre {
 
 .menu nav ul li {
   display: inline-block;
-}
-
-.menu nav ul li a:hover {
-  box-shadow: 1px 1px 0px var(--text),
-            2px 2px 0px var(--text),
-            3px 3px 0px var(--text),
-            4px 4px 0px var(--text)
 }
 
 .menu nav ul li a {
