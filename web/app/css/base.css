@@ -1,0 +1,71 @@
+:root {
+  --surface: hsl(0, 5%, 10%);
+  --text: lch(80 0 0);
+  --brand: hsl(188, 55%, 44%);
+
+  @media (prefers-color-scheme: light) {
+    --surface: lch(98 0 0);
+    --text: lch(30 0 0);
+    --brand: hsl(188, 55%, 54%);
+  }
+}
+
+html {
+  block-size: 100%;
+  inline-size: 100%;
+}
+
+body {
+  min-block-size: 100%;
+  min-inline-size: 100%;
+  box-sizing: border-box;
+
+  display: grid;
+  place-content: center;
+  gap: 2ch;
+
+  background: var(--surface);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+}
+
+body,p,ul,dl,dd,dt,figure,
+h1,h2,h3,h4,h5,h6,small {
+  margin: 0;
+}
+
+a {
+  color: color(display-p3 0 .5 1);
+
+  &:visited {
+    color: color(display-p3 .5 0 1);
+  }
+}
+
+h1,h2,h3,h4,h5,h6 {
+  line-height: 1.5;
+  max-inline-size: 25ch;
+}
+
+p {
+  line-height: 2;
+  font-size: 1.25rem;
+  font-weight: 300;
+  max-inline-size: 45ch;
+}
+
+::selection {
+  background-color: var(--brand);
+}
+
+.center {
+  text-align: center;
+}
+
+.highlight {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 5px;
+}

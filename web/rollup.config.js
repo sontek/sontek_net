@@ -71,6 +71,7 @@ export default assets.map((name, index) => {
         copy({
           targets: [
             { src: 'app/index.html', dest: 'dist' },
+            { src: 'app/favicon.ico', dest: 'dist' },
           ]
         }),
       ],
