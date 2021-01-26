@@ -6,7 +6,7 @@ SITENAME = 'sontek.net blog'
 SITEURL = '/blog/'
 
 PATH = 'blog_posts'
-
+THEME = './pelican_theme/'
 TIMEZONE = 'America/Puerto_Rico'
 # Pretty URLs
 ARTICLE_SAVE_AS = '{date:%Y}/{slug}/index.html'

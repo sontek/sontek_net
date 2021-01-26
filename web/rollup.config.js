@@ -4,7 +4,7 @@ import { terser } from "rollup-plugin-terser";
 import compiler from "@ampproject/rollup-plugin-closure-compiler";
 import { default as importHTTP } from "import-http/rollup";
 import babel from "rollup-plugin-babel";
-import copy from "rollup-plugin-copy";
+import copy from "rollup-plugin-copy-watch";
 
 
 const assets = ["index"];
@@ -35,8 +35,7 @@ export default assets.map((name, index) => {
         terser(),
         copy({
           targets: [
-            { src: 'app/index.html', dest: 'dist' },
-            { src: 'app/favicon.ico', dest: 'dist' },
+            { src: 'public/**/*', dest: 'dist' },
           ]
         }),
       ],
@@ -69,8 +68,9 @@ export default assets.map((name, index) => {
           ],
         }),
         copy({
+          watch: 'app/public/**/*',
           targets: [
-            { src: 'app/index.html', dest: 'dist' },
+            { src: 'app/public/**/*', dest: 'dist' },
           ]
         }),
       ],

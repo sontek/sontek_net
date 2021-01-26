@@ -1,0 +1,26 @@
+#banner a {
+  background: linear-gradient(to right, var(--link-u-high), var(--link-u-low));
+  background-size: 300% 30%;
+  background-repeat: no-repeat;
+  background-position: 0% 100%;
+}
+
+#banner h1 {
+  margin: 0;
+}
+
+#post-list {
+  list-style-type: none;
+}
+
+.hentry {
+  border: solid 2px hsl(0, 0%, 80%);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.container header h1 {
+  padding-bottom: 15px;
+  border-bottom: solid 2px;
+}

@@ -40,3 +40,4 @@ app/bundle.css
 app/bundle.js
 yarn-error.log
 api/output/
+supervisord.log
