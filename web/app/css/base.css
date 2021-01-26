@@ -9,8 +9,13 @@
   --link-u-low: hsl(200, 100%, 13%);
 
   /* mobile variables */
-  @media only screen and (max-width: 800px) {
+  @media only screen and (max-width: 1000px) {
     --body-padding: 15px;
+  }
+
+  @media only screen and (max-width: 800px) {
+    --body-padding: 5px;
+    --content-width: 100%;
   }
 
   @media (prefers-color-scheme: light) {
@@ -38,9 +43,10 @@ body {
   padding: var(--body-padding)
 }
 
-body,p,ul,dl,dd,dt,figure,
+body,p,ol,ul,dl,dd,dt,figure,
 h1,h2,h3,h4,h5,h6,small {
   margin: 0;
+  padding: 0;
 }
 
 h1 {
