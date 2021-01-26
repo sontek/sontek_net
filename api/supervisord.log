@@ -108,3 +108,9 @@
 2021-01-25 23:04:03,025 INFO waiting for gunicorn to die
 2021-01-25 23:04:06,030 INFO waiting for gunicorn to die
 2021-01-25 23:04:09,035 INFO waiting for gunicorn to die
+2021-01-26 00:01:32,841 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2021-01-26 00:01:32,850 INFO supervisord started with pid 1
+2021-01-26 00:01:33,853 INFO spawned: 'gunicorn' with pid 6
+2021-01-26 00:01:33,856 INFO spawned: 'pelican' with pid 7
+2021-01-26 00:01:35,719 INFO success: gunicorn entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2021-01-26 00:01:35,720 INFO success: pelican entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
