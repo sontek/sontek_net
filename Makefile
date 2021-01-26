@@ -14,6 +14,9 @@ prod:
 	docker-compose -f docker-compose.prod.yml --context sontek_net pull
 	docker-compose -f docker-compose.prod.yml --context sontek_net up -d
 
+api_logs:
+	docker exec -ti sontek_net_api_1 supervisorctl tail -f gunicorn
+
 reload_nginx:
-	docker exec -ti sontek_net_nginx_1 docker-entrypoint.d/docker-entrypoint.sh
-	docker exec -ti sontek_net_nginx_1 nginx -s reload
+	docker-compose -f docker-compose.dev.yml restart nginx
+

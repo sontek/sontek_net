@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from yaml import CLoader as Loader, CDumper as Dumper
 from pathlib import Path
 cwd = Path(__file__)
-app = FastAPI()
+app = FastAPI(root_path='/api')
 
 origins = [
     f"http://{os.environ['STK_HOSTNAME']}/",
@@ -33,9 +33,5 @@ async def resume():
     with open(resume_path / 'projects.yml') as f:
         project_data = yaml.load(f, Loader=Loader)
 
-    return {"message": "Hello World"}
-
-@app.get("/hello")
-async def main():
     return {"message": "Hello World"}
 
