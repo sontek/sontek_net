@@ -65,6 +65,8 @@ companies:
         Google Suite, and many more industry specific
         API providers.
 
+      - Intefaced with USB HID devices to do 1D, 2D, and
+        QR barcode scanning.
 
 
   - name: SurveyMonkey
@@ -74,7 +76,7 @@ companies:
       SurveyMonkey is a self-service survey and
       response collection engine.  They are a
       service oriented architecture with 47
-      projects deployed over 200+ machines and
+      projects deployed over 200 machines and
       serve millions of requests per hour. They
       are developed in Python (Pyramid) on top
       of memcached, redis, and SQL Server.
@@ -86,9 +88,9 @@ companies:
       also export to multiple formats, including
       XLS, PPT, and CSV.
 
-      I built the new generation of analytics
-      engine based on Kafka, Zookeeper, and
-      Cassandra that powered our polling team
+      I lead the team that built the new generation
+      of analytics engine based on Kafka, Zookeeper,
+      and Cassandra that powered our polling team
       for the 2016 presidential election that
       was covered by CNN, New York Times, and MSNBC.
 
