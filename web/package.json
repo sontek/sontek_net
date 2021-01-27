@@ -17,7 +17,8 @@
     "build:pre:js": "rollup -c --environment NODE_ENV:production",
     "build": "rimraf dist && concurrently yarn:build:pre:* && concurrently yarn:build:post:*",
     "start": "rimraf dist/* && concurrently --kill-others yarn:dev:*",
-    "production": "yarn run build && yarn run prod:server"
+    "production": "yarn run build && yarn run prod:server",
+    "resume_screenshot": "node generate_pdf_resume.js"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.26.0",
@@ -39,6 +40,7 @@
     "postcss-import": "^14.0.0",
     "postcss-import-url": "^6.0.0",
     "postcss-preset-env": "6.7.0",
+    "puppeteer": "^5.5.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.38.0",
     "rollup-plugin-copy-watch": "^0.0.1",
