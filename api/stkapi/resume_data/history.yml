@@ -1,5 +1,6 @@
 companies:
   - name: EventRay
+    dates: June 2016 to February 2021
     title: CEO, Founder
     description: >
       EventRay is a conference registration platform
@@ -68,6 +69,7 @@ companies:
 
   - name: SurveyMonkey
     title: Principal Software Engineer
+    dates: March 2013 to June 2016
     description: >
       SurveyMonkey is a self-service survey and
       response collection engine.  They are a
@@ -121,6 +123,7 @@ companies:
 
   - name: Devtoo
     title: Senior Software Engineer
+    dates: December 2011 to March 2013
     description: >
       Works as a software development contractor where
       I contributed to a variety of companies and
@@ -145,6 +148,7 @@ companies:
 
   - name: Pictage
     title: Senior Software Engineer
+    dates: May 2011 to December 2011
     description: >
       Pictage (ShootQ) is a business management
       platform for professional photographers. I
@@ -184,6 +188,7 @@ companies:
 
   - name: Orchid Events
     title: Senior Software Engineer
+    dates: January 2006 to May 2011
     description: >
       Orchid is a conference Management and registration
       software for generating dynamic forms with complex
@@ -216,6 +221,7 @@ companies:
 
   - name: My Horse Player
     title: Software Engineer
+    dates: April 2005 to January 2006
     description: >
       MHP was a data analytics platform for horse
       handicappers. We developed our algorithm for
