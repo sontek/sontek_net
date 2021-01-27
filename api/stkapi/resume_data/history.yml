@@ -115,7 +115,7 @@ companies:
       - Helped with the initial adoption and
         deployment of openstack within the company
 
-      - Helped improve performance and over
+      - Helped improve performance and overall
         scalability. This includes improving our
         caching and migrating us to gunicorn from
         paster and optimizing nginx. 
