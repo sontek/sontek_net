@@ -22,6 +22,7 @@ h1, h2, h3 {
 .resume .col {
   align-items: flex-start;
   margin-right: 50px;
+  word-break: break-word;
 }
 
 .resume .container {
@@ -37,4 +38,14 @@ h1, h2, h3 {
   margin-right: 5px;
   margin-bottom: 5px;
   border-radius: 5px;
+}
+.history {
+  margin-top: 30px;
+}
+.historyItem {
+  margin-bottom: 50px;
+}
+.historyItem h2 {
+  padding-bottom: 5px;
+  border-bottom: solid 1px var(--brand);
 }

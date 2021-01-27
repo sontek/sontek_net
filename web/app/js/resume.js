@@ -8,21 +8,32 @@ function Spinner(props) {
 }
 function HistoryItem(item) {
   return (
-    <div>
+    <div class="historyItem">
       <h2>{item['name']}</h2>
-      <p>{item['title']}</p>
+      <small>{item['dates']}</small>
+      <p><strong>{item['title']}</strong></p>
       {item['description'].split("\n").map((paragraph) => {
         return (
           <p>{paragraph}</p>
         );
       })}
+      <div class="accomplishments">
+        <h3>Accomplishments</h3>
+        <ul>
+          {item['accomplishments'].map((accomplishment) => {
+            return (
+              <li>{accomplishment}</li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }
 
 function History(historyData) {
   return (
-    <div>
+    <div class="history">
       <h1>Work History</h1>
       {historyData['companies'].map((company) => {
         return <HistoryItem {...company} />;
