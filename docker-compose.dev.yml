@@ -6,7 +6,7 @@ services:
       context: ./web/
     image: sontek/web:dev
     ports:
-      - "3000:3000"
+      - "4000:4000"
     volumes:
       - "./web/:/srv/"
       - "./shared_volume/web:/srv/dist/"
