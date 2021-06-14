@@ -8,7 +8,6 @@ export default function About() {
             <Head>
                 <title>sontek.net - About John Anderson!</title>
             </Head>
-            <div class="container">
             <div class="center">
                 <div>
                     <Image
@@ -55,7 +54,6 @@ export default function About() {
                 <dt>youtube</dt>
                 <dd><a target="_blank" rel="noopener" href="https://www.youtube.com/sontek">@sontek</a></dd>
                 </dl>
-            </div>
             </div>
         </Layout>
     );

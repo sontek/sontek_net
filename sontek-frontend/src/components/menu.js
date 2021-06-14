@@ -3,15 +3,15 @@ import Link from "next/link";
 export default function Menu() {
     return (
         <>
-            <div class="grid">
-                <div class="col">
-                    <header id="banner" class="body">
+            <div className="grid">
+                <div className="col">
+                    <header id="banner" className="body">
                         <h1>
                             <a href="/">sontek.net</a>
                         </h1>
                     </header>
                 </div>
-                <div class="col menu">
+                <div className="col menu">
                     <nav>
                         <ul>
                             <li>

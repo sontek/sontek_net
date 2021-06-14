@@ -66,20 +66,6 @@ small {
     padding: 0;
 }
 
-h1 {
-    font-size: 1.9em;
-    line-height: 1.3em;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
 
 a {
     color: var(--brand);

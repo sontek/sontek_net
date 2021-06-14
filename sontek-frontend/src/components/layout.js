@@ -9,7 +9,9 @@ export default function Layout({ children }) {
     return (
         <div>
             <Menu />
-            {children}
+            <div className="container">
+              {children}
+            </div>
         </div>
     );
 }
