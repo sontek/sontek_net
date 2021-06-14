@@ -5,7 +5,7 @@ import Link from "next/link";
 import Head from "next/head";
 import Layout from "../src/components/layout";
 import blogStyles from "../styles/blog.module.css";
-import cn from 'classnames';
+import cn from "classnames";
 
 export async function getStaticProps() {
     const allPostsData = await getRecentPosts();
@@ -29,7 +29,7 @@ export default function Home({ allPostsData }) {
                 <ul className={utilStyles.list}>
                     {allPostsData.map(({ id, date, title, contentHtml }) => (
                         <li key={id}>
-                            <article class={blogStyles.hentry}>
+                            <article className={blogStyles.hentry}>
                                 <header>
                                     <h3 className="entry-title">
                                         <Link href={`/posts/${id}`}>
@@ -42,7 +42,11 @@ export default function Home({ allPostsData }) {
                                     <Date dateString={date} />
                                 </small>
                                 <div
-                                    dangerouslySetInnerHTML={{ __html: contentHtml.substring(0, 200) + "..." }}
+                                    dangerouslySetInnerHTML={{
+                                        __html:
+                                            contentHtml.substring(0, 200) +
+                                            "...",
+                                    }}
                                 />
                             </article>
                         </li>

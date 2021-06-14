@@ -10,34 +10,38 @@ import { formatISO } from "date-fns";
 const postsDirectory = path.join(process.cwd(), "posts");
 
 async function getContent(matterResult) {
-  // Use remark to convert markdown into HTML string
-  const processedContent = await remark()
-    .use(html)
-    .use(highlight)
-    .process(matterResult.content);
-  const contentHtml = processedContent.toString();
-  return contentHtml;
+    // Use remark to convert markdown into HTML string
+    const processedContent = await remark()
+        .use(html)
+        .use(highlight)
+        .process(matterResult.content);
+    const contentHtml = processedContent.toString();
+    return contentHtml;
 }
 
 export async function getRecentPosts() {
     // Get file names under /posts
     const fileNames = fs.readdirSync(postsDirectory);
-    const allPostsData = await Promise.all(fileNames.map(async (fileName) => {
-      const id = fileName.replace(/\.md$/, "");
-      const postData = await getPostData(id);
-      return postData;
-    }));
+    const allPostsData = await Promise.all(
+        fileNames.map(async (fileName) => {
+            const id = fileName.replace(/\.md$/, "");
+            const postData = await getPostData(id);
+            return postData;
+        })
+    );
 
     // Sort posts by date
-    return allPostsData.sort(({ date: a }, { date: b }) => {
-        if (a < b) {
-            return 1;
-        } else if (a > b) {
-            return -1;
-        } else {
-            return 0;
-        }
-    }).slice(0, 10);
+    return allPostsData
+        .sort(({ date: a }, { date: b }) => {
+            if (a < b) {
+                return 1;
+            } else if (a > b) {
+                return -1;
+            } else {
+                return 0;
+            }
+        })
+        .slice(0, 10);
 }
 
 export function getAllPostIds() {
