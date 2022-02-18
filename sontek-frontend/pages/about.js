@@ -28,7 +28,7 @@ export default function About() {
                 <p>
                     I'm comfortable with everything from writing CSS and
                     React.js to building custom linux distributions and turning
-                    them into AMIs or docker containers.
+                    them into AMIs or docker images.
                 </p>
                 <p>
                     I've been a professional software developer since 2005 but
