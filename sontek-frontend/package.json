@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "NODE_OPTIONS='--inspect' next dev",
         "predeploy": "yarn build && yarn export && touch dist/.nojekyll && echo sontek.net > dist/CNAME",
-        "deploy": "gh-pages -d dist -t true",    
+        "deploy": "gh-pages -d dist -t true",
         "build": "next build",
         "export": "next export -o dist/",
         "start": "next start",
@@ -32,6 +32,7 @@
         "postcss-import": "14.0.2",
         "postcss-import-url": "7.0.0",
         "postcss-preset-env": "7.4.1",
-        "prettier": "2.5.1"
+        "prettier": "2.5.1",
+        "puppeteer": "^13.3.2"
     }
 }

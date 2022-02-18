@@ -18,7 +18,7 @@ const puppeteer = require('puppeteer');
       */
   }, div_selector_to_remove)
 
-  await page.pdf({path: 'app/public/sontek_resume.pdf'});
+  await page.pdf({path: 'public/sontek_resume.pdf'});
 
   await browser.close();
 })();
