@@ -1,5 +1,5 @@
 name: John M. Anderson
-description: Full-stack software developer who loves DevOps, Python, and Rust.
+description: Full-stack software developer and SRE who loves DevOps, Python, and Rust.
 
 location:
   city: Luquillo, PR
@@ -13,6 +13,12 @@ contact:
   youtube: https://youtube.com/sontek
 
 skills:
+  - Kubernetes
+  - Terraform
+  - ElasticSearch
+  - Docker
+  - ArgoCD
+  - Jenkins
   - Linux
   - Python
   - Postgres

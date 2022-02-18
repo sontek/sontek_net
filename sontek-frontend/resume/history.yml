@@ -1,6 +1,33 @@
 companies:
+  - name: Zapier
+    dates: March 2021 - present
+    title: SRE Engineering Manager
+    description: >
+      Zapier is a no-code solution for automation. It
+      ties many APIs together through a combination
+      of webhooks and polling.
+
+      I was the engineering manager of one of the SRE
+      teams as well as one of the Staff Engineers.
+
+      * Manage 8 at Kubernetes cluster for both production
+        and staging environments.
+
+      * 100% Infrastructure as using Terraform, Helm, and
+        GitLab pipelines.
+
+      * Managing legacy EC2 instances through Ansible and
+        packager
+
+      * Monitoring and Metrics through a mix of Grafana,
+        Prometheus, DataDog, PagerDuty, and GrayLog.
+
+      * Ran multiple elasticsearch clusters
+
+      * 1:1 with my direct reports
+
   - name: EventRay
-    dates: June 2016 to February 2021
+    dates: June 2016 to March 2021
     title: CEO, Founder
     description: >
       EventRay is a conference registration platform
