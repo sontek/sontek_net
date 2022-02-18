@@ -28,9 +28,6 @@ const prod = {
     plugins: [
         ...defaultPlugins,
         "cssnano",
-        {
-            preset: "default",
-        },
     ],
 };
 
