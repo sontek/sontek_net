@@ -26,6 +26,18 @@ companies:
 
       * 1:1 with my direct reports
 
+    accomplishments:
+      - Built the primary GitOps tool for managing which images
+        are deployed to each environment.  This included monitoring
+        ArgoCD statuses and Slack Notifications for each team.
+
+      - Helped run the migration from GitHub to GitLab which included
+        migrating thousands of repositories and CI/CD pipelines.
+
+      - Ran upgrades of Kubernetes from 1.16 to 1.21
+
+      - Built training and onboarding documentation for new SREs
+
   - name: EventRay
     dates: June 2016 to March 2021
     title: CEO, Founder
