@@ -4,7 +4,10 @@
     "private": true,
     "scripts": {
         "dev": "NODE_OPTIONS='--inspect' next dev",
+        "predeploy": "yarn build && yarn export && touch dist/.nojekyll && echo sontek.net > dist/CNAME",
+        "deploy": "gh-pages -d dist -t true",    
         "build": "next build",
+        "export": "next export -o dist/",
         "start": "next start",
         "format": "prettier --write ."
     },
@@ -22,6 +25,7 @@
     "devDependencies": {
         "@types/js-yaml": "^4.0.5",
         "cssnano": "5.0.17",
+        "gh-pages": "^3.2.3",
         "js-yaml": "^4.1.0",
         "postcss": "8.4.6",
         "postcss-easings": "3.0.1",

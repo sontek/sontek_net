@@ -1,6 +1,6 @@
 import indexStyles from "../styles/index.module.css";
 import cn from "classnames";
-import Image from "next/image";
+import Image from "../src/components/image";
 import Head from "next/head";
 import Layout from "../src/components/layout";
 
