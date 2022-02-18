@@ -10,23 +10,21 @@ companies:
       I was the engineering manager of one of the SRE
       teams as well as one of the Staff Engineers.
 
-      * Manage 8 at Kubernetes cluster for both production
-        and staging environments.
-
-      * 100% Infrastructure as using Terraform, Helm, and
-        GitLab pipelines.
-
-      * Managing legacy EC2 instances through Ansible and
-        packager
-
       * Monitoring and Metrics through a mix of Grafana,
-        Prometheus, DataDog, PagerDuty, and GrayLog.
+      Prometheus, DataDog, PagerDuty, and GrayLog.
 
       * Ran multiple elasticsearch clusters
 
       * 1:1 with my direct reports
 
     accomplishments:
+      - Manage 8 at Kubernetes cluster for both production
+        and staging environments. Over 3000 pods running varied
+        workloads.
+
+      - 100% Infrastructure as using Terraform, Helm, and
+        GitLab pipelines.
+
       - Built the primary GitOps tool for managing which images
         are deployed to each environment.  This included monitoring
         ArgoCD statuses and Slack Notifications for each team.
