@@ -21,15 +21,12 @@
     margin-bottom: 0.25em;
 }
 
-.resume .col {
+.col {
     align-items: flex-start;
     margin-right: 50px;
     word-break: break-word;
 }
 
-.resume .container {
-    max-width: 45em;
-}
 .skills {
     margin-top: 10px;
 }
@@ -41,6 +38,7 @@
     margin-bottom: 5px;
     border-radius: 5px;
 }
+
 .history {
     margin-top: 30px;
 }

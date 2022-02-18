@@ -79,16 +79,6 @@ export default function About() {
                             @sontek
                         </a>
                     </dd>
-                    <dt>stackoverflow</dt>
-                    <dd>
-                        <a
-                            target="_blank"
-                            rel="noopener"
-                            href="https://stackoverflow.com/users/17176/sontek"
-                        >
-                            @sontek
-                        </a>
-                    </dd>
                     <dt>youtube</dt>
                     <dd>
                         <a

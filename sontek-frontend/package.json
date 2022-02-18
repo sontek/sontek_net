@@ -20,7 +20,9 @@
         "remark-html": "^15.0.1"
     },
     "devDependencies": {
+        "@types/js-yaml": "^4.0.5",
         "cssnano": "5.0.17",
+        "js-yaml": "^4.1.0",
         "postcss": "8.4.6",
         "postcss-easings": "3.0.1",
         "postcss-import": "14.0.2",

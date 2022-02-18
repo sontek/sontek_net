@@ -1,9 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import resumeStyles from "../styles/resume.module.css";
 import Layout from "../src/components/layout";
+import { getResumeDetails } from "../src/lib/resume";
+import cn from "classnames";
 
-function Spinner(props) {
-    return <div className={resumeStyles.loading}></div>;
+export async function getStaticProps() {
+    const resumeDetails = await getResumeDetails();
+    return {
+        props: {
+            resumeDetails,
+        },
+    };
 }
 
 function HistoryItem(item) {
@@ -43,22 +50,22 @@ function History(historyData) {
 function About(aboutData) {
     return (
         <div className="grid">
-            <div className="col">
+            <div className={cn("col", resumeStyles.col)}>
                 <h2>{aboutData["name"]}</h2>
                 <p>Location: {aboutData["location"]["city"]}</p>
                 <small>{aboutData["description"]}</small>
-                <div className="skills">
+                <div className={resumeStyles.skills}>
                     <h3>Top Skills:</h3>
                     {aboutData["skills"].map((skill) => {
                         return (
-                            <span className="skill" key={skill}>
+                            <span className={resumeStyles.skill} key={skill}>
                                 {skill}
                             </span>
                         );
                     })}
                 </div>
             </div>
-            <div className="col">
+            <div className={resumeStyles.col}>
                 <div>
                     <h2>Contact Information</h2>
                     <ul>
@@ -91,39 +98,15 @@ function About(aboutData) {
 }
 
 export default function Resume(props) {
-    const [isLoading, setIsLoading] = useState(true);
-    const [resumeData, setResumeData] = useState(null);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch("/api/resume");
-            const data = await response.json();
-            setIsLoading(false);
-            setResumeData(data);
-        };
-        fetchData();
-    }, []);
-
-    if (isLoading) {
-        console.log("is loading");
-        return (
-            <Layout>
-                <div className="center">
-                    <Spinner />
+    const resumeData = props.resumeDetails;
+    return (
+        <Layout>
+            <div className={resumeStyles.resume}>
+                <div className={"container"}>
+                    <About {...resumeData["about"]} />
+                    <History {...resumeData["history"]} />
                 </div>
-            </Layout>
-        );
-    } else {
-        console.log("ended...");
-        return (
-            <Layout>
-                <div className={resumeStyles.resume}>
-                    <div className="container">
-                        <About {...resumeData["about"]} />
-                        <History {...resumeData["history"]} />
-                    </div>
-                </div>
-            </Layout>
-        );
-    }
+            </div>
+        </Layout>
+    );
 }

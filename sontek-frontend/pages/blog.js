@@ -5,7 +5,6 @@ import Link from "next/link";
 import Head from "next/head";
 import Layout from "../src/components/layout";
 import blogStyles from "../styles/blog.module.css";
-import cn from "classnames";
 
 export async function getStaticProps() {
     const allPostsData = await getRecentPosts();
