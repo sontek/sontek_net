@@ -18,14 +18,36 @@ async function getContent(matterResult) {
     const contentHtml = processedContent.toString();
     return contentHtml;
 }
+function getAllFilesInDirectory(startingDirectory, prefix=null) {
+    const dirents = fs.readdirSync(startingDirectory, { withFileTypes: true });
+    let fileNames = [];
+    dirents.map((dirent) => {
+        if (dirent.isFile()) {
+            let fileName = dirent.name;
+            if (prefix) {
+                fileName = `${prefix}/${fileName}`;
+            }
+            fileNames.push(fileName); 
+        } else if (dirent.isDirectory()) {
+            if (
+                (dirent.name === 'drafts' && process.env.NODE_ENV === "development") ||
+                dirent.name !== 'drafts'
+            ) {
+                const nextDirectory = path.join(startingDirectory, dirent.name);
+                fileNames = fileNames.concat(getAllFilesInDirectory(nextDirectory, dirent.name));
+            }
+        }
+    });
+    return fileNames;
+}
 
 export async function getRecentPosts() {
     // Get file names under /posts
-    const fileNames = fs.readdirSync(postsDirectory);
+    const fileNames = getAllFilesInDirectory(postsDirectory);
     const allPostsData = await Promise.all(
         fileNames.map(async (fileName) => {
             const id = fileName.replace(/\.md$/, "");
-            const postData = await getPostData(id);
+            const postData = await getPostData(id.split("/"));
             return postData;
         })
     );
@@ -45,7 +67,7 @@ export async function getRecentPosts() {
 }
 
 export function getAllPostIds() {
-    const fileNames = fs.readdirSync(postsDirectory);
+    const fileNames = getAllFilesInDirectory(postsDirectory);
 
     // Returns an array that looks like this:
     // [
@@ -60,17 +82,22 @@ export function getAllPostIds() {
     //     }
     //   }
     // ]
-    return fileNames.map((fileName) => {
+    const finalData = fileNames.map((fileName) => {
+        const clean = fileName.replace(/\.md$/, "");
+        const segments = clean.split("/");
+
         return {
             params: {
-                id: fileName.replace(/\.md$/, ""),
+                id: segments,
             },
         };
     });
+    return finalData;
 }
 
 export async function getPostData(id) {
-    const fullPath = path.join(postsDirectory, `${id}.md`);
+    const fileName = id.join("/");
+    const fullPath = path.join(postsDirectory, `${fileName}.md`);
     const fileContents = fs.readFileSync(fullPath, "utf8");
 
     // Use gray-matter to parse the post metadata section
@@ -82,6 +109,7 @@ export async function getPostData(id) {
 
     return {
         id,
+        path: fileName,
         contentHtml,
         ...matterResult.data,
         date,

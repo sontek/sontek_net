@@ -26,12 +26,12 @@ export default function Home({ allPostsData }) {
             >
                 <h2 className={utilStyles.headingLg}>All Articles</h2>
                 <ul className={utilStyles.list}>
-                    {allPostsData.map(({ id, date, title, contentHtml }) => (
-                        <li key={id}>
+                    {allPostsData.map(({ path, date, title, contentHtml }) => (
+                        <li key={path}>
                             <article className={blogStyles.hentry}>
                                 <header>
                                     <h3 className="entry-title">
-                                        <Link href={`/posts/${id}`}>
+                                        <Link href={`/posts/${path}`}>
                                             <a>{title}</a>
                                         </Link>
                                     </h3>
