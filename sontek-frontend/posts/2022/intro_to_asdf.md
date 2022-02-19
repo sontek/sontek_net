@@ -79,4 +79,54 @@ yarn
 ```
 
 ## Using the installed languages
-To activate a specific version of a language you have 
+To activate a specific version of a language you have you have three options:
+
+### Make it global
+You can make it global, meaning when you run the tool like `python` it'll use
+this version for the system:
+
+```bash
+> asdf global python 3.9.10
+```
+
+### Make it local
+You can make it local, which means it will generate a file in the current
+directory named `.tool-versions` and so whenever you change into a directory
+it will activate the versions defined in there.
+
+```bash
+> asdf local nodejs 12.22.10
+> cat .tool-versions 
+nodejs 12.22.10
+```
+
+The great thing about this is you can commit that file to git and then anyone
+who checks out the project and uses `asdf` will have the same versions activated!
+
+### Temporary
+If you want to activate a version of a language temporarily you can swap to it
+for the current shell:
+
+```bash
+> asdf shell golang 1.17.7
+> env|grep -i ASDF
+ASDF_GOLANG_VERSION=1.17.7
+```
+
+It sets an environment variable that will have preference over the file. If you
+ever wonder what versions a directory is using you can run:
+
+```bash
+> asdf current
+golang          ______          No version set. Run "asdf <global|shell|local> golang <version>"
+nodejs          12.22.10        .tool-versions
+poetry          ______          No version set. Run "asdf <global|shell|local> poetry <version>"
+python          3.9.10          .tool-versions
+yarn            1.22.17         .tool-versions
+```
+
+
+## Conclusion
+[asdf](https://asdf-vm.com/)  is an AWESOME tool to utilize if you find yourself using many
+different languages or many different versions of the same language. You should check it out
+and see if it can improve your workflow.
