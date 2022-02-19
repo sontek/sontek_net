@@ -9,12 +9,12 @@
     margin-bottom: 10px;
 }
 
-.container header h1 {
-    padding-bottom: 15px;
-    border-bottom: solid 2px;
-}
-
 #post-list {
     margin: 0;
     padding: 0;
+}
+
+.article img {
+    margin: 0 auto;
+    display: block;
 }

@@ -1,23 +1,35 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import {remark} from "remark";
-import html from "remark-html";
-import highlight from "remark-highlight.js";
+import { unified } from 'unified'
+import markdown from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import hrehypeStringify from 'rehype-stringify'
+import rehypeRaw from 'rehype-raw'
+
+import highlight from 'rehype-highlight'
 
 import { formatISO } from "date-fns";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 
+
+
 async function getContent(matterResult) {
-    // Use remark to convert markdown into HTML string
-    const processedContent = await remark()
-        .use(html)
+    const content = await unified()
+        .use(markdown)
+        // .use(remarkGfm)
+        .use(remarkRehype, { allowDangerousHtml: true })
+        .use(rehypeRaw)
         .use(highlight)
-        .process(matterResult.content);
-    const contentHtml = processedContent.toString();
-    return contentHtml;
+        .use(hrehypeStringify).process(
+            matterResult.content
+        ).then((file) => {
+            return file.value;
+        })
+    return content;
 }
+
 function getAllFilesInDirectory(startingDirectory, prefix=null) {
     const dirents = fs.readdirSync(startingDirectory, { withFileTypes: true });
     let fileNames = [];
