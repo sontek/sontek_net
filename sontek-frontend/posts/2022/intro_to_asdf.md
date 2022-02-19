@@ -20,7 +20,6 @@ I've used tools like `pyenv` and `nvm` in the past when I needed to change
 versions depending on which project I'm contributing to. But with `asdf`
 you have one tool to rule them all!
 
-![image](/images/posts/one_to_rule_them_all.png)
 
 ## Getting Started
 
