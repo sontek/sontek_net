@@ -223,4 +223,5 @@ Available recipes:
 [Just](https://github.com/casey/just) is a wonderful tool for building project specific CLIs without much effort. It is
 a great replacement for `Make` if you are using it as a command runner and it has most of the features you'd need.
 
-I recommend adding a `justfile` to your projects today!   I use one to even maintain my [home directory](https://github.com/sontek/homies/blob/master/justfile)!
+I recommend adding a `justfile` to your projects today! If you'd like to see a real world example of how to use `just`,
+you can check out the one I use to maintain my [home directory](https://github.com/sontek/homies/blob/master/justfile)!
