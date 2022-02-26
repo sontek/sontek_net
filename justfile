@@ -8,11 +8,11 @@ cfe CMD:
   cd {{ fe }} && {{ CMD }}
 
 # Install all frontend dependencies
-install-frontend:
+install-fe:
   just cfe "yarn"
 
 # Run frontend dev server
-dev-frontend: install-frontend
+dev-fe: install-fe
   just cfe "yarn dev"
 
 
