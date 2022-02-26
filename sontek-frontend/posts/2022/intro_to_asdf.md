@@ -129,3 +129,12 @@ yarn            1.22.17         .tool-versions
 [asdf](https://asdf-vm.com/)  is an AWESOME tool to utilize if you find yourself using many
 different languages or many different versions of the same language. You should check it out
 and see if it can improve your workflow.
+
+I made a video of me using the tool here:
+
+<iframe width="854" height="480" src="https://www.youtube.com/embed/RTaqWRj-6Lg"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+></iframe>

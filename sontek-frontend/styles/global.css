@@ -96,6 +96,10 @@ p {
     font-size: 1em;
 }
 
+iframe, img {
+    max-width: var(--content-width);
+}
+
 .center {
     text-align: center;
 }
