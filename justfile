@@ -16,7 +16,7 @@ dev-fe: install-fe
   just cfe "yarn dev"
 
 
-# Build and deploya assets
+# Build and deploy assets
 deploy-prod:
   just cfe "yarn build"
   just cfe "yarn export"
