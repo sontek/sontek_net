@@ -40,8 +40,8 @@ a cluster that looks like this:
 Since we’ll be using multipass to launch the nodes, we can do that now:
 
 ```bash
-❯ multipass launch -c 2 -m 2G -n controlplane
-❯ multipass launch -c 2 -m 4G -n worker
+❯ multipass launch -c 2 -m 2G -d 10G -n controlplane
+❯ multipass launch -c 2 -m 4G -d 10G -n worker
 ❯ multipass list
 Name                    State             IPv4             Image
 controlplane            Running           192.168.64.7     Ubuntu 20.04 LTS
@@ -59,7 +59,7 @@ Lets first add the kubernetes repo to the system so we have access to all the ku
 ❯ echo "deb  http://apt.kubernetes.io/  kubernetes-xenial  main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 ❯ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-❯ sudo apt-get update && sudo apt-get upgrade
+❯ sudo apt-get update && sudo apt-get upgrade -y
 ```
 
 Now that our system is setup, we can move on to getting a container runtime.
@@ -150,7 +150,7 @@ but to find the latest version you can run:
 Then install the version you want:
 
 ```bash
-❯ sudo apt-get install kubeadm=1.23.5-00
+❯ sudo apt-get install kubeadm=1.23.5-00 -y
 ```
 
 This will pull in a few tools, including an alternative to `ctr` that we used earlier called
@@ -272,7 +272,7 @@ Now run the following commands:
 ❯ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 ❯ echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
 ❯ curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
-❯ sudo apt-get update && sudo apt-get upgrade
+❯ sudo apt-get update && sudo apt-get upgrade -y
 ❯ cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 br_netfilter
 EOF
@@ -283,7 +283,7 @@ net.ipv4.ip_forward                        = 1
 EOF
 ❯ sudo systemctl restart systemd-modules-load
 ❯ sudo sysctl --system
-❯ sudo apt-get install containerd=1.5.5-0ubuntu3~20.04.2 apt-transport-https helm -y 
+❯ sudo apt-get install containerd=1.5.5-0ubuntu3~20.04.2 apt-transport-https helm kubeadm=1.23.5-00 -y 
 ```
 
 From there we should be ready to join the cluster.   When we ran `kubeadm init` previously it
