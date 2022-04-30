@@ -4,7 +4,7 @@ category: |
 date: 2022-04-30
 tags: |
     pandas
-title: How to speak spanish like a 1920s phone operator!
+title: How to speak spanish like a colombian drug lord!
 ---
 
 I've been living in Puerto Rico for 4 years but two of those have been COVID and so I haven't been able to practice Spanish as much as I'd like. So to speed up my learning I've decided I want to watch a lot of spanish speaking television to start training my ears, but to do this I need a baseline of words I understand to be able to even know what they are saying!
