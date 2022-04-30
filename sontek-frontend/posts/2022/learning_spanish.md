@@ -7,9 +7,7 @@ tags: |
 title: How to speak spanish like a 1920s phone operator!
 ---
 
-I've been living in Puerto Rico for 3 years but two of those have been COVID and so I haven't been able to practice Spanish as much as I'd like.   For 2022 I'm planning on making more of an effort.
-
-So to speed up my learning I've decided I want to watch a lot of spanish speaking television to start training my ears, but to do this I need a baseline of words I understand to be able to even know what they are saying!
+I've been living in Puerto Rico for 4 years but two of those have been COVID and so I haven't been able to practice Spanish as much as I'd like. So to speed up my learning I've decided I want to watch a lot of spanish speaking television to start training my ears, but to do this I need a baseline of words I understand to be able to even know what they are saying!
 
 Learning through apps like Duolingo, Drops, etc start with weird topics like vegetables that don't get you to a very good baseline for actually understanding daily conversations, so I think consuming TV is a better use of my time. 
 
