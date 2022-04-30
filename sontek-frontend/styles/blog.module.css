@@ -18,3 +18,31 @@
     margin: 0 auto;
     display: block;
 }
+
+.article th {
+    background-color: #262626;
+    color: var(--text);
+
+    @media (prefers-color-scheme: light) {
+        background-color: #CCC;
+        color: #000;
+    }
+}
+
+.article table {
+    background-color: #f1f4f5;
+    display: table-cell;
+    border-spacing: 0;
+    background: var(--surface);
+    color: var(--text);
+}
+
+.article th, .article td {
+    border: 1px solid #333;
+
+    @media (prefers-color-scheme: light) {
+        border: 1px solid #dadfe2;
+    }
+    padding: 4px;
+    display: table-cell;
+}
