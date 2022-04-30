@@ -65,7 +65,7 @@ I want to detect the start of a sentence and the end of a sentence and then comb
 Splitting on spaces also didn't work for identifying the parts of speech since I needed the context around the word.
 
 <center>
-<img src="https://cdn.zappy.app/51b01eb5330df4d7582637acb6bc539a.png" />
+<img src="/images/posts/learning_spanish/regex-extraction.png" />
 </center>
 
 ## Natural Language Processing
@@ -170,7 +170,7 @@ Which returned a list of words and their count:
 Now I wanted to identify where my diminishing returns would be.   Is there a set of words that I must learn because they are spoken so often that I wouldn't understand a conversation if they weren't in my vocabulary?
 
 <center>
-<img src="https://cdn.zappy.app/d8c6b45084cf94dc1174b0181b00c763.png" />
+<img src="/images/posts/learning_spanish/diminishing_returns.png" />
 </center>
 
 As you can see in this chart, the usage for words drops off at around the ~200 mark.   So there are basically 150 words I *must* know and then the rest are equally important.   I wasn't quite happy with this because some parts of speech are higher priority than others, for example I think having a strong understanding of the popular verbs will go a long way.  So I also wanted to identify what are the most important verbs to learn:
@@ -208,7 +208,7 @@ Which got me this:
 Verbs had a slightly different drop-off pattern when I targeted them directly:
 
 <center>
-<img src="https://cdn.zappy.app/bca0b3810fde5627d72bf14a5292375d.png" />
+<img src="/images/posts/learning_spanish/diminishing_verbs.png" />
 </center>
 
 I get a big bang for my buck by learning those top 40 verbs.   Nouns on the other hand are much more spread out and most are evenly distributed:
@@ -228,7 +228,7 @@ word	pos	count
 ```
 
 <center>
-<img src="https://cdn.zappy.app/893b9203256d51c13eaf97f872793de1.png" />
+<img src="/images/posts/learning_spanish/diminishing_nouns.png" />
 </center>
 
 So then I thought to myself... How much of a show would I understand if I just learned these most important words?  So I started by excluding some of the easy parts of speech and focused on the most important:
@@ -245,7 +245,7 @@ find_important_words.head(50)
 The top 20 were all verbs except for `bueno` and `gracias`.   So now with my list of what I considered "important words" I plotted it to find what amount of words I wanted to learn:
 
 <center>
-<img src="https://cdn.zappy.app/1aaf2ee52ff49d53d9830ccc1dc02046.png" />
+<img src="/images/posts/learning_spanish/important_words.png" />
 </center>
 
 It looks like 200 learned words would give me a reasonable amount of understanding for a series, so I decided to calculate how much of a series I would understand if I learned just those first 200 words:
@@ -551,5 +551,5 @@ I believe a data-driven approach to language learning will be an effective way t
 I'll improve the data analysis over time as well but I do believe this is a pretty good starting point!
 
 <center>
-<img src="https://cdn.zappy.app/54a9b682b4f87512ab9a471321b1da6c.png" />
+<img src="/images/posts/learning_spanish/meme.png" />
 </center>
