@@ -1,0 +1,425 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width"/><meta charSet="utf-8"/><title>How to speak spanish like a colombian drug lord!</title><meta name="next-head-count" content="3"/><link rel="preload" href="/_next/static/css/97e2e641c9651679.css" as="style"/><link rel="stylesheet" href="/_next/static/css/97e2e641c9651679.css" data-n-g=""/><link rel="preload" href="/_next/static/css/98f4b305e55937cf.css" as="style"/><link rel="stylesheet" href="/_next/static/css/98f4b305e55937cf.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-5cd94c89d3acac5f.js"></script><script src="/_next/static/chunks/webpack-d7b038a63b619762.js" defer=""></script><script src="/_next/static/chunks/framework-5f4595e5518b5600.js" defer=""></script><script src="/_next/static/chunks/main-7d0be5702b1cad24.js" defer=""></script><script src="/_next/static/chunks/pages/_app-db340e45743e5304.js" defer=""></script><script src="/_next/static/chunks/395-021075f5bc54064e.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5B...id%5D-bf20ef94989869af.js" defer=""></script><script src="/_next/static/uf8yO-xiACoeo0dLzQgV9/_buildManifest.js" defer=""></script><script src="/_next/static/uf8yO-xiACoeo0dLzQgV9/_ssgManifest.js" defer=""></script><script src="/_next/static/uf8yO-xiACoeo0dLzQgV9/_middlewareManifest.js" defer=""></script></head><body><div id="__next" data-reactroot=""><div><div class="grid"><div class="col"><header id="banner" class="body"><h1><a href="/">sontek.net</a></h1></header></div><div class="col menu"><nav><ul><li><a href="/">Home</a></li><li><a href="/blog">Blog</a></li><li><a href="/resume">Resume</a></li><li><a href="/about">About</a></li></ul></nav></div></div><div class="container"><article class="blog_article__NoEy4"><h1 class="util_headingXl__knZ_h">How to speak spanish like a colombian drug lord!</h1><div class="util_lightText__xcqUE"><time dateTime="2022-04-29T20:00:00-04:00">April 29, 2022</time></div><div><p>I've been living in Puerto Rico for 4 years but two of those have been COVID and so I haven't been able to practice Spanish as much as I'd like. So to speed up my learning I've decided I want to watch a lot of spanish speaking television to start training my ears, but to do this I need a baseline of words I understand to be able to even know what they are saying!</p>
+<p>Learning through apps like Duolingo, Drops, etc start with weird topics like vegetables that don't get you to a very good baseline for actually understanding daily conversations, so I think consuming TV is a better use of my time.</p>
+<h2>Subtitles</h2>
+<p>I've decided the way to understand what the best words to study are is to download every subtitle for every episode of a show I want to watch and then count each word.  The more a word is spoken the more important it is for me to know it since I'll be hearing it a lot in the show.</p>
+<p>I'm going to download subtitles from Netflix. Subtitles in Netflix are in WebVTT format, which looks like this:</p>
+<pre><code class="hljs language-arduino"><span class="hljs-number">248</span>
+<span class="hljs-number">00</span>:<span class="hljs-number">17</span>:<span class="hljs-number">58.285</span> --> <span class="hljs-number">00</span>:<span class="hljs-number">18</span>:<span class="hljs-number">01.163</span>  position:<span class="hljs-number">50.00</span>%,middle  align:middle size:<span class="hljs-number">80.00</span>%  line:<span class="hljs-number">79.33</span>% 
+Yo de verdad espero que ustedes
+me vean como una amiga, ¿mmm?
+
+<span class="hljs-number">249</span>
+<span class="hljs-number">00</span>:<span class="hljs-number">18</span>:<span class="hljs-number">01.247</span> --> <span class="hljs-number">00</span>:<span class="hljs-number">18</span>:<span class="hljs-number">02.539</span>  position:<span class="hljs-number">50.00</span>%,middle  align:middle size:<span class="hljs-number">80.00</span>%  line:<span class="hljs-number">84.67</span>% 
+No como una madrastra.
+
+<span class="hljs-number">250</span>
+<span class="hljs-number">00</span>:<span class="hljs-number">18</span>:<span class="hljs-number">04.250</span> --> <span class="hljs-number">00</span>:<span class="hljs-number">18</span>:<span class="hljs-number">06.127</span>  position:<span class="hljs-number">50.00</span>%,middle  align:middle size:<span class="hljs-number">80.00</span>%  line:<span class="hljs-number">84.67</span>% 
+Yo nunca te vi como una madrastra.
+</code></pre>
+<p>It gives you a start time, end time, and the text on the screen.   So my first process was parsing this format and just turning it into a list of words using https://github.com/glut23/webvtt-py.</p>
+<h3>Dummy parsing</h3>
+<p>What I basically did was <code>text.split(" ")</code> and started counting the words.   This approach was quick and painless but it had a few downs falls.    Some words <em>look</em> the same when in reality they are not and so this meant I'd have to study every meaning of a word even if it was more rare.</p>
+<p>An example of this is the word "como", you can say:</p>
+<ul>
+<li>Haz como te digo: "Do as I say", where como means "as"</li>
+<li>como tacos todos los dias: "I eat tacos every day", where como is a conjugated form of the verb "to eat"</li>
+</ul>
+<p>I need to know which version of a word is being used so I can count it properly.</p>
+<h3>Regular Expressions are always the answer</h3>
+<p>I couldn't figure out what the word was without it being in a complete sentence, but subtitles are fragments.   They are split up into timings for displaying on the screen but they don't include entire sentences.  For example, it might look like this:</p>
+<pre><code class="hljs language-arduino"><span class="hljs-number">23</span>
+<span class="hljs-number">00</span>:<span class="hljs-number">01</span>:<span class="hljs-number">21.960</span> --> <span class="hljs-number">00</span>:<span class="hljs-number">01</span>:<span class="hljs-number">23.520</span>  position:<span class="hljs-number">50.00</span>%,middle  align:middle size:<span class="hljs-number">80.00</span>%  line:<span class="hljs-number">84.67</span>% 
+Solo las que luchan por ellos
+
+<span class="hljs-number">24</span>
+<span class="hljs-number">00</span>:<span class="hljs-number">01</span>:<span class="hljs-number">23.680</span> --> <span class="hljs-number">00</span>:<span class="hljs-number">01</span>:<span class="hljs-number">25.680</span>  position:<span class="hljs-number">50.00</span>%,middle  align:middle size:<span class="hljs-number">80.00</span>%  line:<span class="hljs-number">84.67</span>% 
+consiguen sus sueños.
+</code></pre>
+<p>I want to detect the start of a sentence and the end of a sentence and then combine it, so that you end up with "Solo las que luchan por ellos consiguen sus sueños.".   My first thought was a regular expression on punctuation.   This worked well <em>most</em> of the time but there were enough exceptions to the rule that it broke often on generated a lot of broken sentences:</p>
+<ul>
+<li>Abbreviations like "EE. UU" for estados unidos (united states)</li>
+<li>Ellipsis</li>
+</ul>
+<p>Splitting on spaces also didn't work for identifying the parts of speech since I needed the context around the word.</p>
+<center>
+<img src="/images/posts/learning_spanish/regex-extraction.png">
+</center>
+<h2>Natural Language Processing</h2>
+<p>So to solve my pain I decided to grab https://spacy.io/ and do some NLP on the subtitles so that I could identify the proper parts of speech and get an accurate representation of the words I needed to learn.</p>
+<p>The way spaCy works is you can send it a sentence and it'll return you a set of tokens:</p>
+<pre><code class="hljs language-python"><span class="hljs-meta">>>> </span><span class="hljs-keyword">import</span> spacy
+<span class="hljs-meta">>>> </span>nlp = spacy.load(<span class="hljs-string">"es_core_news_sm"</span>)
+<span class="hljs-meta">>>> </span>[x.pos_ <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> nlp(<span class="hljs-string">"Hola, como estas?"</span>)]
+[<span class="hljs-string">'PROPN'</span>, <span class="hljs-string">'PUNCT'</span>, <span class="hljs-string">'SCONJ'</span>, <span class="hljs-string">'PRON'</span>, <span class="hljs-string">'PUNCT'</span>]
+</code></pre>
+<p>So now I could identify the parts of speech and pull sentences together through end of sentence punctation.   The first thing I did was generate a CSV of sentences that looked like this:</p>
+<table>
+<tbody><tr>
+<th>sentence</th>
+<th>start</th>
+<th>end</th>
+<th>show</th>
+<th>file</th>
+</tr>
+<tr>
+<td>Si no, le voy a cortar todos los deditos</td>
+<td>00:00:20.605</td>
+<td>00:00:24.125</td>
+<td>El marginal</td>
+<td>El marginal S02E02 WEBRip Netflix es[cc].vtt</td>
+</tr>
+</tbody></table>
+<p>Once I had a CSV of sentences I could send those back through spaCy for NLP and then start counting words, to generate another CSV:</p>
+<table>
+<tbody><tr>
+<th>word</th>
+<th>pos</th>
+<th>show</th>
+<th>file</th>
+</tr>
+<tr>
+<td>a</td>
+<td>ADP</td>
+<td>El marginal</td>
+<td>El marginal S02E02 WEBRip Netflix es[cc].vtt</td>
+</tr>
+<tr>
+<td>cortar</td>
+<td>VERB</td>
+<td>El marginal</td>
+<td>El marginal S02E02 WEBRip Netflix es[cc].vtt</td>
+</tr>
+<tr>
+<td>todos</td>
+<td>PRON</td>
+<td>El marginal</td>
+<td>El marginal S02E02 WEBRip Netflix es[cc].vtt</td>
+</tr>
+</tbody></table>
+<p>From there I had all the data I needed!   So now it was time to start doing some data analysis!</p>
+<h2>Data analysis</h2>
+<p>Using a jupyter notebook ( https://jupyter.org/ ) I grabbed pandas ( https://pandas.pydata.org/ ) and read in my CSVs to start analyzing the results.</p>
+<pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd
+<span class="hljs-keyword">import</span> matplotlib.<span class="hljs-property">pyplot</span> <span class="hljs-keyword">as</span> plt
+pd.<span class="hljs-title hljs-function">set_option</span>(<span class="hljs-string">'display.max_rows'</span>, <span class="hljs-number">1000</span>)
+words = pd.<span class="hljs-title hljs-function">read_csv</span>(<span class="hljs-string">'word_data.csv.gz'</span>, compression=<span class="hljs-string">'gzip'</span>, delimiter=<span class="hljs-string">','</span>)
+</code></pre>
+<p>The words dataframe is built up out of the second table I showed above with just words and their parts of speech.   I started off grouping the dataset by the word so I could get a count for how many times it was spoken in every series I parsed:</p>
+<pre><code class="hljs language-ini"><span class="hljs-attr">grouped_result</span> = (words.groupby(words.word).size() 
+   .sort_values(<span class="hljs-attr">ascending</span>=<span class="hljs-literal">False</span>) 
+   .reset_index(<span class="hljs-attr">name</span>=<span class="hljs-string">'count'</span>)
+   .drop_duplicates(<span class="hljs-attr">subset</span>=<span class="hljs-string">'word'</span>))
+
+grouped_result.head(300)
+</code></pre>
+<p>Which returned a list of words and their count:</p>
+<pre><code class="hljs language-arduino">	<span class="hljs-type">word</span>	count
+<span class="hljs-number">0</span>	que	<span class="hljs-number">94430</span>
+<span class="hljs-number">1</span>	no	<span class="hljs-number">75931</span>
+<span class="hljs-number">2</span>	a	<span class="hljs-number">70968</span>
+<span class="hljs-number">3</span>	de	<span class="hljs-number">67982</span>
+<span class="hljs-number">4</span>	ser	<span class="hljs-number">64226</span>
+<span class="hljs-number">5</span>	la	<span class="hljs-number">52143</span>
+<span class="hljs-number">6</span>	y	<span class="hljs-number">44390</span>
+<span class="hljs-number">7</span>	estar	<span class="hljs-number">37819</span>
+<span class="hljs-number">8</span>	el	<span class="hljs-number">35920</span>
+</code></pre>
+<p>Now I wanted to identify where my diminishing returns would be.   Is there a set of words that I must learn because they are spoken so often that I wouldn't understand a conversation if they weren't in my vocabulary?</p>
+<center>
+<img src="/images/posts/learning_spanish/diminishing_returns.png">
+</center>
+<p>As you can see in this chart, the usage for words drops off at around the ~200 mark.   So there are basically 150 words I <em>must</em> know and then the rest are equally important.   I wasn't quite happy with this because some parts of speech are higher priority than others, for example I think having a strong understanding of the popular verbs will go a long way.  So I also wanted to identify what are the most important verbs to learn:</p>
+<pre><code class="hljs language-ini"><span class="hljs-attr">grouped_verbs</span> = (words[words.pos == <span class="hljs-string">'VERB'</span>].groupby([<span class="hljs-string">'word'</span>, <span class="hljs-string">'pos'</span>]).size() 
+   .sort_values(<span class="hljs-attr">ascending</span>=<span class="hljs-literal">False</span>) 
+   .reset_index(<span class="hljs-attr">name</span>=<span class="hljs-string">'count'</span>)
+   .drop_duplicates(<span class="hljs-attr">subset</span>=<span class="hljs-string">'word'</span>))
+
+grouped_verbs.head(50)
+</code></pre>
+<p>Which got me this:</p>
+<pre><code class="hljs language-yaml">	<span class="hljs-string">word</span>	<span class="hljs-string">pos</span>	<span class="hljs-string">count</span>
+<span class="hljs-number">0</span>	<span class="hljs-string">tener</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">22072</span>
+<span class="hljs-number">1</span>	<span class="hljs-string">hacer</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">14946</span>
+<span class="hljs-number">2</span>	<span class="hljs-string">ir</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">12570</span>
+<span class="hljs-number">3</span>	<span class="hljs-string">decir</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">11314</span>
+<span class="hljs-number">4</span>	<span class="hljs-string">querer</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">11083</span>
+<span class="hljs-number">5</span>	<span class="hljs-string">ver</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">10269</span>
+<span class="hljs-number">6</span>	<span class="hljs-string">estar</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">9780</span>
+<span class="hljs-number">7</span>	<span class="hljs-string">saber</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">8704</span>
+<span class="hljs-number">8</span>	<span class="hljs-string">ser</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">7674</span>
+<span class="hljs-number">9</span>	<span class="hljs-string">dar</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">5722</span>
+<span class="hljs-number">10</span>	<span class="hljs-string">pasar</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">5528</span>
+<span class="hljs-number">11</span>	<span class="hljs-string">hablar</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">5355</span>
+<span class="hljs-number">12</span>	<span class="hljs-string">venir</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">5145</span>
+<span class="hljs-number">13</span>	<span class="hljs-string">creer</span>	<span class="hljs-string">VERB</span>	<span class="hljs-number">4895</span>
+<span class="hljs-number">14</span>	<span class="hljs-string">salir</span> 	<span class="hljs-string">VERB</span>	<span class="hljs-number">3395</span>
+</code></pre>
+<p>Verbs had a slightly different drop-off pattern when I targeted them directly:</p>
+<center>
+<img src="/images/posts/learning_spanish/diminishing_verbs.png">
+</center>
+<p>I get a big bang for my buck by learning those top 40 verbs.   Nouns on the other hand are much more spread out and most are evenly distributed:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-string">word</span>	<span class="hljs-string">pos</span>	<span class="hljs-string">count</span>
+<span class="hljs-number">0</span>	<span class="hljs-string">gracias</span>	<span class="hljs-string">NOUN</span>	<span class="hljs-number">4676</span>
+<span class="hljs-number">1</span>	<span class="hljs-string">favor</span>	<span class="hljs-string">NOUN</span>	<span class="hljs-number">4625</span>
+<span class="hljs-number">2</span>	<span class="hljs-string">señor</span>	<span class="hljs-string">NOUN</span>	<span class="hljs-number">4116</span>
+<span class="hljs-number">3</span>	<span class="hljs-string">verdad</span>	<span class="hljs-string">NOUN</span>	<span class="hljs-number">3566</span>
+<span class="hljs-number">4</span>	<span class="hljs-string">vida</span>	<span class="hljs-string">NOUN</span>	<span class="hljs-number">2673</span>
+<span class="hljs-number">5</span>	<span class="hljs-string">hombre</span>	<span class="hljs-string">NOUN</span>	<span class="hljs-number">2601</span>
+<span class="hljs-number">6</span>	<span class="hljs-string">madre</span>	<span class="hljs-string">NOUN</span>	<span class="hljs-number">2597</span>
+<span class="hljs-number">7</span>	<span class="hljs-string">vez</span>	<span class="hljs-string">NOUN</span>	<span class="hljs-number">2537</span>
+<span class="hljs-number">8</span>	<span class="hljs-string">tiempo</span>	<span class="hljs-string">NOUN</span>	<span class="hljs-number">2492</span>
+<span class="hljs-number">9</span>	<span class="hljs-string">hijo</span>	<span class="hljs-string">NOUN</span>	<span class="hljs-number">2215</span>
+</code></pre>
+<center>
+<img src="/images/posts/learning_spanish/diminishing_nouns.png">
+</center>
+<p>So then I thought to myself... How much of a show would I understand if I just learned these most important words?  So I started by excluding some of the easy parts of speech and focused on the most important:</p>
+<pre><code class="hljs language-ini"><span class="hljs-attr">find_important_words</span> = (words[~words.pos.isin([<span class="hljs-string">'PRON'</span>, <span class="hljs-string">'CONJ'</span>, <span class="hljs-string">'ADP'</span>, <span class="hljs-string">'ADV'</span>, <span class="hljs-string">'SCONJ'</span>, <span class="hljs-string">'AUX'</span>, <span class="hljs-string">'INTJ'</span>])].groupby([<span class="hljs-string">'word'</span>, <span class="hljs-string">'pos'</span>]).size() 
+   .sort_values(<span class="hljs-attr">ascending</span>=<span class="hljs-literal">False</span>) 
+   .reset_index(<span class="hljs-attr">name</span>=<span class="hljs-string">'count'</span>)
+   .drop_duplicates(<span class="hljs-attr">subset</span>=<span class="hljs-string">'word'</span>))
+
+find_important_words.head(50)
+</code></pre>
+<p>The top 20 were all verbs except for <code>bueno</code> and <code>gracias</code>.   So now with my list of what I considered "important words" I plotted it to find what amount of words I wanted to learn:</p>
+<center>
+<img src="/images/posts/learning_spanish/important_words.png">
+</center>
+<p>It looks like 200 learned words would give me a reasonable amount of understanding for a series, so I decided to calculate how much of a series I would understand if I learned just those first 200 words:</p>
+<pre><code class="hljs language-ini"><span class="hljs-attr">percentages</span> = {}
+
+for show_name in words<span class="hljs-section">['media']</span>.drop_duplicates().values:
+    <span class="hljs-attr">words_in_show</span> = (words[words.media == show_name].groupby(words.word).size() 
+       .sort_values(<span class="hljs-attr">ascending</span>=<span class="hljs-literal">False</span>) 
+       .reset_index(<span class="hljs-attr">name</span>=<span class="hljs-string">'count'</span>)
+       .drop_duplicates(<span class="hljs-attr">subset</span>=<span class="hljs-string">'word'</span>))
+    
+    <span class="hljs-attr">total_words_handled</span> = <span class="hljs-number">0</span>
+
+    for word in grouped_result<span class="hljs-section">['word']</span><span class="hljs-section">[:200]</span>:
+        <span class="hljs-attr">values</span> = words_in_show[words_in_show.word == word][<span class="hljs-string">'count'</span>].values
+
+        if values.size > 0:
+            total_words_handled += values<span class="hljs-section">[0]</span>
+
+    percentages<span class="hljs-section">[show_name]</span> = total_words_handled / words_in_show.sum().loc<span class="hljs-section">['count']</span>
+</code></pre>
+<p>Now I had a table that would show me what percentage of the spoken words were covered by the first 200 words in my list:</p>
+<pre><code class="hljs language-ini"><span class="hljs-attr">p_df</span> = pd.DataFrame(percentages.items(), columns=[<span class="hljs-string">'show'</span>, <span class="hljs-string">'percentage'</span>])
+<span class="hljs-attr">p_df</span> = p_df.sort_values(by=<span class="hljs-string">'percentage'</span>)
+p_df<span class="hljs-section">['percentage']</span> = p_df<span class="hljs-section">['percentage']</span> * 100
+<span class="hljs-attr">pd.options.display.float_format</span> = <span class="hljs-string">'{:,.2f}%'</span>.format
+p_df
+</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table>
+<tbody><tr>
+<th>Show</th>
+<th>Percentage</th>
+</tr><tr>
+<td>Verónica</td>
+<td>64.24%</td>
+</tr><tr>
+<td>El ciudadano ilustre</td>
+<td>65.28%</td>
+</tr><tr>
+<td>El Chapo</td>
+<td>66.68%</td>
+</tr><tr>
+<td>Neruda</td>
+<td>66.89%</td>
+</tr><tr>
+<td>La casa de papel</td>
+<td>67.56%</td>
+</tr><tr>
+<td>El Ministerio del Tiempo</td>
+<td>68.03%</td>
+</tr><tr>
+<td>Club de Cuervos</td>
+<td>68.19%</td>
+</tr><tr>
+<td>El marginal</td>
+<td>68.47%</td>
+</tr><tr>
+<td>Ingobernable</td>
+<td>68.59%</td>
+</tr><tr>
+<td>Pablo Escobar</td>
+<td>70.20%</td>
+</tr><tr>
+<td>Fariña</td>
+<td>70.95</td>
+</tr><tr>
+<td>La Reina del Sur</td>
+<td>71.52%</td>
+</tr><tr>
+<td>Gran Hotel</td>
+<td>73.15%</td>
+</tr><tr>
+<td>Las chicas del cable</td>
+<td>73.58%</td>
+</tr><tr>
+<td>Élite</td>
+<td>73.78%</td>
+</tr><tr>
+<td>La Piloto</td>
+<td>74.03%</td>
+</tr><tr>
+<td>El bar</td>
+<td>74.07%</td>
+</tr><tr>
+<td>La casa de las flores</td>
+<td>75.40%</td>
+</tr><tr>
+<td>Tarde para la ira</td>
+<td>75.59%</td>
+</tr></tbody></table>
+<p>But living in Puerto Rico, one thing I've realized is speed of speech is also important.  I have a much easier time speaking with people from Colombia and Mexico than I do with Puerto Ricans because they speak so much faster.   So even though I could understand 75% of "Tarde para la ira" if I learned the 200 words, I want to make sure they are speaking at a pace I could understand as well.</p>
+<p>So I loaded up the other CSV file that was the full sentences and added a "time per word" column:</p>
+<pre><code class="hljs language-css">sentences = pd<span class="hljs-selector-class">.read_csv</span>('sentences<span class="hljs-selector-class">.csv</span><span class="hljs-selector-class">.gz</span>', compression='gzip', delimiter=',', parse_dates=<span class="hljs-selector-attr">[<span class="hljs-string">'start'</span>, <span class="hljs-string">'end'</span>]</span>)
+sentences<span class="hljs-selector-attr">[<span class="hljs-string">'total_time'</span>]</span> = (sentences<span class="hljs-selector-attr">[<span class="hljs-string">'end'</span>]</span> - sentences<span class="hljs-selector-attr">[<span class="hljs-string">'start'</span>]</span>)<span class="hljs-selector-class">.dt</span><span class="hljs-selector-class">.total_seconds</span>()
+sentences<span class="hljs-selector-attr">[<span class="hljs-string">'word_count'</span>]</span> = sentences<span class="hljs-selector-attr">[<span class="hljs-string">'sentence'</span>]</span><span class="hljs-selector-class">.str</span><span class="hljs-selector-class">.split</span>()<span class="hljs-selector-class">.str</span><span class="hljs-selector-class">.len</span>()
+sentences<span class="hljs-selector-attr">[<span class="hljs-string">'time_per_word'</span>]</span> = sentences<span class="hljs-selector-attr">[<span class="hljs-string">'total_time'</span>]</span> / sentences<span class="hljs-selector-attr">[<span class="hljs-string">'word_count'</span>]</span>
+</code></pre>
+<p>Then I was able to have a speed rating for each show:</p>
+<pre><code class="hljs language-scss">sentence_group = sentences<span class="hljs-selector-class">.groupby</span>([sentences.media])
+sentence_group<span class="hljs-selector-class">.time_per_word</span><span class="hljs-selector-class">.mean</span>()<span class="hljs-selector-class">.reset_index</span>()<span class="hljs-selector-class">.sort_values</span>('time_per_word')
+</code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table>
+<tbody><tr>
+<th>media</th>
+<th>time_per_word</th>
+</tr><tr>
+<td>Gran Hotel</td>
+<td>0.58</td>
+</tr><tr>
+<td>El Chapo</td>
+<td>0.59</td>
+</tr><tr>
+<td>Las chicas del cable</td>
+<td>0.61</td>
+</tr><tr>
+<td>Élite</td>
+<td>0.63</td>
+</tr><tr>
+<td>Ingobernable</td>
+<td>0.64</td>
+</tr><tr>
+<td>El Ministerio del Tiempo</td>
+<td>0.64</td>
+</tr><tr>
+<td>Fariña</td>
+<td>0.65</td>
+</tr><tr>
+<td>El ciudadano ilustre</td>
+<td>0.67</td>
+</tr><tr>
+<td>Neruda</td>
+<td>0.68</td>
+</tr><tr>
+<td>La Piloto</td>
+<td>0.69</td>
+</tr><tr>
+<td>La casa de papel</td>
+<td>0.70</td>
+</tr><tr>
+<td>El bar</td>
+<td>0.70</td>
+</tr><tr>
+<td>Verónica</td>
+<td>0.72</td>
+</tr><tr>
+<td>La Reina del Sur</td>
+<td>0.75</td>
+</tr><tr>
+<td>Club de Cuervos</td>
+<td>0.76</td>
+</tr><tr>
+<td>El marginal</td>
+<td>0.76</td>
+</tr><tr>
+<td>Pablo Escobar</td>
+<td>0.77</td>
+</tr><tr>
+<td>Tarde para la ira</td>
+<td>0.77</td>
+</tr><tr>
+<td>La casa de las flores</td>
+<td>0.81</td>
+</tr></tbody></table>
+<p>Luckily the two series that have the least amount of vocabulary also speak the slowest!   So these will be the series I start with.    The final question I wanted to answer is "What are the top words I'm missing for a series".    Since I'll know 75% of the series from the top 200 words, I'm hoping there are some top words from a specific series that I can also learn to get an even higher understanding.</p>
+<p>First, find which words are in each show but not in the top 200:</p>
+<pre><code class="hljs language-ini"><span class="hljs-attr">missing_words_by_show</span> = {}
+
+for show_name in words<span class="hljs-section">['media']</span>.drop_duplicates().values:
+    <span class="hljs-attr">words_in_show</span> = (words[words.media == show_name].groupby(words.word).size() 
+       .sort_values(<span class="hljs-attr">ascending</span>=<span class="hljs-literal">False</span>) 
+       .reset_index(<span class="hljs-attr">name</span>=<span class="hljs-string">'count'</span>)
+       .drop_duplicates(<span class="hljs-attr">subset</span>=<span class="hljs-string">'word'</span>))
+    
+    <span class="hljs-attr">frequency_words</span> = grouped_result[<span class="hljs-string">'word'</span>][:<span class="hljs-number">200</span>]
+
+    <span class="hljs-attr">missing_words</span> = words_in_show[~words_in_show.word.isin(frequency_words.values)]
+    missing_words_by_show<span class="hljs-section">[show_name]</span> = missing_words
+</code></pre>
+<p>Then we were able to grab them per show:</p>
+<pre><code class="hljs language-css">missing_words_by_show<span class="hljs-selector-attr">[<span class="hljs-string">'La casa de las flores'</span>]</span><span class="hljs-selector-class">.head</span>(<span class="hljs-number">50</span>)
+
+word	count
+<span class="hljs-number">31</span>	mamá	<span class="hljs-number">252</span>
+<span class="hljs-number">70</span>	florerí<span class="hljs-selector-tag">a</span>	<span class="hljs-number">87</span>
+<span class="hljs-number">98</span>	perdón	<span class="hljs-number">56</span>
+<span class="hljs-number">102</span>	sea	<span class="hljs-number">54</span>
+<span class="hljs-number">116</span>	además	<span class="hljs-number">44</span>
+<span class="hljs-number">126</span>	ahorita	<span class="hljs-number">40</span>
+<span class="hljs-number">132</span>	cárcel	<span class="hljs-number">38</span>
+<span class="hljs-number">133</span>	fiesta	<span class="hljs-number">38</span>
+</code></pre>
+<p>So adding those few words to my vocabulary will also give me a better understanding of the series.</p>
+<h2>Conclusion</h2>
+<p>I believe a data-driven approach to language learning will be an effective way to get me speaking better spanish.   It was a ton of fun to play with spaCy, pandas, and jupyter as well!</p>
+<p>I'll improve the data analysis over time as well but I do believe this is a pretty good starting point!</p>
+<center>
+<img src="/images/posts/learning_spanish/meme.png">
+</center></div></article></div></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"postData":{"id":["2022","learning_spanish"],"path":"2022/learning_spanish","contentHtml":"\u003cp\u003eI've been living in Puerto Rico for 4 years but two of those have been COVID and so I haven't been able to practice Spanish as much as I'd like. So to speed up my learning I've decided I want to watch a lot of spanish speaking television to start training my ears, but to do this I need a baseline of words I understand to be able to even know what they are saying!\u003c/p\u003e\n\u003cp\u003eLearning through apps like Duolingo, Drops, etc start with weird topics like vegetables that don't get you to a very good baseline for actually understanding daily conversations, so I think consuming TV is a better use of my time.\u003c/p\u003e\n\u003ch2\u003eSubtitles\u003c/h2\u003e\n\u003cp\u003eI've decided the way to understand what the best words to study are is to download every subtitle for every episode of a show I want to watch and then count each word.  The more a word is spoken the more important it is for me to know it since I'll be hearing it a lot in the show.\u003c/p\u003e\n\u003cp\u003eI'm going to download subtitles from Netflix. Subtitles in Netflix are in WebVTT format, which looks like this:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-arduino\"\u003e\u003cspan class=\"hljs-number\"\u003e248\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e00\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e17\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e58.285\u003c/span\u003e --\u003e \u003cspan class=\"hljs-number\"\u003e00\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e18\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e01.163\u003c/span\u003e  position:\u003cspan class=\"hljs-number\"\u003e50.00\u003c/span\u003e%,middle  align:middle size:\u003cspan class=\"hljs-number\"\u003e80.00\u003c/span\u003e%  line:\u003cspan class=\"hljs-number\"\u003e79.33\u003c/span\u003e% \nYo de verdad espero que ustedes\nme vean como una amiga, ¿mmm?\n\n\u003cspan class=\"hljs-number\"\u003e249\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e00\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e18\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e01.247\u003c/span\u003e --\u003e \u003cspan class=\"hljs-number\"\u003e00\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e18\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e02.539\u003c/span\u003e  position:\u003cspan class=\"hljs-number\"\u003e50.00\u003c/span\u003e%,middle  align:middle size:\u003cspan class=\"hljs-number\"\u003e80.00\u003c/span\u003e%  line:\u003cspan class=\"hljs-number\"\u003e84.67\u003c/span\u003e% \nNo como una madrastra.\n\n\u003cspan class=\"hljs-number\"\u003e250\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e00\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e18\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e04.250\u003c/span\u003e --\u003e \u003cspan class=\"hljs-number\"\u003e00\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e18\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e06.127\u003c/span\u003e  position:\u003cspan class=\"hljs-number\"\u003e50.00\u003c/span\u003e%,middle  align:middle size:\u003cspan class=\"hljs-number\"\u003e80.00\u003c/span\u003e%  line:\u003cspan class=\"hljs-number\"\u003e84.67\u003c/span\u003e% \nYo nunca te vi como una madrastra.\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eIt gives you a start time, end time, and the text on the screen.   So my first process was parsing this format and just turning it into a list of words using https://github.com/glut23/webvtt-py.\u003c/p\u003e\n\u003ch3\u003eDummy parsing\u003c/h3\u003e\n\u003cp\u003eWhat I basically did was \u003ccode\u003etext.split(\" \")\u003c/code\u003e and started counting the words.   This approach was quick and painless but it had a few downs falls.    Some words \u003cem\u003elook\u003c/em\u003e the same when in reality they are not and so this meant I'd have to study every meaning of a word even if it was more rare.\u003c/p\u003e\n\u003cp\u003eAn example of this is the word \"como\", you can say:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eHaz como te digo: \"Do as I say\", where como means \"as\"\u003c/li\u003e\n\u003cli\u003ecomo tacos todos los dias: \"I eat tacos every day\", where como is a conjugated form of the verb \"to eat\"\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eI need to know which version of a word is being used so I can count it properly.\u003c/p\u003e\n\u003ch3\u003eRegular Expressions are always the answer\u003c/h3\u003e\n\u003cp\u003eI couldn't figure out what the word was without it being in a complete sentence, but subtitles are fragments.   They are split up into timings for displaying on the screen but they don't include entire sentences.  For example, it might look like this:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-arduino\"\u003e\u003cspan class=\"hljs-number\"\u003e23\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e00\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e01\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e21.960\u003c/span\u003e --\u003e \u003cspan class=\"hljs-number\"\u003e00\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e01\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e23.520\u003c/span\u003e  position:\u003cspan class=\"hljs-number\"\u003e50.00\u003c/span\u003e%,middle  align:middle size:\u003cspan class=\"hljs-number\"\u003e80.00\u003c/span\u003e%  line:\u003cspan class=\"hljs-number\"\u003e84.67\u003c/span\u003e% \nSolo las que luchan por ellos\n\n\u003cspan class=\"hljs-number\"\u003e24\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e00\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e01\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e23.680\u003c/span\u003e --\u003e \u003cspan class=\"hljs-number\"\u003e00\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e01\u003c/span\u003e:\u003cspan class=\"hljs-number\"\u003e25.680\u003c/span\u003e  position:\u003cspan class=\"hljs-number\"\u003e50.00\u003c/span\u003e%,middle  align:middle size:\u003cspan class=\"hljs-number\"\u003e80.00\u003c/span\u003e%  line:\u003cspan class=\"hljs-number\"\u003e84.67\u003c/span\u003e% \nconsiguen sus sueños.\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eI want to detect the start of a sentence and the end of a sentence and then combine it, so that you end up with \"Solo las que luchan por ellos consiguen sus sueños.\".   My first thought was a regular expression on punctuation.   This worked well \u003cem\u003emost\u003c/em\u003e of the time but there were enough exceptions to the rule that it broke often on generated a lot of broken sentences:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eAbbreviations like \"EE. UU\" for estados unidos (united states)\u003c/li\u003e\n\u003cli\u003eEllipsis\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eSplitting on spaces also didn't work for identifying the parts of speech since I needed the context around the word.\u003c/p\u003e\n\u003ccenter\u003e\n\u003cimg src=\"/images/posts/learning_spanish/regex-extraction.png\"\u003e\n\u003c/center\u003e\n\u003ch2\u003eNatural Language Processing\u003c/h2\u003e\n\u003cp\u003eSo to solve my pain I decided to grab https://spacy.io/ and do some NLP on the subtitles so that I could identify the proper parts of speech and get an accurate representation of the words I needed to learn.\u003c/p\u003e\n\u003cp\u003eThe way spaCy works is you can send it a sentence and it'll return you a set of tokens:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-python\"\u003e\u003cspan class=\"hljs-meta\"\u003e\u003e\u003e\u003e \u003c/span\u003e\u003cspan class=\"hljs-keyword\"\u003eimport\u003c/span\u003e spacy\n\u003cspan class=\"hljs-meta\"\u003e\u003e\u003e\u003e \u003c/span\u003enlp = spacy.load(\u003cspan class=\"hljs-string\"\u003e\"es_core_news_sm\"\u003c/span\u003e)\n\u003cspan class=\"hljs-meta\"\u003e\u003e\u003e\u003e \u003c/span\u003e[x.pos_ \u003cspan class=\"hljs-keyword\"\u003efor\u003c/span\u003e x \u003cspan class=\"hljs-keyword\"\u003ein\u003c/span\u003e nlp(\u003cspan class=\"hljs-string\"\u003e\"Hola, como estas?\"\u003c/span\u003e)]\n[\u003cspan class=\"hljs-string\"\u003e'PROPN'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'PUNCT'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'SCONJ'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'PRON'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'PUNCT'\u003c/span\u003e]\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eSo now I could identify the parts of speech and pull sentences together through end of sentence punctation.   The first thing I did was generate a CSV of sentences that looked like this:\u003c/p\u003e\n\u003ctable\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003cth\u003esentence\u003c/th\u003e\n\u003cth\u003estart\u003c/th\u003e\n\u003cth\u003eend\u003c/th\u003e\n\u003cth\u003eshow\u003c/th\u003e\n\u003cth\u003efile\u003c/th\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003eSi no, le voy a cortar todos los deditos\u003c/td\u003e\n\u003ctd\u003e00:00:20.605\u003c/td\u003e\n\u003ctd\u003e00:00:24.125\u003c/td\u003e\n\u003ctd\u003eEl marginal\u003c/td\u003e\n\u003ctd\u003eEl marginal S02E02 WEBRip Netflix es[cc].vtt\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\u003c/table\u003e\n\u003cp\u003eOnce I had a CSV of sentences I could send those back through spaCy for NLP and then start counting words, to generate another CSV:\u003c/p\u003e\n\u003ctable\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003cth\u003eword\u003c/th\u003e\n\u003cth\u003epos\u003c/th\u003e\n\u003cth\u003eshow\u003c/th\u003e\n\u003cth\u003efile\u003c/th\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003ea\u003c/td\u003e\n\u003ctd\u003eADP\u003c/td\u003e\n\u003ctd\u003eEl marginal\u003c/td\u003e\n\u003ctd\u003eEl marginal S02E02 WEBRip Netflix es[cc].vtt\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003ecortar\u003c/td\u003e\n\u003ctd\u003eVERB\u003c/td\u003e\n\u003ctd\u003eEl marginal\u003c/td\u003e\n\u003ctd\u003eEl marginal S02E02 WEBRip Netflix es[cc].vtt\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003etodos\u003c/td\u003e\n\u003ctd\u003ePRON\u003c/td\u003e\n\u003ctd\u003eEl marginal\u003c/td\u003e\n\u003ctd\u003eEl marginal S02E02 WEBRip Netflix es[cc].vtt\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\u003c/table\u003e\n\u003cp\u003eFrom there I had all the data I needed!   So now it was time to start doing some data analysis!\u003c/p\u003e\n\u003ch2\u003eData analysis\u003c/h2\u003e\n\u003cp\u003eUsing a jupyter notebook ( https://jupyter.org/ ) I grabbed pandas ( https://pandas.pydata.org/ ) and read in my CSVs to start analyzing the results.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-javascript\"\u003e\u003cspan class=\"hljs-keyword\"\u003eimport\u003c/span\u003e numpy \u003cspan class=\"hljs-keyword\"\u003eas\u003c/span\u003e np\n\u003cspan class=\"hljs-keyword\"\u003eimport\u003c/span\u003e pandas \u003cspan class=\"hljs-keyword\"\u003eas\u003c/span\u003e pd\n\u003cspan class=\"hljs-keyword\"\u003eimport\u003c/span\u003e matplotlib.\u003cspan class=\"hljs-property\"\u003epyplot\u003c/span\u003e \u003cspan class=\"hljs-keyword\"\u003eas\u003c/span\u003e plt\npd.\u003cspan class=\"hljs-title hljs-function\"\u003eset_option\u003c/span\u003e(\u003cspan class=\"hljs-string\"\u003e'display.max_rows'\u003c/span\u003e, \u003cspan class=\"hljs-number\"\u003e1000\u003c/span\u003e)\nwords = pd.\u003cspan class=\"hljs-title hljs-function\"\u003eread_csv\u003c/span\u003e(\u003cspan class=\"hljs-string\"\u003e'word_data.csv.gz'\u003c/span\u003e, compression=\u003cspan class=\"hljs-string\"\u003e'gzip'\u003c/span\u003e, delimiter=\u003cspan class=\"hljs-string\"\u003e','\u003c/span\u003e)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe words dataframe is built up out of the second table I showed above with just words and their parts of speech.   I started off grouping the dataset by the word so I could get a count for how many times it was spoken in every series I parsed:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ini\"\u003e\u003cspan class=\"hljs-attr\"\u003egrouped_result\u003c/span\u003e = (words.groupby(words.word).size() \n   .sort_values(\u003cspan class=\"hljs-attr\"\u003eascending\u003c/span\u003e=\u003cspan class=\"hljs-literal\"\u003eFalse\u003c/span\u003e) \n   .reset_index(\u003cspan class=\"hljs-attr\"\u003ename\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e'count'\u003c/span\u003e)\n   .drop_duplicates(\u003cspan class=\"hljs-attr\"\u003esubset\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e'word'\u003c/span\u003e))\n\ngrouped_result.head(300)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWhich returned a list of words and their count:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-arduino\"\u003e\t\u003cspan class=\"hljs-type\"\u003eword\u003c/span\u003e\tcount\n\u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e\tque\t\u003cspan class=\"hljs-number\"\u003e94430\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e1\u003c/span\u003e\tno\t\u003cspan class=\"hljs-number\"\u003e75931\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e2\u003c/span\u003e\ta\t\u003cspan class=\"hljs-number\"\u003e70968\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e3\u003c/span\u003e\tde\t\u003cspan class=\"hljs-number\"\u003e67982\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e4\u003c/span\u003e\tser\t\u003cspan class=\"hljs-number\"\u003e64226\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e5\u003c/span\u003e\tla\t\u003cspan class=\"hljs-number\"\u003e52143\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e6\u003c/span\u003e\ty\t\u003cspan class=\"hljs-number\"\u003e44390\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e7\u003c/span\u003e\testar\t\u003cspan class=\"hljs-number\"\u003e37819\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e8\u003c/span\u003e\tel\t\u003cspan class=\"hljs-number\"\u003e35920\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNow I wanted to identify where my diminishing returns would be.   Is there a set of words that I must learn because they are spoken so often that I wouldn't understand a conversation if they weren't in my vocabulary?\u003c/p\u003e\n\u003ccenter\u003e\n\u003cimg src=\"/images/posts/learning_spanish/diminishing_returns.png\"\u003e\n\u003c/center\u003e\n\u003cp\u003eAs you can see in this chart, the usage for words drops off at around the ~200 mark.   So there are basically 150 words I \u003cem\u003emust\u003c/em\u003e know and then the rest are equally important.   I wasn't quite happy with this because some parts of speech are higher priority than others, for example I think having a strong understanding of the popular verbs will go a long way.  So I also wanted to identify what are the most important verbs to learn:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ini\"\u003e\u003cspan class=\"hljs-attr\"\u003egrouped_verbs\u003c/span\u003e = (words[words.pos == \u003cspan class=\"hljs-string\"\u003e'VERB'\u003c/span\u003e].groupby([\u003cspan class=\"hljs-string\"\u003e'word'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'pos'\u003c/span\u003e]).size() \n   .sort_values(\u003cspan class=\"hljs-attr\"\u003eascending\u003c/span\u003e=\u003cspan class=\"hljs-literal\"\u003eFalse\u003c/span\u003e) \n   .reset_index(\u003cspan class=\"hljs-attr\"\u003ename\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e'count'\u003c/span\u003e)\n   .drop_duplicates(\u003cspan class=\"hljs-attr\"\u003esubset\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e'word'\u003c/span\u003e))\n\ngrouped_verbs.head(50)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWhich got me this:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-yaml\"\u003e\t\u003cspan class=\"hljs-string\"\u003eword\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003epos\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003ecount\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003etener\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e22072\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e1\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003ehacer\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e14946\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e2\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eir\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e12570\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e3\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003edecir\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e11314\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e4\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003equerer\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e11083\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e5\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003ever\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e10269\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e6\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eestar\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e9780\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e7\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003esaber\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e8704\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e8\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eser\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e7674\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e9\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003edar\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e5722\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e10\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003epasar\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e5528\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e11\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003ehablar\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e5355\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e12\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003evenir\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e5145\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e13\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003ecreer\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e4895\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e14\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003esalir\u003c/span\u003e \t\u003cspan class=\"hljs-string\"\u003eVERB\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e3395\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eVerbs had a slightly different drop-off pattern when I targeted them directly:\u003c/p\u003e\n\u003ccenter\u003e\n\u003cimg src=\"/images/posts/learning_spanish/diminishing_verbs.png\"\u003e\n\u003c/center\u003e\n\u003cp\u003eI get a big bang for my buck by learning those top 40 verbs.   Nouns on the other hand are much more spread out and most are evenly distributed:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-yaml\"\u003e\u003cspan class=\"hljs-string\"\u003eword\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003epos\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003ecount\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003egracias\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eNOUN\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e4676\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e1\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003efavor\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eNOUN\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e4625\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e2\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eseñor\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eNOUN\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e4116\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e3\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003everdad\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eNOUN\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e3566\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e4\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003evida\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eNOUN\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e2673\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e5\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003ehombre\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eNOUN\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e2601\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e6\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003emadre\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eNOUN\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e2597\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e7\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003evez\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eNOUN\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e2537\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e8\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003etiempo\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eNOUN\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e2492\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e9\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003ehijo\u003c/span\u003e\t\u003cspan class=\"hljs-string\"\u003eNOUN\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e2215\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003ccenter\u003e\n\u003cimg src=\"/images/posts/learning_spanish/diminishing_nouns.png\"\u003e\n\u003c/center\u003e\n\u003cp\u003eSo then I thought to myself... How much of a show would I understand if I just learned these most important words?  So I started by excluding some of the easy parts of speech and focused on the most important:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ini\"\u003e\u003cspan class=\"hljs-attr\"\u003efind_important_words\u003c/span\u003e = (words[~words.pos.isin([\u003cspan class=\"hljs-string\"\u003e'PRON'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'CONJ'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'ADP'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'ADV'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'SCONJ'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'AUX'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'INTJ'\u003c/span\u003e])].groupby([\u003cspan class=\"hljs-string\"\u003e'word'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'pos'\u003c/span\u003e]).size() \n   .sort_values(\u003cspan class=\"hljs-attr\"\u003eascending\u003c/span\u003e=\u003cspan class=\"hljs-literal\"\u003eFalse\u003c/span\u003e) \n   .reset_index(\u003cspan class=\"hljs-attr\"\u003ename\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e'count'\u003c/span\u003e)\n   .drop_duplicates(\u003cspan class=\"hljs-attr\"\u003esubset\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e'word'\u003c/span\u003e))\n\nfind_important_words.head(50)\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe top 20 were all verbs except for \u003ccode\u003ebueno\u003c/code\u003e and \u003ccode\u003egracias\u003c/code\u003e.   So now with my list of what I considered \"important words\" I plotted it to find what amount of words I wanted to learn:\u003c/p\u003e\n\u003ccenter\u003e\n\u003cimg src=\"/images/posts/learning_spanish/important_words.png\"\u003e\n\u003c/center\u003e\n\u003cp\u003eIt looks like 200 learned words would give me a reasonable amount of understanding for a series, so I decided to calculate how much of a series I would understand if I learned just those first 200 words:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ini\"\u003e\u003cspan class=\"hljs-attr\"\u003epercentages\u003c/span\u003e = {}\n\nfor show_name in words\u003cspan class=\"hljs-section\"\u003e['media']\u003c/span\u003e.drop_duplicates().values:\n    \u003cspan class=\"hljs-attr\"\u003ewords_in_show\u003c/span\u003e = (words[words.media == show_name].groupby(words.word).size() \n       .sort_values(\u003cspan class=\"hljs-attr\"\u003eascending\u003c/span\u003e=\u003cspan class=\"hljs-literal\"\u003eFalse\u003c/span\u003e) \n       .reset_index(\u003cspan class=\"hljs-attr\"\u003ename\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e'count'\u003c/span\u003e)\n       .drop_duplicates(\u003cspan class=\"hljs-attr\"\u003esubset\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e'word'\u003c/span\u003e))\n    \n    \u003cspan class=\"hljs-attr\"\u003etotal_words_handled\u003c/span\u003e = \u003cspan class=\"hljs-number\"\u003e0\u003c/span\u003e\n\n    for word in grouped_result\u003cspan class=\"hljs-section\"\u003e['word']\u003c/span\u003e\u003cspan class=\"hljs-section\"\u003e[:200]\u003c/span\u003e:\n        \u003cspan class=\"hljs-attr\"\u003evalues\u003c/span\u003e = words_in_show[words_in_show.word == word][\u003cspan class=\"hljs-string\"\u003e'count'\u003c/span\u003e].values\n\n        if values.size \u003e 0:\n            total_words_handled += values\u003cspan class=\"hljs-section\"\u003e[0]\u003c/span\u003e\n\n    percentages\u003cspan class=\"hljs-section\"\u003e[show_name]\u003c/span\u003e = total_words_handled / words_in_show.sum().loc\u003cspan class=\"hljs-section\"\u003e['count']\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eNow I had a table that would show me what percentage of the spoken words were covered by the first 200 words in my list:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ini\"\u003e\u003cspan class=\"hljs-attr\"\u003ep_df\u003c/span\u003e = pd.DataFrame(percentages.items(), columns=[\u003cspan class=\"hljs-string\"\u003e'show'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'percentage'\u003c/span\u003e])\n\u003cspan class=\"hljs-attr\"\u003ep_df\u003c/span\u003e = p_df.sort_values(by=\u003cspan class=\"hljs-string\"\u003e'percentage'\u003c/span\u003e)\np_df\u003cspan class=\"hljs-section\"\u003e['percentage']\u003c/span\u003e = p_df\u003cspan class=\"hljs-section\"\u003e['percentage']\u003c/span\u003e * 100\n\u003cspan class=\"hljs-attr\"\u003epd.options.display.float_format\u003c/span\u003e = \u003cspan class=\"hljs-string\"\u003e'{:,.2f}%'\u003c/span\u003e.format\np_df\n\u003c/code\u003e\u003c/pre\u003e\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\u003ctable\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003cth\u003eShow\u003c/th\u003e\n\u003cth\u003ePercentage\u003c/th\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eVerónica\u003c/td\u003e\n\u003ctd\u003e64.24%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eEl ciudadano ilustre\u003c/td\u003e\n\u003ctd\u003e65.28%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eEl Chapo\u003c/td\u003e\n\u003ctd\u003e66.68%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eNeruda\u003c/td\u003e\n\u003ctd\u003e66.89%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eLa casa de papel\u003c/td\u003e\n\u003ctd\u003e67.56%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eEl Ministerio del Tiempo\u003c/td\u003e\n\u003ctd\u003e68.03%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eClub de Cuervos\u003c/td\u003e\n\u003ctd\u003e68.19%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eEl marginal\u003c/td\u003e\n\u003ctd\u003e68.47%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eIngobernable\u003c/td\u003e\n\u003ctd\u003e68.59%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003ePablo Escobar\u003c/td\u003e\n\u003ctd\u003e70.20%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eFariña\u003c/td\u003e\n\u003ctd\u003e70.95\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eLa Reina del Sur\u003c/td\u003e\n\u003ctd\u003e71.52%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eGran Hotel\u003c/td\u003e\n\u003ctd\u003e73.15%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eLas chicas del cable\u003c/td\u003e\n\u003ctd\u003e73.58%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eÉlite\u003c/td\u003e\n\u003ctd\u003e73.78%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eLa Piloto\u003c/td\u003e\n\u003ctd\u003e74.03%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eEl bar\u003c/td\u003e\n\u003ctd\u003e74.07%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eLa casa de las flores\u003c/td\u003e\n\u003ctd\u003e75.40%\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eTarde para la ira\u003c/td\u003e\n\u003ctd\u003e75.59%\u003c/td\u003e\n\u003c/tr\u003e\u003c/tbody\u003e\u003c/table\u003e\n\u003cp\u003eBut living in Puerto Rico, one thing I've realized is speed of speech is also important.  I have a much easier time speaking with people from Colombia and Mexico than I do with Puerto Ricans because they speak so much faster.   So even though I could understand 75% of \"Tarde para la ira\" if I learned the 200 words, I want to make sure they are speaking at a pace I could understand as well.\u003c/p\u003e\n\u003cp\u003eSo I loaded up the other CSV file that was the full sentences and added a \"time per word\" column:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-css\"\u003esentences = pd\u003cspan class=\"hljs-selector-class\"\u003e.read_csv\u003c/span\u003e('sentences\u003cspan class=\"hljs-selector-class\"\u003e.csv\u003c/span\u003e\u003cspan class=\"hljs-selector-class\"\u003e.gz\u003c/span\u003e', compression='gzip', delimiter=',', parse_dates=\u003cspan class=\"hljs-selector-attr\"\u003e[\u003cspan class=\"hljs-string\"\u003e'start'\u003c/span\u003e, \u003cspan class=\"hljs-string\"\u003e'end'\u003c/span\u003e]\u003c/span\u003e)\nsentences\u003cspan class=\"hljs-selector-attr\"\u003e[\u003cspan class=\"hljs-string\"\u003e'total_time'\u003c/span\u003e]\u003c/span\u003e = (sentences\u003cspan class=\"hljs-selector-attr\"\u003e[\u003cspan class=\"hljs-string\"\u003e'end'\u003c/span\u003e]\u003c/span\u003e - sentences\u003cspan class=\"hljs-selector-attr\"\u003e[\u003cspan class=\"hljs-string\"\u003e'start'\u003c/span\u003e]\u003c/span\u003e)\u003cspan class=\"hljs-selector-class\"\u003e.dt\u003c/span\u003e\u003cspan class=\"hljs-selector-class\"\u003e.total_seconds\u003c/span\u003e()\nsentences\u003cspan class=\"hljs-selector-attr\"\u003e[\u003cspan class=\"hljs-string\"\u003e'word_count'\u003c/span\u003e]\u003c/span\u003e = sentences\u003cspan class=\"hljs-selector-attr\"\u003e[\u003cspan class=\"hljs-string\"\u003e'sentence'\u003c/span\u003e]\u003c/span\u003e\u003cspan class=\"hljs-selector-class\"\u003e.str\u003c/span\u003e\u003cspan class=\"hljs-selector-class\"\u003e.split\u003c/span\u003e()\u003cspan class=\"hljs-selector-class\"\u003e.str\u003c/span\u003e\u003cspan class=\"hljs-selector-class\"\u003e.len\u003c/span\u003e()\nsentences\u003cspan class=\"hljs-selector-attr\"\u003e[\u003cspan class=\"hljs-string\"\u003e'time_per_word'\u003c/span\u003e]\u003c/span\u003e = sentences\u003cspan class=\"hljs-selector-attr\"\u003e[\u003cspan class=\"hljs-string\"\u003e'total_time'\u003c/span\u003e]\u003c/span\u003e / sentences\u003cspan class=\"hljs-selector-attr\"\u003e[\u003cspan class=\"hljs-string\"\u003e'word_count'\u003c/span\u003e]\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThen I was able to have a speed rating for each show:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-scss\"\u003esentence_group = sentences\u003cspan class=\"hljs-selector-class\"\u003e.groupby\u003c/span\u003e([sentences.media])\nsentence_group\u003cspan class=\"hljs-selector-class\"\u003e.time_per_word\u003c/span\u003e\u003cspan class=\"hljs-selector-class\"\u003e.mean\u003c/span\u003e()\u003cspan class=\"hljs-selector-class\"\u003e.reset_index\u003c/span\u003e()\u003cspan class=\"hljs-selector-class\"\u003e.sort_values\u003c/span\u003e('time_per_word')\n\u003c/code\u003e\u003c/pre\u003e\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\u003ctable\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003cth\u003emedia\u003c/th\u003e\n\u003cth\u003etime_per_word\u003c/th\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eGran Hotel\u003c/td\u003e\n\u003ctd\u003e0.58\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eEl Chapo\u003c/td\u003e\n\u003ctd\u003e0.59\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eLas chicas del cable\u003c/td\u003e\n\u003ctd\u003e0.61\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eÉlite\u003c/td\u003e\n\u003ctd\u003e0.63\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eIngobernable\u003c/td\u003e\n\u003ctd\u003e0.64\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eEl Ministerio del Tiempo\u003c/td\u003e\n\u003ctd\u003e0.64\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eFariña\u003c/td\u003e\n\u003ctd\u003e0.65\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eEl ciudadano ilustre\u003c/td\u003e\n\u003ctd\u003e0.67\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eNeruda\u003c/td\u003e\n\u003ctd\u003e0.68\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eLa Piloto\u003c/td\u003e\n\u003ctd\u003e0.69\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eLa casa de papel\u003c/td\u003e\n\u003ctd\u003e0.70\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eEl bar\u003c/td\u003e\n\u003ctd\u003e0.70\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eVerónica\u003c/td\u003e\n\u003ctd\u003e0.72\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eLa Reina del Sur\u003c/td\u003e\n\u003ctd\u003e0.75\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eClub de Cuervos\u003c/td\u003e\n\u003ctd\u003e0.76\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eEl marginal\u003c/td\u003e\n\u003ctd\u003e0.76\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003ePablo Escobar\u003c/td\u003e\n\u003ctd\u003e0.77\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eTarde para la ira\u003c/td\u003e\n\u003ctd\u003e0.77\u003c/td\u003e\n\u003c/tr\u003e\u003ctr\u003e\n\u003ctd\u003eLa casa de las flores\u003c/td\u003e\n\u003ctd\u003e0.81\u003c/td\u003e\n\u003c/tr\u003e\u003c/tbody\u003e\u003c/table\u003e\n\u003cp\u003eLuckily the two series that have the least amount of vocabulary also speak the slowest!   So these will be the series I start with.    The final question I wanted to answer is \"What are the top words I'm missing for a series\".    Since I'll know 75% of the series from the top 200 words, I'm hoping there are some top words from a specific series that I can also learn to get an even higher understanding.\u003c/p\u003e\n\u003cp\u003eFirst, find which words are in each show but not in the top 200:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-ini\"\u003e\u003cspan class=\"hljs-attr\"\u003emissing_words_by_show\u003c/span\u003e = {}\n\nfor show_name in words\u003cspan class=\"hljs-section\"\u003e['media']\u003c/span\u003e.drop_duplicates().values:\n    \u003cspan class=\"hljs-attr\"\u003ewords_in_show\u003c/span\u003e = (words[words.media == show_name].groupby(words.word).size() \n       .sort_values(\u003cspan class=\"hljs-attr\"\u003eascending\u003c/span\u003e=\u003cspan class=\"hljs-literal\"\u003eFalse\u003c/span\u003e) \n       .reset_index(\u003cspan class=\"hljs-attr\"\u003ename\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e'count'\u003c/span\u003e)\n       .drop_duplicates(\u003cspan class=\"hljs-attr\"\u003esubset\u003c/span\u003e=\u003cspan class=\"hljs-string\"\u003e'word'\u003c/span\u003e))\n    \n    \u003cspan class=\"hljs-attr\"\u003efrequency_words\u003c/span\u003e = grouped_result[\u003cspan class=\"hljs-string\"\u003e'word'\u003c/span\u003e][:\u003cspan class=\"hljs-number\"\u003e200\u003c/span\u003e]\n\n    \u003cspan class=\"hljs-attr\"\u003emissing_words\u003c/span\u003e = words_in_show[~words_in_show.word.isin(frequency_words.values)]\n    missing_words_by_show\u003cspan class=\"hljs-section\"\u003e[show_name]\u003c/span\u003e = missing_words\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThen we were able to grab them per show:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-css\"\u003emissing_words_by_show\u003cspan class=\"hljs-selector-attr\"\u003e[\u003cspan class=\"hljs-string\"\u003e'La casa de las flores'\u003c/span\u003e]\u003c/span\u003e\u003cspan class=\"hljs-selector-class\"\u003e.head\u003c/span\u003e(\u003cspan class=\"hljs-number\"\u003e50\u003c/span\u003e)\n\nword\tcount\n\u003cspan class=\"hljs-number\"\u003e31\u003c/span\u003e\tmamá\t\u003cspan class=\"hljs-number\"\u003e252\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e70\u003c/span\u003e\tflorerí\u003cspan class=\"hljs-selector-tag\"\u003ea\u003c/span\u003e\t\u003cspan class=\"hljs-number\"\u003e87\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e98\u003c/span\u003e\tperdón\t\u003cspan class=\"hljs-number\"\u003e56\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e102\u003c/span\u003e\tsea\t\u003cspan class=\"hljs-number\"\u003e54\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e116\u003c/span\u003e\tademás\t\u003cspan class=\"hljs-number\"\u003e44\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e126\u003c/span\u003e\tahorita\t\u003cspan class=\"hljs-number\"\u003e40\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e132\u003c/span\u003e\tcárcel\t\u003cspan class=\"hljs-number\"\u003e38\u003c/span\u003e\n\u003cspan class=\"hljs-number\"\u003e133\u003c/span\u003e\tfiesta\t\u003cspan class=\"hljs-number\"\u003e38\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eSo adding those few words to my vocabulary will also give me a better understanding of the series.\u003c/p\u003e\n\u003ch2\u003eConclusion\u003c/h2\u003e\n\u003cp\u003eI believe a data-driven approach to language learning will be an effective way to get me speaking better spanish.   It was a ton of fun to play with spaCy, pandas, and jupyter as well!\u003c/p\u003e\n\u003cp\u003eI'll improve the data analysis over time as well but I do believe this is a pretty good starting point!\u003c/p\u003e\n\u003ccenter\u003e\n\u003cimg src=\"/images/posts/learning_spanish/meme.png\"\u003e\n\u003c/center\u003e","category":"development","date":"2022-04-29T20:00:00-04:00","tags":["pandas","nlp"],"title":"How to speak spanish like a colombian drug lord!"}},"__N_SSG":true},"page":"/blog/[...id]","query":{"id":["2022","learning_spanish"]},"buildId":"uf8yO-xiACoeo0dLzQgV9","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
