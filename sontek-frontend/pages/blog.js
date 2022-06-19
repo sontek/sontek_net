@@ -30,7 +30,7 @@ export default function Home({ allPostsData, allTagData }) {
                 <div className={blogStyles.tags}>
                     {Object.keys(allTagData).map((tag) => {
                         return (
-                            <Link href={`/blog/tags/${tag}`}>
+                            <Link href={`/blog/tags/${tag}`} key={tag}>
                                 <a className={blogStyles.tag}>
                                     {tag}
                                 </a>

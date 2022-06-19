@@ -1,16 +1,11 @@
 ---
-category: |
-    development
+category: development
 date: 2011-05-07
 tags:
     - vim
     - python
 title: Turning Vim into a modern Python IDE
 ---
-
-::: {.contents}
-:::
-
 TL;DR:
 
     $ git clone https://github.com/sontek/dotfiles.git
