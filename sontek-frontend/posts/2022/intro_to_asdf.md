@@ -1,9 +1,11 @@
 ---
-category: |
-    programming
+category: development
 date: 2022-02-18
-tags: |
-    python,nodejs,golang,linux
+tags:
+    - python
+    - nodejs
+    - golang
+    - linux
 title: Use asdf to manage Python, NodeJS, GoLang and more!
 ---
 

@@ -1,9 +1,9 @@
 ---
-category: |
-    spanish
+category: development
 date: 2022-04-30
-tags: |
-    pandas
+tags:
+    - pandas
+    - nlp
 title: How to speak spanish like a colombian drug lord!
 ---
 

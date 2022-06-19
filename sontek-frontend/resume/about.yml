@@ -1,5 +1,7 @@
 name: John M. Anderson
-description: Full-stack software developer and SRE who loves DevOps, Python, and Rust.
+description: Full-stack software developer and SRE who loves DevOps, Python,
+             and Rust. I'm a Certified Kubernetes Administrator and ScrumMaster
+             as well.
 
 location:
   city: Luquillo, PR
@@ -30,3 +32,4 @@ skills:
   - React.js
   - react-native
   - electron
+  - Postgres

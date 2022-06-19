@@ -1,10 +1,10 @@
 ---
-category: |
-    kubernetes
+category: kubernetes
 date: 2022-04-17
-tags: |
-    linux
-    kubernetes
+tags:
+    - linux
+    - kubernetes
+    - devops
 title: Running a kubernetes cluster locally with kubeadm
 ---
 

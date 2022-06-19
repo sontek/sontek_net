@@ -1,9 +1,8 @@
 ---
-category: |
-    development
+category: development
 date: 2022-02-26
-tags: |
-    linux
+tags:
+    - linux
 title: Automate project workflows with the command runner Just!
 ---
 

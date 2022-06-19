@@ -1,9 +1,11 @@
 ---
 category: |
-    python
+    development
 date: 2011-12-01
-tags: |
-    python, pyramid, sqlalchemy
+tags:
+    - python
+    - pyramid
+    - sqlalchemy
 title: Writing tests for Pyramid and SQLAlchemy
 ---
 

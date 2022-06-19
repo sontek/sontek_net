@@ -1,9 +1,9 @@
 ---
-category: |
-    none
+category: development
 date: 2010-11-15
-tags: |
-    python, interviews
+tags:
+    - python
+    - interviews
 title: Caesar Cipher in Python
 ---
 

@@ -1,9 +1,8 @@
 ---
-category: |
-    linux
+category: linux
 date: 2022-02-18
-tags: |
-    linux
+tags:
+    - linux
 title: Using Nix as your local package manager
 ---
 

@@ -53,6 +53,34 @@ function getAllFilesInDirectory(startingDirectory, prefix=null) {
     return fileNames;
 }
 
+export async function getAllTags() {
+    // Get file names under /posts
+    const fileNames = getAllFilesInDirectory(postsDirectory);
+    const tags = {};
+    await Promise.all(
+        fileNames.map(async (fileName) => {
+            const id = fileName.replace(/\.md$/, "");
+            const postData = await getPostData(id.split("/"));
+
+            const oldTags = postData['tags'] || [];
+
+            oldTags.forEach((tag) => {
+                // first time we've see this tag
+                if (!tags[tag]) {
+                    tags[tag] = {
+                        'count': 1,
+                        'posts': [postData],
+                    }
+                } else {
+                    tags[tag]['count'] += 1;
+                    tags[tag]['posts'].push(postData);
+                }
+            });
+        })
+    );
+    return tags;
+}
+
 export async function getRecentPosts() {
     // Get file names under /posts
     const fileNames = getAllFilesInDirectory(postsDirectory);
@@ -80,20 +108,6 @@ export async function getRecentPosts() {
 
 export function getAllPostIds() {
     const fileNames = getAllFilesInDirectory(postsDirectory);
-
-    // Returns an array that looks like this:
-    // [
-    //   {
-    //     params: {
-    //       id: 'ssg-ssr'
-    //     }
-    //   },
-    //   {
-    //     params: {
-    //       id: 'pre-rendering'
-    //     }
-    //   }
-    // ]
     const finalData = fileNames.map((fileName) => {
         const clean = fileName.replace(/\.md$/, "");
         const segments = clean.split("/");

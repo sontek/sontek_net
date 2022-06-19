@@ -22,6 +22,9 @@ companies:
         and staging environments. Over 3000 pods running varied
         workloads.
 
+      - Manage an elasticsearch cluster that received 7tb of data
+        each day
+
       - 100% Infrastructure as using Terraform, Helm, and
         GitLab pipelines.
 
@@ -32,7 +35,7 @@ companies:
       - Helped run the migration from GitHub to GitLab which included
         migrating thousands of repositories and CI/CD pipelines.
 
-      - Ran upgrades of Kubernetes from 1.16 to 1.21
+      - Ran upgrades of Kubernetes from 1.16 to 1.24
 
       - Built training and onboarding documentation for new SREs
 
