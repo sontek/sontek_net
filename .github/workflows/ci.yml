@@ -1,4 +1,4 @@
-name: Lint Frontend
+name: Lint
 on:
   pull_request:
   push:
@@ -22,5 +22,30 @@ jobs:
       - name: Run lint
         run: |
           just fe-lint
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+name: deploy
+on:
+  push:
+    branches: main
+jobs:
+  lint-fe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️  The workflow is now ready to test your code on the runner."
+      - name: Install just
+        shell: bash
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to $HOME/.local/bin
+          echo $HOME/.local/bin >> $GITHUB_PATH
+      - name: Deploy to production
+        run: |
+          just fe-deploy-prod
       - run: echo "🍏 This job's status is ${{ job.status }}."
 
