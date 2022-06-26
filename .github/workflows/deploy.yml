@@ -1,11 +1,12 @@
-name: Lint
+name: deploy
 on:
-  pull_request:
   push:
     branches: main
 jobs:
-  lint-fe:
+  deployment:
     runs-on: ubuntu-latest
+    environment: production
+
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -19,7 +20,9 @@ jobs:
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to $HOME/.local/bin
           echo $HOME/.local/bin >> $GITHUB_PATH
-      - name: Run lint
+      - name: Deploy to production
         run: |
-          just fe-lint
+          just fe-deploy-prod
       - run: echo "🍏 This job's status is ${{ job.status }}."
+
+
