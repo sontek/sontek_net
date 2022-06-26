@@ -55,16 +55,6 @@ function About(aboutData) {
                 <h2>{aboutData["name"]}</h2>
                 <p>Location: {aboutData["location"]["city"]}</p>
                 <p>{aboutData["description"]}</p>
-                <div className={resumeStyles.skills}>
-                    <h3>Top Skills:</h3>
-                    {aboutData["skills"].map((skill) => {
-                        return (
-                            <span className={resumeStyles.skill} key={skill}>
-                                {skill}
-                            </span>
-                        );
-                    })}
-                </div>
             </div>
             <div className={resumeStyles.col}>
                 <div>
@@ -93,6 +83,16 @@ function About(aboutData) {
                         })}
                     </ul>
                 </div>
+            </div>
+            <div className={resumeStyles.skills}>
+                <h3>Top Skills:</h3>
+                {aboutData["skills"].map((skill) => {
+                    return (
+                        <span className={resumeStyles.skill} key={skill}>
+                            {skill}
+                        </span>
+                    );
+                })}
             </div>
         </div>
     );
