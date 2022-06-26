@@ -25,7 +25,7 @@
         "@types/js-yaml": "^4.0.5",
         "classnames": "^2.3.1",
         "cssnano": "^5.1.12",
-        "gh-pages": "^3.2.3",
+        "gh-pages": "^4.0.0",
         "js-yaml": "^4.1.0",
         "postcss": "^8.4.14",
         "postcss-easings": "3.0.1",
