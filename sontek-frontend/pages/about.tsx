@@ -19,19 +19,19 @@ export default function About() {
                     />
                 </div>
                 <small>
-                    I'm a father of two who lives in Luquillo, Puerto Rico and
+                    I&apos;m a father of two who lives in Luquillo, Puerto Rico and
                     loves to hack on opensource
                 </small>
             </div>
             <br />
             <div>
                 <p>
-                    I'm comfortable with everything from writing CSS and
+                    I&apos;m comfortable with everything from writing CSS and
                     React.js to building custom linux distributions and turning
                     them into AMIs or docker images.
                 </p>
                 <p>
-                    I've been a professional software developer since 2005 but
+                    I&apos;ve been a professional software developer since 2005 but
                     spent plenty of time hacking on opensource and tinkering
                     with linux as a young whipper-snapper before I ever got paid
                     for it. I spenty many years in datacenters racking and
@@ -40,7 +40,7 @@ export default function About() {
                 </p>
                 <p>
                     My technology stack of choice is Python, Rust, React.js, and
-                    Postgres but I'm not very picky. I've worked professionally
+                    Postgres but I&apos;m not very picky. I&apos;ve worked professionally
                     with PHP, C#, and Perl as well.
                 </p>
             </div>
@@ -53,7 +53,7 @@ export default function About() {
                     <dd>
                         <a
                             target="_blank"
-                            rel="noopener"
+                            rel="noreferrer"
                             href="https://twitter.com/sontek/"
                         >
                             @sontek
@@ -63,7 +63,7 @@ export default function About() {
                     <dd>
                         <a
                             target="_blank"
-                            rel="noopener"
+                            rel="noreferrer"
                             href="https://www.linkedin.com/in/sontek"
                         >
                             @sontek
@@ -73,7 +73,7 @@ export default function About() {
                     <dd>
                         <a
                             target="_blank"
-                            rel="noopener"
+                            rel="noreferrer"
                             href="https://www.github.com/sontek"
                         >
                             @sontek
@@ -83,7 +83,7 @@ export default function About() {
                     <dd>
                         <a
                             target="_blank"
-                            rel="noopener"
+                            rel="noreferrer"
                             href="https://www.youtube.com/sontek"
                         >
                             @sontek

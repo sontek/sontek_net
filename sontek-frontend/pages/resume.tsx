@@ -84,7 +84,7 @@ function About(aboutData) {
                                     <a
                                         href={aboutData["contact"][key]}
                                         target="_blank"
-                                        rel="noopener"
+                                        rel="noreferrer"
                                     >
                                         {aboutData["contact"][key]}
                                     </a>

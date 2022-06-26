@@ -8,7 +8,7 @@ export default function Home() {
     return (
         <Layout>
             <Head>
-                <title>sontek.net - John Anderson's play place!</title>
+                <title>sontek.net - John Anderson&apos;s play place!</title>
             </Head>
             <div className="container grid">
                 <div className="col">
@@ -23,9 +23,9 @@ export default function Home() {
                 </div>
                 <div className="col">
                     <header className="center">
-                        <h1>Hi, I'm sontek!</h1>
+                        <h1>Hi, I&apos;m sontek!</h1>
                         <small>
-                            I'm a full-stack software developer that enjoys
+                            I&apos;m a full-stack software developer that enjoys
                             Python, Rust, DevOps, and Linux. I live in Luquillo,
                             PR.
                         </small>
@@ -37,7 +37,7 @@ export default function Home() {
                     <a
                         href="https://github.com/sontek"
                         target="_blank"
-                        rel="noopener"
+                        rel="noreferrer"
                     >
                         <svg
                             className={indexStyles.github}
@@ -53,7 +53,7 @@ export default function Home() {
                     <a
                         href="https://youtube.com/sontek"
                         target="_blank"
-                        rel="noopener"
+                        rel="noreferrer"
                     >
                         <svg
                             className={indexStyles.youtube}
@@ -69,7 +69,7 @@ export default function Home() {
                     <a
                         href="https://twitter.com/sontek"
                         target="_blank"
-                        rel="noopener"
+                        rel="noreferrer"
                     >
                         <svg
                             className={indexStyles.twitter}

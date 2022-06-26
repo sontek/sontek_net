@@ -7,7 +7,9 @@ export default function Menu() {
                 <div className="col">
                     <header id="banner" className="body">
                         <h1>
-                            <a href="/">sontek.net</a>
+                            <Link href="/">
+                                <a>sontek.net</a>
+                            </Link>
                         </h1>
                     </header>
                 </div>
