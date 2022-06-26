@@ -20,6 +20,10 @@ jobs:
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to $HOME/.local/bin
           echo $HOME/.local/bin >> $GITHUB_PATH
+      - name: Setup the git credentials
+        run: |
+          git config user.name "$(git --no-pager log --format=format:'%an' -n 1)"
+          git config user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
       - name: Deploy to production
         run: |
           just fe-deploy-prod
