@@ -21,14 +21,14 @@ function HistoryItem(item) {
             <p>
                 <strong>{item["title"]}</strong>
             </p>
-            {item["description"].split("\n").map((paragraph) => {
-                return <p>{paragraph}</p>;
+            {item["description"].split("\n").map((paragraph, index) => {
+                return <p key={index}>{paragraph}</p>;
             })}
             <div className={resumeStyles.accomplishments}>
                 <h3>Accomplishments</h3>
                 <ul>
                     {item["accomplishments"].map((accomplishment) => {
-                        return <li>{accomplishment}</li>;
+                        return <li key={accomplishment}>{accomplishment}</li>;
                     })}
                 </ul>
             </div>
@@ -40,8 +40,8 @@ function History(historyData) {
     return (
         <div className={resumeStyles.history}>
             <h1>Work History</h1>
-            {historyData["companies"].map((company) => {
-                return <HistoryItem {...company} />;
+            {historyData["companies"].map((company, index) => {
+                return <HistoryItem key={index} {...company} />;
             })}
         </div>
     );
