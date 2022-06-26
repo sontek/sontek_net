@@ -3,6 +3,7 @@ import resumeStyles from "../styles/resume.module.css";
 import Layout from "../src/components/layout";
 import { getResumeDetails } from "../src/lib/resume";
 import cn from "classnames";
+import Head from "next/head";
 
 export async function getStaticProps() {
     const resumeDetails = await getResumeDetails();
@@ -101,6 +102,9 @@ export default function Resume(props) {
     const resumeData = props.resumeDetails;
     return (
         <Layout>
+            <Head>
+                <title>sontek.net - Resume for John Anderson!</title>
+            </Head>
             <div className={resumeStyles.resume}>
                 <div className={"container"}>
                     <About {...resumeData["about"]} />
