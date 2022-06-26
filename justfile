@@ -25,7 +25,7 @@ lint: fe-lint
 
 
 # Build and deploy assets
-fe-deploy-prod:
+fe-deploy-prod: fe-install
   just _cfe "yarn build"
   just _cfe "yarn export"
   touch {{ fe }}/dist/.nojekyll
