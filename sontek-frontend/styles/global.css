@@ -89,6 +89,10 @@ p {
     }
 }
 
+.container > * {
+    font-size: 1em;
+}
+
 .container {
     max-width: var(--content-width);
     margin: 0 auto;

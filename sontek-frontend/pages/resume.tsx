@@ -18,7 +18,7 @@ function HistoryItem(item) {
     return (
         <div className={resumeStyles.historyItem}>
             <h2>{item["name"]}</h2>
-            <small>{item["dates"]}</small>
+            <p>{item["dates"]}</p>
             <p>
                 <strong>{item["title"]}</strong>
             </p>
@@ -54,7 +54,7 @@ function About(aboutData) {
             <div className={cn("col", resumeStyles.col)}>
                 <h2>{aboutData["name"]}</h2>
                 <p>Location: {aboutData["location"]["city"]}</p>
-                <small>{aboutData["description"]}</small>
+                <p>{aboutData["description"]}</p>
                 <div className={resumeStyles.skills}>
                     <h3>Top Skills:</h3>
                     {aboutData["skills"].map((skill) => {

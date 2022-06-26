@@ -24,11 +24,11 @@ export default function Home() {
                 <div className="col">
                     <header className="center">
                         <h1>Hi, I&apos;m sontek!</h1>
-                        <small>
+                        <p>
                             I&apos;m a full-stack software developer that enjoys
                             Python, Rust, DevOps, and Linux. I live in Luquillo,
                             PR.
-                        </small>
+                        </p>
                     </header>
                 </div>
             </div>
