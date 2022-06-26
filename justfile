@@ -23,6 +23,10 @@ fe-lint: fe-install
 lint: fe-lint
   echo "Done linting"
 
+# Update resume from prod
+pdf-resume:
+  just _cfe "node generate_pdf_resume.js"
+
 
 # Build and deploy assets
 fe-deploy-prod: fe-install
