@@ -7,18 +7,19 @@ companies:
       ties many APIs together through a combination
       of webhooks and polling.
 
-      I was the engineering manager of one of the SRE
-      teams as well as one of the Staff Engineers.
+      I was the engineering manager of the largest SRE
+      team in the organization that covered americas
+      timezones to asia pacific (APAC). 
 
       * Monitoring and Metrics through a mix of Grafana,
-      Prometheus, DataDog, PagerDuty, and GrayLog.
+      Prometheus, DataDog, PagerDuty, and Graylog.
 
       * Ran multiple elasticsearch clusters
 
       * 1:1 with my direct reports
 
     accomplishments:
-      - Manage 8 at Kubernetes cluster for both production
+      - Managed 8 at Kubernetes cluster for both production
         and staging environments. Over 3000 pods running varied
         workloads.
 
@@ -38,6 +39,12 @@ companies:
       - Ran upgrades of Kubernetes from 1.16 to 1.24
 
       - Built training and onboarding documentation for new SREs
+
+      - Scrum ceremonies, Quarterly planning, and Performance reviews.
+
+      - Designed and implemented the interview process for SREs.
+
+      - Designed and implemented the onboarding process for SREs.
 
   - name: EventRay
     dates: June 2016 to March 2021
