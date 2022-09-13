@@ -40,12 +40,12 @@ a cluster that looks like this:
 Since we’ll be using multipass to launch the nodes, we can do that now:
 
 ```bash
-❯ multipass launch -c 2 -m 2G -d 10G -n controlplane
-❯ multipass launch -c 2 -m 4G -d 10G -n worker
+❯ multipass launch -c 2 -m 4G -d 10G -n controlplane 22.04
+❯ multipass launch -c 2 -m 4G -d 10G -n worker 22.04
 ❯ multipass list
 Name                    State             IPv4             Image
-controlplane            Running           192.168.64.7     Ubuntu 20.04 LTS
-worker                  Running           192.168.64.8     Ubuntu 20.04 LTS
+controlplane            Running           192.168.64.7     Ubuntu 22.04 LTS
+worker                  Running           192.168.64.8     Ubuntu 22.04 LTS
 ```
 Now we can start working on our controlplane first, lets shell in:
 
@@ -58,7 +58,7 @@ Lets first add the kubernetes repo to the system so we have access to all the ku
 ```bash
 ❯ echo "deb  http://apt.kubernetes.io/  kubernetes-xenial  main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-❯ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+❯ curl -fsSL  https://packages.cloud.google.com/apt/doc/apt-key.gpg|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/k8s.gpg
 ❯ sudo apt-get update && sudo apt-get upgrade -y
 ```
 
@@ -67,9 +67,7 @@ Now that our system is setup, we can move on to getting a container runtime.
 ## Getting your Container Runtime!
 Before we start pulling in kubernetes components we need to get a container runtime setup on the
 machine.   We we are going to use containerd for this purpose.  You can view the docs of for it
-here:
-
-https://containerd.io/docs/getting-started/#starting-containerd
+[here](https://github.com/containerd/containerd/blob/main/docs/getting-started.md).
 
 Which will download the latest binary and set it up.   I’m going to walk you through how to do it
 using the version packaged with Ubuntu which could be older than the latest release.
@@ -78,6 +76,7 @@ First thing we want to do is configure the networking to allow iptables to manag
 
 ```bash
 ❯ cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
 br_netfilter
 EOF
 
@@ -88,6 +87,15 @@ net.ipv4.ip_forward                 = 1
 EOF
 
 ```
+We also need to disable some default systemd settings for `rp_filter`  because
+they are not compatible with cilium. See the bug report
+[here](https://github.com/cilium/cilium/commit/cabc6581b8128681f4ed23f8d6dc463180eea61e)
+
+```bash
+❯ sudo sed -i -e '/net.ipv4.conf.*.rp_filter/d' $(grep -ril '\.rp_filter' /etc/sysctl.d/ /usr/lib/sysctl.d/)
+❯ sudo sysctl -a | grep '\.rp_filter' | awk '{print $1" = 0"}' | sudo tee -a /etc/sysctl.d/1000-cilium.conf
+```
+
 Then we need to refresh sysctl so those settings are applied:
 
 ```bash
@@ -112,20 +120,67 @@ br_netfilter           28672  0
 bridge                176128  1 br_netfilter
 ```
 
-Now lets pull down the container runtime we’ll be using which is containerd.  You can
-find which versions are available by running:
+You want to make sure `rp_filter` is `0` everywhere as well for cilium:
 
-
-```bash
-❯ sudo apt-cache madison containerd
-containerd | 1.5.5-0ubuntu3~20.04.2 | http://archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages
-containerd | 1.5.5-0ubuntu3~20.04.2 | http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages
-containerd | 1.3.3-0ubuntu2 | http://archive.ubuntu.com/ubuntu focal/main amd64 Packages
+```
+❯ sudo sysctl -a | grep '\.rp_filter'
+net.ipv4.conf.all.rp_filter = 0
+net.ipv4.conf.cilium_host.rp_filter = 0
+net.ipv4.conf.cilium_net.rp_filter = 0
+net.ipv4.conf.cilium_vxlan.rp_filter = 0
+net.ipv4.conf.default.rp_filter = 0
+net.ipv4.conf.enp0s1.rp_filter = 0
+net.ipv4.conf.lo.rp_filter = 0
+net.ipv4.conf.lxc0965b7b545f7.rp_filter = 0
+net.ipv4.conf.lxcb05ffd84ab74.rp_filter = 0
 ```
 
-We are going to use the latest version available which was 1.5.5. 
+Now lets pull down the container runtime we’ll be using which is containerd.
+
+Ubuntu ships with a very old version of containerd so you need to upgrade to
+the version shipped from the docker repos:
+You can find which versions are available by running:
+
 ```bash
-❯ sudo apt-get install containerd=1.5.5-0ubuntu3~20.04.2 -y
+❯ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg
+❯ echo "deb https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
+❯ sudo apt-get update
+```
+
+```bash
+❯ sudo apt-cache madison containerd.io
+containerd.io |    1.6.8-1 | https://download.docker.com/linux/ubuntu jammy/stable arm64 Packages
+containerd.io |    1.6.7-1 | https://download.docker.com/linux/ubuntu jammy/stable arm64 Packages
+containerd.io |    1.6.6-1 | https://download.docker.com/linux/ubuntu jammy/stable arm64 Packages
+containerd.io |    1.6.4-1 | https://download.docker.com/linux/ubuntu jammy/stable arm64 Packages
+containerd.io |   1.5.11-1 | https://download.docker.com/linux/ubuntu jammy/stable arm64 Packages
+containerd.io |   1.5.10-1 | https://download.docker.com/linux/ubuntu jammy/stable arm64 Packages
+```
+
+We are going to use the latest version available which was 1.6.8-1
+```bash
+❯ sudo apt-get install containerd.io=1.6.8-1 -y
+```
+
+Then we'll setup a configuration that enables containerd to use the systemd
+cgroup.  We are hard coding this config instead of using `containerd config default`
+because that currently has had a [bug](https://github.com/containerd/containerd/issues/4574)
+for many years that generates an invalid config.
+
+```bash
+❯ cat <<EOF | sudo tee /etc/containerd/config.toml
+version = 2
+[plugins]
+  [plugins."io.containerd.grpc.v1.cri"]
+   [plugins."io.containerd.grpc.v1.cri".containerd]
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+          runtime_type = "io.containerd.runc.v2"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+            SystemdCgroup = true
+EOF
+
+❯ sudo systemctl restart containerd.service
 ```
 
 You can verify its running with ctr:
@@ -147,10 +202,11 @@ but to find the latest version you can run:
    kubeadm |  1.23.4-00 | http://apt.kubernetes.io kubernetes-xenial/main amd64 Packages
 ```
 
-Then install the version you want:
+Then install the version you want, we install kubelet and kubeadm here to make
+sure the versions align:
 
 ```bash
-❯ sudo apt-get install kubeadm=1.23.5-00 -y
+❯ sudo apt-get install kubeadm=1.23.5-00 kubelet=1.23.5-00 kubectl=1.23.5-00 -y
 ```
 
 This will pull in a few tools, including an alternative to `ctr` that we used earlier called
@@ -174,12 +230,37 @@ Once that finishes running it should give you some tips setup your configuration
 ❯ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
+You can run those on the master node for now, but later I'll show you how to move
+the config to your host computer.
+
 Now you should be able to check that your node is not ready yet:
 
 ```bash
 ❯ kubectl get nodes
 NAME           STATUS     ROLES                  AGE     VERSION
 controlplane   NotReady   control-plane,master   4m16s   v1.23.5
+```
+
+*Note*: If you recieve "The connecto to the server was refused" error,
+The cluster starting up and getting all the dependencies running could take
+a bit of time.  So if you aren't able to communicate right away you can check
+which pods are up and running with `crictl`.  You'll need `kube-apiserver` up
+and running.  If it isn't you can check:
+
+```bash
+❯ sudo crictl --runtime-endpoint=unix:///var/run/containerd/containerd.sock ps -a
+CONTAINER           IMAGE               CREATED             STATE               NAME                      ATTEMPT             POD ID              POD
+8322192c4605c       bd8cc6d582470       36 seconds ago      Running             kube-proxy                4                   344c4f7fffbe8       kube-proxy-drm46
+30ce27c40adb2       81a4a8a4ac639       2 minutes ago       Exited              kube-controller-manager   4                   3a819c3a864b2       kube-controller-manager-controlplane
+7709fd5e92898       bd8cc6d582470       2 minutes ago       Exited              kube-proxy                3                   7cc6922c82015       kube-proxy-drm46
+10432b81d7c61       3767741e7fba7       2 minutes ago       Exited              kube-apiserver            4                   e64ddf3679d98       kube-apiserver-controlplane
+```
+
+which will show you pods that have exited. You can grab the container ID for
+kube-apiserver and read its logs:
+
+```bash
+❯ sudo crictl --runtime-endpoint=unix:///var/run/containerd/containerd.sock logs 10432b81d7c61
 ```
 
 There are a few ways to figure out why the node isn’t ready yet.  Usually I would check the
@@ -215,7 +296,8 @@ but I’ll walk you through it anyways.  I do recommend checking out their docum
 are familiar with it.   We will use `helm` to pull down the version of cilium we want:
 
 ```bash
-❯ curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
+❯ curl -fsSL  https://baltocdn.com/helm/signing.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/helm.gpg
+
 ❯ sudo apt-get install apt-transport-https --yes
 
 ❯ echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
@@ -224,7 +306,9 @@ are familiar with it.   We will use `helm` to pull down the version of cilium we
 ❯ sudo apt-get install helm
 ```
 
-Now we can install cilium:
+Now we can install cilium!  It is *very* important that you pay attention to the
+compatibility of cilium with the version of kubernetes you are intstalling. Check
+the compatibility list [here](https://docs.cilium.io/en/v1.12/concepts/kubernetes/compatibility/).
 
 ```bash
 ❯ helm repo add cilium https://helm.cilium.io/
@@ -233,15 +317,21 @@ Now we can install cilium:
 Once the repo is added you can list the versions available:
 
 ```bash
-❯ helm search repo
-NAME         	CHART VERSION	APP VERSION	DESCRIPTION
-cilium/cilium	1.11.3       	1.11.3     	eBPF-based Networking, Security, and Observability
+❯ helm search repo -l|head -n8
+NAME           	CHART VERSION	APP VERSION	DESCRIPTION
+cilium/cilium  	1.12.1       	1.12.1     	eBPF-based Networking, Security, and Observability
+cilium/cilium  	1.12.0       	1.12.0     	eBPF-based Networking, Security, and Observability
+cilium/cilium  	1.11.8       	1.11.8     	eBPF-based Networking, Security, and Observability
+cilium/cilium  	1.11.7       	1.11.7     	eBPF-based Networking, Security, and Observability
+cilium/cilium  	1.11.6       	1.11.6     	eBPF-based Networking, Security, and Observability
+cilium/cilium  	1.11.5       	1.11.5     	eBPF-based Networking, Security, and Observability
+cilium/cilium  	1.11.4       	1.11.4     	eBPF-based Networking, Security, and Observability
 ```
 
-So we want `1.11.3`:
+So we want `1.11.4`:
 
 ```bash
-❯ helm install cilium cilium/cilium --version 1.11.3 --namespace kube-system
+❯ helm install cilium cilium/cilium --namespace kube-system --version 1.11.4
 ```
 
 Now our node should be ready!
@@ -269,28 +359,52 @@ Now run the following commands:
 
 ```bash
 ❯ echo "deb  http://apt.kubernetes.io/  kubernetes-xenial  main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-❯ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-❯ echo "deb https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-❯ curl https://baltocdn.com/helm/signing.asc | sudo apt-key add -
-❯ sudo apt-get update && sudo apt-get upgrade -y
+❯ curl -fsSL  https://packages.cloud.google.com/apt/doc/apt-key.gpg|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/k8s.gpg
+❯ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker.gpg
+❯ echo "deb https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list
+
 ❯ cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
 br_netfilter
 EOF
+
+❯ sudo sed -i -e '/net.ipv4.conf.*.rp_filter/d' $(grep -ril '\.rp_filter' /etc/sysctl.d/ /usr/lib/sysctl.d/)
+❯ sudo sysctl -a | grep '\.rp_filter' | awk '{print $1" = 0"}' | sudo tee -a /etc/sysctl.d/1000-cilium.conf
+
 ❯ cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables   = 1
-net.ipv4.ip_forward                        = 1
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
 EOF
+
 ❯ sudo systemctl restart systemd-modules-load
 ❯ sudo sysctl --system
-❯ sudo apt-get install containerd=1.5.5-0ubuntu3~20.04.2 apt-transport-https helm kubeadm=1.23.5-00 -y 
+
+❯ sudo apt-get update && sudo apt-get upgrade -y
+❯ sudo apt-get install containerd.io=1.6.8-1 -y
+
+❯ cat <<EOF | sudo tee /etc/containerd/config.toml
+version = 2
+[plugins]
+  [plugins."io.containerd.grpc.v1.cri"]
+   [plugins."io.containerd.grpc.v1.cri".containerd]
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+          runtime_type = "io.containerd.runc.v2"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+            SystemdCgroup = true
+EOF
+
+❯ sudo systemctl restart containerd.service
+❯ sudo apt-get install kubeadm=1.23.5-00 kubelet=1.23.5-00 kubectl=1.23.5-00 -y
+
 ```
 
 From there we should be ready to join the cluster.   When we ran `kubeadm init` previously it
 printed a join command out that we could use but I’m going to show you how to do it if you
 were coming back later and no longer had that token.
 
-First, on the controplane node run:
+Back on the *controplane* node run:
 
 ```bash
 ❯ kubeadm token create --print-join-command
