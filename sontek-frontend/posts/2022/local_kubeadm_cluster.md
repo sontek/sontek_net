@@ -431,7 +431,9 @@ worker         Ready    <none>                 79s   v1.23.5
 Now the final part is to get the `admin.conf` as a kubeconfig on your machine so you can control
 it from outside of the cluster.   To do this we can use scp
 
+```bash
 multipass transfer controlplane:/home/ubuntu/.kube/config local.config
+```
 
 Normally kubernetes configuration is in ~/.kube/config but I like to maint a separate file for
 each cluster and then I set the `KUBECONFIG` env var to access it. 
