@@ -1,8 +1,8 @@
 ---
-category: development
+category: Development
 date: 2010-12-28
 tags:
-    - python
+    - Python
 title: Tips and Tricks for the Python Interpreter
 ---
 

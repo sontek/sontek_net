@@ -1,9 +1,9 @@
 ---
-category: development
+category: Development
 date: 2011-05-07
 tags:
-    - vim
-    - python
+    - Vim
+    - Python
 title: Turning Vim into a modern Python IDE
 ---
 TL;DR:

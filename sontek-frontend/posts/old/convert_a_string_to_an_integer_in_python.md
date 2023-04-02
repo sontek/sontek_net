@@ -1,9 +1,9 @@
 ---
-category: development
+category: Development
 date: 2010-10-28
 tags:
-    - python
-    - interviews
+    - Python
+    - Interviews
 title: Convert a string to an integer in Python
 ---
 
