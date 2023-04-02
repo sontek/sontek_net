@@ -1,10 +1,11 @@
 ---
-category: kubernetes
+category: Kubernetes
 date: 2022-04-17
 tags:
-    - linux
-    - kubernetes
-    - devops
+    - Linux
+    - Kubernetes
+    - DevOps
+    - SRE
 title: Running a kubernetes cluster locally with kubeadm
 ---
 

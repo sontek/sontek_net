@@ -8,6 +8,7 @@ import hrehypeStringify from 'rehype-stringify'
 import rehypeRaw from 'rehype-raw'
 
 import highlight from 'rehype-highlight'
+import langHCL from '../utils/terraform'
 
 import { formatISO } from "date-fns";
 
@@ -16,12 +17,16 @@ const postsDirectory = path.join(process.cwd(), "posts");
 
 
 async function getContent(matterResult) {
+    const languages = {
+        hcl: langHCL,
+      }
+
     const content = await unified()
         .use(markdown)
         // .use(remarkGfm)
         .use(remarkRehype, { allowDangerousHtml: true })
         .use(rehypeRaw)
-        .use(highlight)
+        .use(highlight, { languages: languages })
         .use(hrehypeStringify).process(
             matterResult.content
         ).then((file) => {

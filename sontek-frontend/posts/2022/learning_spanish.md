@@ -1,9 +1,10 @@
 ---
-category: development
+category: Development
 date: 2022-04-30
 tags:
-    - pandas
-    - nlp
+    - Python
+    - Pandas
+    - NLP
 title: How to speak spanish like a colombian drug lord!
 ---
 

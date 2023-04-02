@@ -60,3 +60,6 @@
     border-radius: 5px;
 }
 
+.article code {
+    line-height: 1.3;
+}

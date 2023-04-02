@@ -41,3 +41,5 @@ app/bundle.js
 yarn-error.log
 api/output/
 supervisord.log
+
+.DS_Store
