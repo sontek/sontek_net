@@ -7,15 +7,62 @@ tags:
     - SRE
 title: AWS From Scratch with Terraform - Setting up your Root Account for IaC (using Terraform Cloud)
 ---
+You should no longer keep long-lived access keys in your CI/CD pipelines when
+deploying to AWS. That is an older and less secure way of handling things.
+
+These days you should use OIDC (OpenID Connect) to securely deploy to AWS when
+using Terraform Cloud or Github Actions.
+
 Starting a new AWS account from scratch can be overwhelming but following this
 article will get you setup with an AWS Root (Payer) account that can be
-managed through infrastructure as code (IaC) through Terraform.
+managed through through Terraform Cloud with OIDC.
+
 
 # What we will do
 - Setup a root AWS account that is managed througuh terraform
 - Setup OIDC authentication with Terraform Cloud so it can talk to AWS
 - Setup Github Actions authentication with Terraform Cloud so we can run plan
   and apply through the CI/CD pipeline.
+
+# How does OIDC work
+OIDC enables us to request a short-lived access token directly from AWS. We
+just have to trust relationship that controls which workflows are able to
+request the access tokens.
+
+- No need to duplicate AWS credentials as long-lived GitHub secrets.
+- Since we are using a short-lived access token that is only valid for a single
+  job there is no reason to worry about rotating secrets.
+
+The following diagram gives an overview of how we can use Terraform Cloud's
+OIDC provider to integrate with AWS:
+
+```mermaid
+flowchart RL
+subgraph AWS[AWS #1]
+    direction LR
+    OIDC[OIDC Trust]
+    Roles
+    Resources
+end
+subgraph Terraform[Terraform Cloud Workflow #2]
+    OIDCProvider[OIDC Provider]
+end
+
+AWS --> Token[Access Token #4] --> Terraform
+Terraform --> JWT[JWT & Cloud Role ID #3] --> AWS
+```
+
+1. In AWS, create an OIDC trust between a role and our terraform cloud
+   workflow(s) that need access to the cloud.
+2. Every time a job runs, TFC's OIDC Provider auto-generates an OIDC token.
+   This token contains multiple claims to establish a security-hardened and
+   verifiable identity about the specific workflow that is trying to authenticate.
+3. Request this token from TFC's OIDC provider, and present it to AWS
+4. Once AWS successfully validates the claims presented in the token, it then
+   provides a short-lived cloud access token that is available only for the duration
+   of the job.
+
+
 
 # Setup AWS Access
 It is very bad practice to use the root account for much of anything but for 
@@ -598,3 +645,4 @@ When you merge it will apply the changes.
 # Helpful Resources
 - [Terraform Dynamic Credentials Tutorial](https://developer.hashicorp.com/terraform/tutorials/cloud/dynamic-credentials?product_intent=terraform)
 - [Terraform docs on Dynamic Credentials](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/aws-configuration)
+- [Github's understanding OIDC](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token)

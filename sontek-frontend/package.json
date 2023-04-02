@@ -12,7 +12,9 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@mermaid-js/mermaid-cli": "^10.0.2",
         "@panelbear/panelbear-nextjs": "^1.0.3",
+        "@southball/remark-mermaid": "^0.2.1",
         "date-fns": "2.28.0",
         "gray-matter": "4.0.3",
         "highlight.js": "^11.5.1",

@@ -6,7 +6,7 @@ import markdown from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import hrehypeStringify from 'rehype-stringify'
 import rehypeRaw from 'rehype-raw'
-
+import remarkMermaid from '@southball/remark-mermaid';
 import highlight from 'rehype-highlight'
 import langHCL from '../utils/terraform'
 
@@ -24,6 +24,7 @@ async function getContent(matterResult) {
     const content = await unified()
         .use(markdown)
         // .use(remarkGfm)
+        .use(remarkMermaid)
         .use(remarkRehype, { allowDangerousHtml: true })
         .use(rehypeRaw)
         .use(highlight, { languages: languages })
