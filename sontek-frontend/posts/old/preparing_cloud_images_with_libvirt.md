@@ -1,10 +1,8 @@
 ---
-category: devops
+category: DevOps
 date: 2014-08-03
 tags:
-    - linux
-    - openstack
-    - libvirt
+    - Linux
 title: Preparing custom images for OpenStack
 ---
 

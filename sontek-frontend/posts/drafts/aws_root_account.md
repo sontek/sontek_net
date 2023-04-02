@@ -1,9 +1,9 @@
 ---
-category: devops
+category: DevOps
 date: 2022-02-18
 tags:
-    - linux
-    - aws
+    - Linux
+    - AWS
 title: Best practices with your AWS account
 ---
 
