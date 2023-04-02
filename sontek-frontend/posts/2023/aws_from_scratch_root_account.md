@@ -14,6 +14,11 @@ should no longer keep long-lived access keys in your CI/CD pipelines when
 deploying to AWS. These days you should use OIDC (OpenID Connect) to securely
 deploy to AWS when using Terraform Cloud or Github Actions.
 
+# TL;DR
+Download all the source from the blog post here:
+
+[https://github.com/sontek/aws-terraform-bootstrap](https://github.com/sontek/aws-terraform-bootstrap)
+
 # How does OIDC work
 OIDC enables us to request a short-lived access token directly from AWS. We
 just have to trust relationship that controls which workflows are able to
