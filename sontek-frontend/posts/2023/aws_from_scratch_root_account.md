@@ -633,8 +633,24 @@ was created.
 
 # Send your first pull request
 Now you should be able to send a pull request tearing down the SQS resource we
-generated at the beginning and terraform cloud will take care of the rest!
-When you merge it will apply the changes.
+generated at the beginning and terraform cloud will take care of the rest! Make
+sure you are on the generated `infra` repo and:
+
+```
+❯ rm root/sqs.tf
+```
+
+and commit / push that to a branch and open a pull request. When you merge it
+will apply the changes.
+
+# Next Steps
+This should be good enough for you to manage your AWS cloud infrastructure as
+code with terraform but I **personally** don't like that terraform cloud applies
+the changes on merge.  There are a lot of ways where a `plan` can succeed but an
+`apply` will fail and you end up with broken configuration in `main`.
+
+I prefer a worfklow called `apply-before-merge` and in my next post I'll show you
+how to do that through github actions instead of utilizing the TFC webhook.
 
 # Helpful Resources
 - [Terraform Dynamic Credentials Tutorial](https://developer.hashicorp.com/terraform/tutorials/cloud/dynamic-credentials?product_intent=terraform)
