@@ -114,6 +114,8 @@ I personally prefer doing this in two repositories:
    managed.  It will store state in Terraform Cloud and you can introduce a
    CI/CD pipeline for approving changes.
 
+   **Note**: This repository will be generated with the terraform code.
+
 After manually creating the git repository `infra-boostrap` in your Github
 account We will need 3 providers to bootstrap the account `aws`, `github`, and
 `tfe`.
