@@ -428,3 +428,9 @@ created:
 <center>
 <img src="/images/posts/aws_apply_before_merge/required_checks.png" height="200" />
 </center>
+
+# Next Steps
+Now that you have the ability to manage your AWS accounts through terraform
+via pull request the next step is to start creating infrastructure that can
+create real workloads.   In my next post I'll show you how to boostrap an
+EKS (Kubernetes cluster) using terraform.
