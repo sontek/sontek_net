@@ -7,11 +7,10 @@ tags:
     - SRE
 title: AWS From Scratch with Terraform - Setting up your Root Account for IaC (using Terraform Cloud)
 ---
-Starting a new AWS account from scratch can be overwhelming but following this
-article will get you setup with an AWS Root (Payer) account that can be
+Following this article will get you setup with an AWS Root account that can be
 managed through through Terraform Cloud with OIDC. As a best practice you
-should no longer keep long-lived access keys in your CI/CD pipelines when
-deploying to AWS. These days you should use OIDC (OpenID Connect) to securely
+should not keep long-lived access keys in your CI/CD pipelines when
+deploying to AWS, instead you should use OIDC (OpenID Connect) to securely
 deploy to AWS when using Terraform Cloud or Github Actions.
 
 # TL;DR
@@ -21,8 +20,8 @@ Download all the source from the blog post here:
 
 # How does OIDC work
 OIDC enables us to request a short-lived access token directly from AWS. We
-just have to trust relationship that controls which workflows are able to
-request the access tokens.
+just have to create trust relationship that controls which workflows are able
+to request the access tokens.
 
 - No need to duplicate AWS credentials as long-lived GitHub secrets.
 - Since we are using a short-lived access token that is only valid for a single
