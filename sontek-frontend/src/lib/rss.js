@@ -1,7 +1,8 @@
+import fs from 'fs';
 import RSS from "rss";
 import { getRecentPosts } from "./posts";
 
-export async function getRSSFeed() {
+export async function generateRSSFeed() {
     const site_url = process.env["HOST"];
 
     const feedOptions = {
@@ -25,5 +26,5 @@ export async function getRSSFeed() {
             date: post.date,
         });
     });
-    return feed.xml({ indent: true });
+    fs.writeFileSync('./public/rss.xml', feed.xml({ indent: true }));
 }

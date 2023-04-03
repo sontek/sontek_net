@@ -31,3 +31,4 @@ yarn-error.log*
 
 # typescript files
 next-env.d.ts
+rss.xml

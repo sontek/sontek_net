@@ -1,5 +1,6 @@
 import utilStyles from "../styles/util.module.css";
 import { getRecentPosts, getAllTags } from "../src/lib/posts";
+import { generateRSSFeed } from "../src/lib/rss";
 import Date from "../src/components/date";
 import Link from "next/link";
 import Head from "next/head";
@@ -9,6 +10,7 @@ import blogStyles from "../styles/blog.module.css";
 export async function getStaticProps() {
     const allTagData = await getAllTags();
     const allPostsData = await getRecentPosts();
+    await generateRSSFeed()
 
     return {
         props: {

@@ -5,7 +5,7 @@ export default function Layout({ children }) {
     return (
         <div>
             <Head>
-                <link rel="alternate" type="application/rss+xml" title="Blog Feed" href="/rss/" />
+                <link rel="alternate" type="application/rss+xml" title="Blog Feed" href="/rss.xml" />
             </Head>
             <Menu />
             <div className="container">{children}</div>
