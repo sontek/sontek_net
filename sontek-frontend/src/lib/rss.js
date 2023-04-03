@@ -6,7 +6,7 @@ export async function generateRSSFeed() {
     const site_url = process.env["HOST"];
 
     const feedOptions = {
-        title: "sontek.net Blog posts",
+        title: "sontek's blog",
         description:
             "Blog about SRE, Kubernetes, Python, GoLang, and anything development related.",
         site_url: site_url,
