@@ -13,7 +13,7 @@ fe-install:
 
 # Run frontend dev server
 fe-dev: fe-install
-  just _cfe "yarn dev"
+  HOST="http://localhost:3000" just _cfe "yarn dev"
 
 # Run linting for frontend
 fe-lint: fe-install
@@ -30,7 +30,7 @@ pdf-resume:
 
 # Build and deploy assets
 fe-deploy-prod: fe-install
-  just _cfe "yarn build"
+  HOST="http://sontek.net" just _cfe "yarn build"
   just _cfe "yarn export"
   touch {{ fe }}/dist/.nojekyll
   echo "sontek.net" > {{ fe }}/dist/CNAME

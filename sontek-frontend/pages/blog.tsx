@@ -9,6 +9,7 @@ import blogStyles from "../styles/blog.module.css";
 export async function getStaticProps() {
     const allTagData = await getAllTags();
     const allPostsData = await getRecentPosts();
+
     return {
         props: {
             allPostsData,
