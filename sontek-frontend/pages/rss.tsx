@@ -1,19 +1,16 @@
-import { getRSSFeed } from "../src/lib/feed";
+import { getRSSFeed } from "../src/lib/rss";
 
-function RSSFeed() {
-    // getServerSideProps will do the heavy lifting
-  }
-  
-  export async function getServerSideProps({ res }) {
-    const rssFeed = await getRSSFeed()
-    res.setHeader('Content-Type', 'text/xml');
-    // we send the XML to the browser
-    res.write(rssFeed);
-    res.end();
-  
+function RSSFeed({ rssFeed }) {
+    return rssFeed;
+}
+
+export async function getStaticProps() {
+    const rssFeed = await getRSSFeed();
     return {
-      props: {},
+        props: {
+            rssFeed: rssFeed,
+        },
     };
-  }
+}
 
-  export default RSSFeed;
+export default RSSFeed;
