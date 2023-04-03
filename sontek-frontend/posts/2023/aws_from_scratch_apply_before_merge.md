@@ -26,6 +26,10 @@ If you haven't ready my [previous article](/blog/2023/aws_from_scratch_root_acco
 it covers how to setup terraform cloud with apply after merge and bootstrap your AWS
 account with terraform.  I will assume you have read that article going forward.
 
+# TL;DR
+The code for the github actions we create in this post can be found
+[here](https://github.com/sontek/aws-terraform-github-actions)
+
 # Repairing the bootstrap
 With apply-before-merge we need to implement our how github actions rather than
 utilizing the terraform cloud webhooks.  So lets drop the VCS repo and usage of
