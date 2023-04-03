@@ -31,7 +31,7 @@ The code for the github actions we create in this post can be found
 [here](https://github.com/sontek/aws-terraform-github-actions)
 
 # Repairing the bootstrap
-With apply-before-merge we need to implement our how github actions rather than
+With apply-before-merge we need to implement it in github actions rather than
 utilizing the terraform cloud webhooks.  So lets drop the VCS repo and usage of
 the webhook from our github repository. Basically anything that references
 `github_oauth_client` can be removed because we will no longer be using OAuth
@@ -191,7 +191,7 @@ So create the folders:
 ```
 
 # On Pull Request
-The first slow we'll create is the `terraform plan` workflow which should be
+The first flow we'll create is the `terraform plan` workflow which should be
 ran whenever a pull request is opened. Create the file
 `.github/workflows/on-pull-request.yml` and put this content in it:
 
