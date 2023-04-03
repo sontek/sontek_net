@@ -659,6 +659,8 @@ the changes on merge.  There are a lot of ways where a `plan` can succeed but an
 I prefer a worfklow called `apply-before-merge` and in my next post I'll show you
 how to do that through github actions instead of utilizing the TFC webhook.
 
+Check out that post [here](/blog/2023/aws_from_scratch_apply_before_merge)!
+
 # Helpful Resources
 - [Terraform Dynamic Credentials Tutorial](https://developer.hashicorp.com/terraform/tutorials/cloud/dynamic-credentials?product_intent=terraform)
 - [Terraform docs on Dynamic Credentials](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/aws-configuration)
