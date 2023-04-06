@@ -19,9 +19,8 @@ companies:
       * 1:1 with my direct reports
 
     accomplishments:
-      - Managed 8 at Kubernetes cluster for both production
-        and staging environments. Over 3000 pods running varied
-        workloads.
+      - Managed 12 Kubernetes cluster for both production
+        and staging environments.
 
       - Manage an elasticsearch cluster that received 7tb of data
         each day
@@ -45,6 +44,15 @@ companies:
       - Designed and implemented the interview process for SREs.
 
       - Designed and implemented the onboarding process for SREs.
+
+      - Introduced and rolled out our entire FinOps strategy and cost
+        management.
+
+      - Improved our SOC2 policies and management through better processes
+        and understanding of SOC2 controls.
+
+      - Built out a better monitoring and auditing system for our production
+        bastion access.
 
   - name: Stacklet
     dates: March 2022 - present
