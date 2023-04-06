@@ -59,10 +59,13 @@ companies:
       I was the engineering manager of the team developing some of the most critical
       parts of the application such as:
 
-      - Cloud Asset Database
-      - Compliance Notifications via Slack, Email, and JIRA
-      - FinOps and Cost Analysis
-      - Shift-Left compliance through terraform policies
+      * Cloud Asset Database
+
+      * Compliance Notifications via Slack, Email, and JIRA
+
+      * FinOps and Cost Analysis
+
+      * Shift-Left compliance through terraform policies
 
     accomplishments:
       - Introduced the AWS Cost and Usage Report functionality which moved
