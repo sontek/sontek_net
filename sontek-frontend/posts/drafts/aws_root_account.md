@@ -18,8 +18,3 @@ title: Best practices with your AWS account
 
 - Use AWS SSO
 - https://www.youtube.com/watch?v=9hZWPkIZxPw
-
-
-https://sontek.awsapps.com/start
-sontek
-wx9PiaHMEDH1#^J<020I$dm?49!Z*Me

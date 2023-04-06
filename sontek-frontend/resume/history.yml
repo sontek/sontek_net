@@ -46,6 +46,34 @@ companies:
 
       - Designed and implemented the onboarding process for SREs.
 
+  - name: Stacklet
+    dates: March 2022 - present
+    title: Senior Engineering Manager
+    description: >
+      Stacklet is a cloud governance and FinOps tool that allows organizations
+      to main their SOC2, CIS, and ISO certifications through a set of policy
+      packs and a cloud asset inventory.
+
+      It is built on top of the opensource tool Cloud custodian. 
+
+      I was the engineering manager of the team developing some of the most critical
+      parts of the application such as:
+
+      - Cloud Asset Database
+      - Compliance Notifications via Slack, Email, and JIRA
+      - FinOps and Cost Analysis
+      - Shift-Left compliance through terraform policies
+
+    accomplishments:
+      - Introduced the AWS Cost and Usage Report functionality which moved
+        us into the FinOps space.
+      - Managed the rollout of both GCP and Azure support for our asset
+        database
+      - Introduced the SLI/SLO framework and rolled out the new monitoring
+        infrastructure that all teams utilize.
+      - Revamped the on-call process and introduced a throughout retrospective
+        system for incidents.
+
   - name: EventRay
     dates: June 2016 to March 2021
     title: CEO, Founder
