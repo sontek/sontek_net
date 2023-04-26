@@ -9,6 +9,7 @@ title: Introduction to CUE Lang
 > code does not provide a contract between developer intent and runtime operation
 > can think of it like a spreadsheet where you can reference other cells and run functions but for JSON.
 
+- Show tags (@ syntax) for metadata
 - Show eval cmd
 - Show export cmd
 - Show vet cmd
@@ -74,3 +75,4 @@ Type:
 # Resources
 - https://www.youtube.com/watch?v=e4v1_2bSeGI
 - https://www.youtube.com/watch?v=fR_yApIf6jU
+- Good use of CUE: https://github.com/cueblox/blox

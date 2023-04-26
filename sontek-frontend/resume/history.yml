@@ -1,7 +1,7 @@
 companies:
   - name: Zapier
     dates: March 2021 - present
-    title: SRE Engineering Manager
+    title: Engineering Manager, SRE
     description: >
       Zapier is a no-code solution for automation. It
       ties many APIs together through a combination
@@ -56,7 +56,7 @@ companies:
 
   - name: Stacklet
     dates: March 2022 - present
-    title: Senior Engineering Manager
+    title: Engineering Manager, SRE
     description: >
       Stacklet is a cloud governance and FinOps tool that allows organizations
       to main their SOC2, CIS, and ISO certifications through a set of policy
@@ -75,6 +75,10 @@ companies:
 
       * Shift-Left compliance through terraform policies
 
+      * This included the management of all the infrastructure being deployed. The
+      infrastructure was 100% Infrastructure as Code utilizing terraform with a mix
+      of Github Actions and AWS CodePipeline.
+
     accomplishments:
       - Introduced the AWS Cost and Usage Report functionality which moved
         us into the FinOps space.
@@ -84,10 +88,13 @@ companies:
         infrastructure that all teams utilize.
       - Revamped the on-call process and introduced a throughout retrospective
         system for incidents.
+      - Along with our SaaS offering we also had an on-prem offering so our IaC had to
+        work flawlessly to spin up new accounts on the fly.
+
 
   - name: EventRay
     dates: June 2016 to March 2021
-    title: CEO, Founder
+    title: Engineering Manager, SRE
     description: >
       EventRay is a conference registration platform
       to help meeting planners easily build their
@@ -95,26 +102,16 @@ companies:
       event, and analyze the attendee data to make
       better decisions while planning the on-site.
 
-      As the founder of EventRay, I bootstrapped it
-      from two-founders to 10 employees, 3
-      contractors, and $900k annual revenue. 
+      * Built the infrastructure team from scratch
+      growing it from a start-up to more production
+      ready infrastructure that was SOC2 and CIS
+      compliant.
 
-      I helped architect and develop every portion
-      of the applications.
+      * Migrated from EC2 instances that were provisioned
+      with ansible to Kubernetes, ArgoCD, and GitOps.
 
-      * API is a set of microservices built on top
-      of Pyramid, SQLAlchemy, Celery, Redis, Nginx,
-      and Gunicorn.
-
-      * Attendee mobile apps for viewing agenda,
-      speakers, sponsors, and any live streams of
-      the event built in react-native and deployed
-      on iOS, Android, and Mobile Web
-
-      * Desktop application for printing badges and
-      tickets on-site and checking attendees into
-      the event built in Electron and deployed on
-      Windows, Linux, and Mac.
+      * Moved monitoring stack from nagios and hand made
+      python scripts to Prometheus, Grafana, and Thanos.
 
       * Our infrastructure was a multi-cloud
       environment built on a combination TeamCity,
