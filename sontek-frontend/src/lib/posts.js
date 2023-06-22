@@ -137,7 +137,12 @@ export async function getPostData(id) {
 
     const contentHtml = await getContent(matterResult);
     // Combine the data with the id and contentHtml
-    const date = formatISO(matterResult.data.date);
+    let date;
+    try {
+        date = formatISO(matterResult.data.date);
+    } catch {
+        throw new Error(`Failed to format date for post ${fileName}`)
+    }
 
     return {
         id,

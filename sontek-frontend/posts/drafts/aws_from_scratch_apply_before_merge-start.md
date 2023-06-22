@@ -1,22 +1,23 @@
 ---
 category: AWS
-date: 2023-04-01
+date: 2023-06-22
 tags:
     - AWS
     - DevOps
     - SRE
-title: AWS From Scratch with Terraform - Setting up your Root Account for IaC (using Terraform Cloud)
+title: AWS From Scratch with Terraform - Setting up your Root Account for IaC  with Terraform Cloud and Github actions.
 ---
 Following this article will get you setup with an AWS Root account that can be
-managed through through Terraform Cloud with OIDC. As a best practice you
+managed through through Terraform Cloud with OIDC and github actions. As a best practice you
 should not keep long-lived access keys in your CI/CD pipelines when
 deploying to AWS, instead you should use OIDC (OpenID Connect) to securely
 deploy to AWS when using Terraform Cloud or Github Actions.
 
 # TL;DR
-Download all the source from the blog post here:
+Download all the terraform from the blog post here:
 
-[https://github.com/sontek/aws-terraform-bootstrap](https://github.com/sontek/aws-terraform-bootstrap)
+* [https://github.com/sontek/aws-apply-before-merge](https://github.com/sontek/aws-apply-before-merge)
+* [https://github.com/sontek/aws-terraform-github-actions](https://github.com/sontek/aws-terraform-github-actions)
 
 # How does OIDC work
 OIDC enables us to request a short-lived access token directly from AWS. We
@@ -173,12 +174,6 @@ variable "github_default_branch" {
   default     = "main"
 }
 
-variable "github_oauth_client_id" {
-  description = "The token for the TFC OAuth client shown under VCS providers"
-  type        = string
-  default     = null
-}
-
 variable "aws_root_account_id" {
   description = "The AWS root account we want to apply these changes to"
   type        = string
@@ -189,7 +184,7 @@ We will use these variables in the later modules but they are mostly metadata
 around the terraform and github accounts you'll need to setup manually.
 
 ### Providers
-Create a file called `2-main.tf` and define the providers:
+Create a file called `2-providers.tf` and define the providers:
 
 ```hcl
 terraform {
@@ -338,31 +333,12 @@ resource "aws_iam_role_policy_attachment" "tfc-access-attach" {
   policy_arn = aws_iam_policy.tfc-agent.arn
 }
 
-/* Fetch an oauth token from the client */
-data "tfe_oauth_client" "github" {
-  /* Don't fetch the client if we don't have the client_id */
-  count           = var.github_oauth_client_id != null ? 1 : 0
-  oauth_client_id = var.github_oauth_client_id
-}
-
 resource "tfe_workspace" "workspaces" {
   count        = length(var.tfc_workspaces)
   name         = var.tfc_workspaces[count.index]
   organization = tfe_organization.organization.name
 
   working_directory = var.tfc_workspaces[count.index]
-
-  /* This generates a webhook on the github repository so plans are triggered
-  automatically.   We dynamically set the setting because we will not have the
-  oauth client ID on first pass.
-  */
-  dynamic "vcs_repo" {
-    for_each = var.github_oauth_client_id != null ? [var.github_oauth_client_id] : []
-    content {
-      identifier     = format("%s/%s", var.github_organization, github_repository.repo.name)
-      oauth_token_id = data.tfe_oauth_client.github[0].oauth_token_id
-    }
-  }
 }
 
 /* These variables tell the agent to use dynamic credentials */
@@ -448,9 +424,9 @@ At this point it:
 
 # Verify TFC can talk to AWS
 To verify that TFC can communicate with AWS through the dynamic credentials,
-lets clone the repository and make some dummy resources. After you've cloned
-the repository lets make a folder for the workspace `root` that we defined in
-bootstrap:
+lets clone the repository we just generated and make some dummy resources. After
+you've cloned the repository lets make a folder for the workspace `root` that we
+defined in bootstrap:
 
 ```bash
 ❯ mkdir root
@@ -517,6 +493,7 @@ If you run the plan you should see the resource it wants to create:
 ```
 
 and you should see the run is executing in terraform cloud:
+
 ```
 Running plan in Terraform Cloud. Output will stream here. Pressing Ctrl-C
 will stop streaming the logs, but will not stop the plan running remotely.
@@ -552,113 +529,269 @@ and commit all the files:
 ❯ git push origin head
 ```
 
-# Github VCS Provider
-To setup oauth between github and terraform cloud so it can manage the webhooks
-you need to login to the [https://app.terraform.io](Terraform Cloud Console) and
-initiate the connection.
+# Github Actions
+Now we need to connect the github actions to replace the plan and apply actions
+that were being taken by the TFC webhook previously. All of these changes will
+be in the `infra` repository that was generated from `bootstrap`.  We are done
+with the bootstrap at this point.
 
-Select the newly created organization and then click `Settings`.  In the sidebar
-there will be a section `Version Control` and you want to select `Providers` under
-that.
-
-At this point you should see an `Add a VCS Provider` button, you want to select
-`Github.com (Custom)`:
-
-<center>
-<img src="/images/posts/aws_root_account/tfc_vcs_provider.png" height="250" />
-</center>
-
-Follow the on-screen instructions to create a new GitHub OAuth application on your
-account. For me, I went to [here](https://github.com/settings/applications/new) and
-provided the information TFC displayed:
-
-<center>
-<img src="/images/posts/aws_root_account/tfc_github_app.png" height="300" />
-</center>
-
-On the Github side you need to save the `Client ID` and you need to click
-`Generate a new client secret`.   Provide those details to terraform cloud and
-then we should be ready to send our first PR!
-
-<center>
-<img src="/images/posts/aws_root_account/tfc_oauth_settings.png" height="300" />
-</center>
-
-## Finish Bootstrap
-At this point we need to return to the bootstrap repository and provide it the
-new OAuth Client ID for its `github_oauth_client_id` setting.  To get the value
-for this the easiest way is to drill into the VCS provider in terraform and click
-`Edit Client`.   In the URL you'll see the Client ID, it should start with
-`oc-...`.
-
-Now return back to the `bootstrap` repository and edit `settings.auto.tfvars` and
-set the final setting:
-
-```
-github_oauth_client_id = "oc-......"
-```
-
-Now you should be able to run a plan and see the `vcs_repo` get added in-place:
+First, lets setup the `.github` folder, the end result we want is:
 
 ```bash
-❯ terraform plan
-
-  ~ update in-place
-
-Terraform will perform the following actions:
-
-  # tfe_workspace.workspaces[0] will be updated in-place
-  ~ resource "tfe_workspace" "workspaces" {
-        id                            = "ws-..."
-        name                          = "root"
-        # (20 unchanged attributes hidden)
-
-      + vcs_repo {
-          + identifier         = "sontek/sontek-infra"
-          + ingress_submodules = false
-          + oauth_token_id     = "ot-..."
-        }
-    }
-
-Plan: 0 to add, 1 to change, 0 to destroy.
+.github/
+└── workflows
+    ├── on-apply-finished.yml
+    ├── on-pull-request-labeled.yml
+    └── on-pull-request.yml
 ```
 
-Apply the change!
+So create the folders:
 
-```
+```bash
+❯ mkdir -p .github/workflows
 ❯ terraform apply
 ```
 
-After you apply the change, if you go to `Settings` -> `Webhooks` of the `infra`
-repository that was created earlier you should see a new terraform cloud webhook
-was created.
+# On Pull Request
+The first flow we'll create is the `terraform plan` workflow which should be
+ran whenever a pull request is opened. Create the file
+`.github/workflows/on-pull-request.yml` and put this content in it:
+
+```yml
+name: pr_build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  TERRAFORM_CLOUD_TOKENS: app.terraform.io=${{ secrets.TFE_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  terraform_validate:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        folder:
+          - root
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: terraform validate
+        uses: dflook/terraform-validate@v1
+        with:
+          path: ${{ matrix.folder }}
+          workspace: ${{ matrix.folder }}
+
+  terraform_fmt:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        folder:
+          - root
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: terraform fmt
+        uses: dflook/terraform-fmt-check@v1
+        with:
+          path: ${{ matrix.folder }}
+          workspace: ${{ matrix.folder }}
+
+  terraform_plan:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        folder:
+          - root
+    steps:
+      - uses: actions/checkout@v3
+      - name: terraform plan
+        uses: dflook/terraform-plan@v1
+        with:
+          path: ${{ matrix.folder }}
+          workspace: ${{ matrix.folder }}
+```
+
+This creates three jobs:
+
+- **terraform_validate**: This validates the terraform via `terraform validate`
+  command to make sure that it is correct and doesn't have duplicate resources
+  or anything like that.
+- **terraform_fmt**: This verifies that the terraform is well formatted by
+  running the `terraform fmt` command.`
+- **terraform_plan**: This runs the `terraform` plan and comments on the PR a
+  diff of the changes for you to verify.
+
+
+To verify this is working, lets make a change to the infrastructure so that we
+can see a plan executed. We can bring back the `SQS` resource we destroyed in
+the previous article. Create a file called `root/2-sqs.tf`:
+
+```hcl
+resource "aws_sqs_queue" "example-sqs" {
+  name                      = "example-sqs"
+  message_retention_seconds = 86400
+  receive_wait_time_seconds = 10
+}
+```
+
+Lets push a branch and make a pull request to see the result so far:
+
+```bash
+❯ git add .github/ root/
+❯ git checkout -b apply-before-merge
+❯ git commit -m "Implemented on-pull-request"
+❯ git push origin head
+```
+
+After you make the pull request you should 3 checks on it and a comment that
+shows the plan:
 
 <center>
-<img src="/images/posts/aws_root_account/github_webhooks.png" width="350" />
+<img src="/images/posts/aws_apply_before_merge/github_comment.png" width="400" />
+<img src="/images/posts/aws_apply_before_merge/github_checks.png" width="400" />
 </center>
 
-# Send your first pull request
-Now you should be able to send a pull request tearing down the SQS resource we
-generated at the beginning and terraform cloud will take care of the rest! Make
-sure you are on the generated `infra` repo and:
+# Apply on Label
+So now that the plan is working we need some way to `apply` the changes. I've
+found the best way to do this is via a label rather than a comment because of
+the way github actions work. Their event based actions like `on-comment` aren't
+executed in the context of a pull-request.
 
-```
-❯ rm root/sqs.tf
+Since we will be using a label to signal a plan is ready to be applied lets
+create a new file `.github/workflows/on-pull-request-labeled.yml` and provide
+this content:
+
+```yaml
+name: pr_apply
+
+on:
+  pull_request:
+    types: [ labeled ]
+
+env:
+  TERRAFORM_CLOUD_TOKENS: app.terraform.io=${{ secrets.TFE_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  terraform_apply:
+    if: ${{ github.event.label.name == 'tfc-apply' }}
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        folder:
+          - root
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dflook/terraform-apply@v1
+        with:
+          path: ${{ matrix.folder }}
+          workspace: ${{ matrix.folder }}
 ```
 
-and commit / push that to a branch and open a pull request. When you merge it
-will apply the changes.
+This will fire whenever a pull request is labeled with the `tfc-apply` label.
+It will run the `apply` and update the previous plan comment to let you 
+know the status.
+
+<center>
+<img src="/images/posts/aws_apply_before_merge/tfc_applying.png" width="400" />
+<img src="/images/posts/aws_apply_before_merge/tfc_applying_comment.png" width="400" />
+</center>
+
+# Merge on Apply
+One thing you'll notice is that the pull request stayed open even after the
+infrastructure is applied and we don't want that. We want any changes that have
+made it into the environment to be merged into `main` automatically. To do
+this we'll create our final action.
+
+Create a new file `.github/workflows/on-apply-finished.yml` with this content:
+
+```yaml
+name: pr_merge
+
+# Only trigger, when the build workflow succeeded
+on:
+  workflow_run:
+    workflows: [pr_apply]
+    types:
+      - completed
+
+jobs:
+  merge:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: read
+      statuses: read
+      actions: read
+    outputs:
+      pullRequestNumber: ${{ steps.workflow-run-info.outputs.pullRequestNumber }}
+    steps:
+      - name: "Get information about the current run"
+        uses: potiuk/get-workflow-origin@v1_5
+        id: workflow-run-info
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          sourceRunId: ${{ github.event.workflow_run.id }}
+
+      - name: merge a pull request after terraform apply
+        uses: sudo-bot/action-pull-request-merge@v1.2.0
+        with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            number: ${{ steps.workflow-run-info.outputs.pullRequestNumber }}
+```
+
+This will wait until the `pr_apply` job completes and as long as it was
+successful it'll merge the branch!
+
+**NOTE**: As I mentioned earlier, the event based actions do not run in the
+context of the pull request which means you cannot test changes to them during
+the PR either.  You must merge the `on-apply-finished.yml` file to `main`
+before it starts working.
+
+# Branch Protection
+The final step to the process is to make sure you go to your github settings
+and make sure these status checks are required before merging. Branch protection
+is a feature that will prevent merging changes into a branch unless all
+required checks are passing.
+
+Go to `Settings` -> `Branches` -> `Branch Protection` and add a branch
+protection rule:
+
+<center>
+<img src="/images/posts/aws_apply_before_merge/branch_protection.png" width="500" />
+</center>
+
+You want to enable the following settings:
+
+- **Branch Name**: main
+- ✅ Require a pull request before merging
+- ✅ Require status checks to pass before merging
+
+Then for `Status checks that are required.` select all of the ones we've
+created:
+
+<center>
+<img src="/images/posts/aws_apply_before_merge/required_checks.png" height="200" />
+</center>
 
 # Next Steps
-This should be good enough for you to manage your AWS cloud infrastructure as
-code with terraform but I **personally** don't like that terraform cloud applies
-the changes on merge.  There are a lot of ways where a `plan` can succeed but an
-`apply` will fail and you end up with broken configuration in `main`.
-
-I prefer a worfklow called `apply-before-merge` and in my next post I'll show you
-how to do that through github actions instead of utilizing the TFC webhook.
-
-Check out that post [here](/blog/2023/aws_from_scratch_apply_before_merge)!
 
 # Helpful Resources
 - [Terraform Dynamic Credentials Tutorial](https://developer.hashicorp.com/terraform/tutorials/cloud/dynamic-credentials?product_intent=terraform)

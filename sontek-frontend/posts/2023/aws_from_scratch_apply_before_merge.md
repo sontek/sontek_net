@@ -28,9 +28,12 @@ account with terraform.  I will assume you have read that article going forward.
 
 # TL;DR
 The code for the github actions we create in this post can be found
-[here](https://github.com/sontek/aws-terraform-github-actions)
+[here](https://github.com/sontek/aws-terraform-github-actions) and the code for the
+terraform configs can be found [here](https://github.com/sontek/aws-apply-before-merge)
 
 # Repairing the bootstrap
+Skip this section if you are starting from scratch following this article.
+
 With apply-before-merge we need to implement it in github actions rather than
 utilizing the terraform cloud webhooks.  So lets drop the VCS repo and usage of
 the webhook from our github repository. Basically anything that references
