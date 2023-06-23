@@ -1,0 +1,113 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width"/><meta charSet="utf-8"/><link rel="alternate" type="application/rss+xml" title="sontek&#x27;s Engineering Blog" href="/rss.xml"/><title>Introduction to CUE Lang</title><meta name="next-head-count" content="4"/><link rel="preload" href="/_next/static/css/4e645f88d9d5f47b.css" as="style"/><link rel="stylesheet" href="/_next/static/css/4e645f88d9d5f47b.css" data-n-g=""/><link rel="preload" href="/_next/static/css/95e79f6f6f52c645.css" as="style"/><link rel="stylesheet" href="/_next/static/css/95e79f6f6f52c645.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-5cd94c89d3acac5f.js"></script><script src="/_next/static/chunks/webpack-d7b038a63b619762.js" defer=""></script><script src="/_next/static/chunks/framework-4556c45dd113b893.js" defer=""></script><script src="/_next/static/chunks/main-2a9c662ddd7329fb.js" defer=""></script><script src="/_next/static/chunks/pages/_app-2e2b8b955a26d1f2.js" defer=""></script><script src="/_next/static/chunks/996-9e3c12b77542c098.js" defer=""></script><script src="/_next/static/chunks/771-5e4a02ed896d5599.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5B...id%5D-426e76fedd45ec38.js" defer=""></script><script src="/_next/static/m1Lsq70t9zQg0mpJ99Z4W/_buildManifest.js" defer=""></script><script src="/_next/static/m1Lsq70t9zQg0mpJ99Z4W/_ssgManifest.js" defer=""></script><script src="/_next/static/m1Lsq70t9zQg0mpJ99Z4W/_middlewareManifest.js" defer=""></script></head><body><div id="__next"><div><div class="grid"><div class="col"><header id="banner" class="body"><h1><a href="/">sontek.net</a></h1></header></div><div class="col menu"><nav><ul><li><a href="/">Home</a></li><li><a href="/blog">Blog</a></li><li><a href="/resume">Resume</a></li><li><a href="/about">About</a></li></ul></nav></div></div><div class="container"><article class="blog_article__NoEy4"><h1 class="util_headingXl__knZ_h">Introduction to CUE Lang</h1><div class="util_lightText__xcqUE"><time dateTime="2022-04-02T20:00:00-04:00">April 2, 2022</time></div><div><blockquote>
+<p>inheritance is questionable in programming, its fatal in configuration
+code does not provide a contract between developer intent and runtime operation
+can think of it like a spreadsheet where you can reference other cells and run functions but for JSON.</p>
+</blockquote>
+<ul>
+<li>
+<p>Show tags (@ syntax) for metadata</p>
+</li>
+<li>
+<p>Show eval cmd</p>
+</li>
+<li>
+<p>Show export cmd</p>
+</li>
+<li>
+<p>Show vet cmd</p>
+</li>
+<li>
+<p>Showing nesting and generating multiple files</p>
+<ul>
+<li>https://www.youtube.com/watch?v=OaPLbvHpVlc</li>
+</ul>
+</li>
+<li>
+<p>Show interpolation of other variables like:</p>
+<ul>
+<li>"(p), (q)"</li>
+</ul>
+</li>
+<li>
+<p>Show errors when it doesn't have all concrete values</p>
+</li>
+<li>
+<p>Show math a + b</p>
+</li>
+<li>
+<p>Show generating OpenAPI specs?</p>
+</li>
+<li>
+<p>Show combining JSON and YAML</p>
+</li>
+<li>
+<p>Show wildcard on key select <code>[=~"Name$" ]</code></p>
+</li>
+<li>
+<p>Show regex validation: <code>^[A-Z]</code></p>
+</li>
+<li>
+<p>Show constraints like <code>foo: >=4 &#x26; &#x3C;=12</code></p>
+</li>
+<li>
+<p>Show optional field like <code>bar?: int</code></p>
+</li>
+<li>
+<h2>Show trim <strong>:chefs_kiss:</strong></h2>
+</li>
+<li>
+<p>Compare to JSON Schema</p>
+<ul>
+<li>Can generate JSON Schema from CUE</li>
+<li>Can generate CUE from a JSON Schema</li>
+</ul>
+</li>
+<li>
+<p>Show how to validates kubernetes manifests</p>
+<ul>
+<li>maybe require prometheus scraping turned on?</li>
+<li>initialDelaySeconds > 15?</li>
+<li>standardize liveness path?</li>
+</ul>
+</li>
+<li>
+<p>Syntax:</p>
+<ul>
+<li>
+<ul>
+<li>is default value</li>
+</ul>
+</li>
+<li><code>import</code> / <code>module</code> / <code>package</code></li>
+</ul>
+</li>
+<li>
+<p>What is CUE?</p>
+<ul>
+<li>Configuration</li>
+<li>Validation</li>
+<li>Logic Programming Engine</li>
+<li>Strongly Typed</li>
+<li>Treats values and types the same</li>
+<li>Idempotent (order doesn't matter!!)</li>
+<li>No overrides / overlays -- 1 layer</li>
+<li>No mixing code with configuration</li>
+<li>Requires everything gets more specific</li>
+</ul>
+</li>
+</ul>
+<p>Data:
+<code>cue     foo: {         name: "Bar"         cash: 1.2M         age: 36     }     </code></p>
+<p>Type:
+```cue
+foo: {
+name: string
+cash: int &#x26; > 1M
+age: > 30
+}</p>
+<h1>Resources</h1>
+<ul>
+<li>https://www.youtube.com/watch?v=e4v1_2bSeGI</li>
+<li>https://www.youtube.com/watch?v=fR_yApIf6jU</li>
+<li>Good use of CUE: https://github.com/cueblox/blox</li>
+</ul></div></article></div></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"postData":{"id":["drafts","cue_lang_intro"],"path":"drafts/cue_lang_intro","contentHtml":"\u003cblockquote\u003e\n\u003cp\u003einheritance is questionable in programming, its fatal in configuration\ncode does not provide a contract between developer intent and runtime operation\ncan think of it like a spreadsheet where you can reference other cells and run functions but for JSON.\u003c/p\u003e\n\u003c/blockquote\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cp\u003eShow tags (@ syntax) for metadata\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow eval cmd\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow export cmd\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow vet cmd\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShowing nesting and generating multiple files\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003ehttps://www.youtube.com/watch?v=OaPLbvHpVlc\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow interpolation of other variables like:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\"(p), (q)\"\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow errors when it doesn't have all concrete values\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow math a + b\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow generating OpenAPI specs?\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow combining JSON and YAML\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow wildcard on key select \u003ccode\u003e[=~\"Name$\" ]\u003c/code\u003e\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow regex validation: \u003ccode\u003e^[A-Z]\u003c/code\u003e\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow constraints like \u003ccode\u003efoo: \u003e=4 \u0026#x26; \u0026#x3C;=12\u003c/code\u003e\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow optional field like \u003ccode\u003ebar?: int\u003c/code\u003e\u003c/p\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003ch2\u003eShow trim \u003cstrong\u003e:chefs_kiss:\u003c/strong\u003e\u003c/h2\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eCompare to JSON Schema\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eCan generate JSON Schema from CUE\u003c/li\u003e\n\u003cli\u003eCan generate CUE from a JSON Schema\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eShow how to validates kubernetes manifests\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003emaybe require prometheus scraping turned on?\u003c/li\u003e\n\u003cli\u003einitialDelaySeconds \u003e 15?\u003c/li\u003e\n\u003cli\u003estandardize liveness path?\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eSyntax:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\n\u003cul\u003e\n\u003cli\u003eis default value\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003ccode\u003eimport\u003c/code\u003e / \u003ccode\u003emodule\u003c/code\u003e / \u003ccode\u003epackage\u003c/code\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\n\u003cp\u003eWhat is CUE?\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eConfiguration\u003c/li\u003e\n\u003cli\u003eValidation\u003c/li\u003e\n\u003cli\u003eLogic Programming Engine\u003c/li\u003e\n\u003cli\u003eStrongly Typed\u003c/li\u003e\n\u003cli\u003eTreats values and types the same\u003c/li\u003e\n\u003cli\u003eIdempotent (order doesn't matter!!)\u003c/li\u003e\n\u003cli\u003eNo overrides / overlays -- 1 layer\u003c/li\u003e\n\u003cli\u003eNo mixing code with configuration\u003c/li\u003e\n\u003cli\u003eRequires everything gets more specific\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ul\u003e\n\u003cp\u003eData:\n\u003ccode\u003ecue     foo: {         name: \"Bar\"         cash: 1.2M         age: 36     }     \u003c/code\u003e\u003c/p\u003e\n\u003cp\u003eType:\n```cue\nfoo: {\nname: string\ncash: int \u0026#x26; \u003e 1M\nage: \u003e 30\n}\u003c/p\u003e\n\u003ch1\u003eResources\u003c/h1\u003e\n\u003cul\u003e\n\u003cli\u003ehttps://www.youtube.com/watch?v=e4v1_2bSeGI\u003c/li\u003e\n\u003cli\u003ehttps://www.youtube.com/watch?v=fR_yApIf6jU\u003c/li\u003e\n\u003cli\u003eGood use of CUE: https://github.com/cueblox/blox\u003c/li\u003e\n\u003c/ul\u003e","category":"DevOps","date":"2022-04-02T20:00:00-04:00","tags":["CUE"],"title":"Introduction to CUE Lang"}},"__N_SSG":true},"page":"/blog/[...id]","query":{"id":["drafts","cue_lang_intro"]},"buildId":"m1Lsq70t9zQg0mpJ99Z4W","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
