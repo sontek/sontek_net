@@ -1,8 +1,10 @@
 ---
-category: DevOps
+category: AWS
 date: 2023-06-22
 tags:
     - AWS
+    - DevOps
+    - SRE
 title: Wiping an AWS Account with aws-nuke
 ---
 When you're an SRE/DevOps engineer you'll end up making AWS accounts and

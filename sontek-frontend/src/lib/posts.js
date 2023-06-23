@@ -49,7 +49,8 @@ function getAllFilesInDirectory(startingDirectory, prefix=null) {
         } else if (dirent.isDirectory()) {
             if (
                 (dirent.name === 'drafts' && process.env.NODE_ENV === "development") ||
-                dirent.name !== 'drafts'
+                dirent.name !== 'drafts' ||
+                dirent.name !== 'scraps'
             ) {
                 const nextDirectory = path.join(startingDirectory, dirent.name);
                 fileNames = fileNames.concat(getAllFilesInDirectory(nextDirectory, dirent.name));
