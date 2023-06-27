@@ -9,9 +9,9 @@
             <link>https://sontek.net</link>
         </image>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Fri, 23 Jun 2023 02:25:10 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 27 Jun 2023 00:46:39 GMT</lastBuildDate>
         <atom:link href="https://sontek.net/rss.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Fri, 23 Jun 2023 02:25:06 GMT</pubDate>
+        <pubDate>Tue, 27 Jun 2023 00:46:37 GMT</pubDate>
         <copyright><![CDATA[All rights reserved 2023, @sontek]]></copyright>
         <item>
             <title><![CDATA[AWS From Scratch with Terraform - Setting up your Root Account for IaC  with Terraform Cloud and Github actions.]]></title>
@@ -37,7 +37,7 @@ job there is no reason to worry about rotating secrets.</li>
 </ul>
 <p>The following diagram gives an overview of how we can use Terraform Cloud's
 OIDC provider to integrate with AWS:</p>
-<div class="remark-mermaid remark-mermaid-default"><svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8 843.078125 320" style="max-width: 843.078px; background-color: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1687487108331"><style>#mermaid-1687487108331{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1687487108331 .error-icon{fill:#552222;}#mermaid-1687487108331 .error-text{fill:#552222;stroke:#552222;}#mermaid-1687487108331 .edge-thickness-normal{stroke-width:2px;}#mermaid-1687487108331 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1687487108331 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1687487108331 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1687487108331 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1687487108331 .marker{fill:#333333;stroke:#333333;}#mermaid-1687487108331 .marker.cross{stroke:#333333;}#mermaid-1687487108331 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1687487108331 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1687487108331 .cluster-label text{fill:#333;}#mermaid-1687487108331 .cluster-label span{color:#333;}#mermaid-1687487108331 .label text,#mermaid-1687487108331 span{fill:#333;color:#333;}#mermaid-1687487108331 .node rect,#mermaid-1687487108331 .node circle,#mermaid-1687487108331 .node ellipse,#mermaid-1687487108331 .node polygon,#mermaid-1687487108331 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-1687487108331 .node .label{text-align:center;}#mermaid-1687487108331 .node.clickable{cursor:pointer;}#mermaid-1687487108331 .arrowheadPath{fill:#333333;}#mermaid-1687487108331 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-1687487108331 .flowchart-link{stroke:#333333;fill:none;}#mermaid-1687487108331 .edgeLabel{background-color:#e8e8e8;text-align:center;}#mermaid-1687487108331 .edgeLabel rect{opacity:0.5;background-color:#e8e8e8;fill:#e8e8e8;}#mermaid-1687487108331 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-1687487108331 .cluster text{fill:#333;}#mermaid-1687487108331 .cluster span{color:#333;}#mermaid-1687487108331 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1687487108331 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1687487108331 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="10" viewBox="0 0 12 20" class="marker flowchart" id="flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-AWS LE-Token" id="L-AWS-Token-0" d="M185.671875,134.5L181.50520833333334,134.5C177.33854166666666,134.5,169.00520833333334,134.5,152.378260969764,145.875C135.75131360619469,157.25,110.83075221238937,180,98.37047151548673,191.375L85.91019081858407,202.75"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Token LE-Terraform" id="L-Token-Terraform-0" d="M85.91019081858407,235.75L98.37047151548673,247.125C110.83075221238937,258.5,135.75131360619469,281.25,164.46289638643069,292.625C193.17447916666666,304,225.67708333333334,304,258.1796875,304C290.6822916666667,304,323.1848958333333,304,359.3528645833333,304C395.5208333333333,304,435.3541666666667,304,475.1875,304C515.0208333333334,304,554.8541666666666,304,585.6956312991642,296.7916666666667C616.5370959316618,289.5833333333333,638.3866918633236,275.1666666666667,649.3114898291544,267.9583333333333L660.2362877949853,260.75"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Terraform LE-JWT" id="L-Terraform-JWT-0" d="M660.2362877949853,177.75L649.3114898291544,170.54166666666666C638.3866918633236,163.33333333333334,616.5370959316618,148.91666666666666,601.4456312991642,141.70833333333334C586.3541666666666,134.5,578.0208333333334,134.5,573.8541666666666,134.5L569.6875,134.5"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-JWT LE-AWS" id="L-JWT-AWS-0" d="M380.6875,134.5L376.5208333333333,134.5C372.3541666666667,134.5,364.0208333333333,134.5,355.6875,134.5C347.3541666666667,134.5,339.0208333333333,134.5,334.8541666666667,134.5L330.6875,134.5"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(621.1171875, 169.75)" class="root"><g class="clusters"><g id="Terraform" class="cluster default"><rect height="83" width="206.890625" y="8" x="-0.9296875" ry="0" rx="0" style=""></rect><g transform="translate(-0.9296875, 8)" class="cluster-label"><foreignObject height="18" width="206.890625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Terraform Cloud Workflow #2</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(102.515625, 49.5)" id="flowchart-OIDCProvider-23" class="node default default"><rect height="33" width="119.03125" y="-16.5" x="-59.515625" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-52.015625, -9)" style="" class="label"><foreignObject height="18" width="104.03125"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Provider</span></div></foreignObject></g></g></g></g><g transform="translate(178.171875, -8)" class="root"><g class="clusters"><g id="AWS" class="cluster default"><rect height="269" width="145.015625" y="8" x="8" ry="0" rx="0" style=""></rect><g transform="translate(51.4609375, 8)" class="cluster-label"><foreignObject height="18" width="58.09375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">AWS #1</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(80.5078125, 59.5)" id="flowchart-OIDC-20" class="node default default"><rect height="33" width="95.015625" y="-16.5" x="-47.5078125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-40.0078125, -9)" style="" class="label"><foreignObject height="18" width="80.015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Trust</span></div></foreignObject></g></g><g transform="translate(80.5078125, 142.5)" id="flowchart-Roles-21" class="node default default"><rect height="33" width="55.90625" y="-16.5" x="-27.953125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-20.453125, -9)" style="" class="label"><foreignObject height="18" width="40.90625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Roles</span></div></foreignObject></g></g><g transform="translate(80.5078125, 225.5)" id="flowchart-Resources-22" class="node default default"><rect height="33" width="91.484375" y="-16.5" x="-45.7421875" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-38.2421875, -9)" style="" class="label"><foreignObject height="18" width="76.484375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Resources</span></div></foreignObject></g></g></g></g><g transform="translate(67.8359375, 219.25)" id="flowchart-Token-25" class="node default default"><rect height="33" width="135.671875" y="-16.5" x="-67.8359375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-60.3359375, -9)" style="" class="label"><foreignObject height="18" width="120.671875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Access Token #4</span></div></foreignObject></g></g><g transform="translate(475.1875, 134.5)" id="flowchart-JWT-28" class="node default default"><rect height="33" width="189" y="-16.5" x="-94.5" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-87, -9)" style="" class="label"><foreignObject height="18" width="174"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">JWT &#x26; Cloud Role ID #3</span></div></foreignObject></g></g></g></g></g></svg></div>
+<div class="remark-mermaid remark-mermaid-default"><svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8 827.9453125 321.5" style="max-width: 827.945px; background-color: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1687826799419"><style>#mermaid-1687826799419{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1687826799419 .error-icon{fill:#552222;}#mermaid-1687826799419 .error-text{fill:#552222;stroke:#552222;}#mermaid-1687826799419 .edge-thickness-normal{stroke-width:2px;}#mermaid-1687826799419 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1687826799419 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1687826799419 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1687826799419 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1687826799419 .marker{fill:#333333;stroke:#333333;}#mermaid-1687826799419 .marker.cross{stroke:#333333;}#mermaid-1687826799419 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1687826799419 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1687826799419 .cluster-label text{fill:#333;}#mermaid-1687826799419 .cluster-label span{color:#333;}#mermaid-1687826799419 .label text,#mermaid-1687826799419 span{fill:#333;color:#333;}#mermaid-1687826799419 .node rect,#mermaid-1687826799419 .node circle,#mermaid-1687826799419 .node ellipse,#mermaid-1687826799419 .node polygon,#mermaid-1687826799419 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-1687826799419 .node .label{text-align:center;}#mermaid-1687826799419 .node.clickable{cursor:pointer;}#mermaid-1687826799419 .arrowheadPath{fill:#333333;}#mermaid-1687826799419 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-1687826799419 .flowchart-link{stroke:#333333;fill:none;}#mermaid-1687826799419 .edgeLabel{background-color:#e8e8e8;text-align:center;}#mermaid-1687826799419 .edgeLabel rect{opacity:0.5;background-color:#e8e8e8;fill:#e8e8e8;}#mermaid-1687826799419 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-1687826799419 .cluster text{fill:#333;}#mermaid-1687826799419 .cluster span{color:#333;}#mermaid-1687826799419 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1687826799419 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1687826799419 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="10" viewBox="0 0 12 20" class="marker flowchart" id="flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-AWS LE-Token" id="L-AWS-Token-0" d="M179.515625,135.25L175.34895833333334,135.25C171.18229166666666,135.25,162.84895833333334,135.25,146.6662555830886,146.64583333333334C130.48355283284386,158.04166666666666,106.45148066568771,180.83333333333334,94.43544458210964,192.22916666666666L82.41940849853157,203.625"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Token LE-Terraform" id="L-Token-Terraform-0" d="M82.41940849853157,237.125L94.43544458210964,248.52083333333334C106.45148066568771,259.9166666666667,130.48355283284386,282.7083333333333,158.28800037475526,294.1041666666667C186.09244791666666,305.5,217.66927083333334,305.5,249.24609375,305.5C280.8229166666667,305.5,312.3997395833333,305.5,347.5989583333333,305.5C382.7981770833333,305.5,421.6197916666667,305.5,460.44140625,305.5C499.2630208333333,305.5,538.0846354166666,305.5,568.5160074033284,298.2708333333333C598.9473793899903,291.0416666666667,620.9885087799804,276.5833333333333,632.0090734749756,269.3541666666667L643.0296381699707,262.125"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Terraform LE-JWT" id="L-Terraform-JWT-0" d="M643.0296381699707,178.625L632.0090734749756,171.39583333333334C620.9885087799804,164.16666666666666,598.9473793899903,149.70833333333334,583.7601480283284,142.47916666666666C568.5729166666666,135.25,560.2395833333334,135.25,556.0729166666666,135.25L551.90625,135.25"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-JWT LE-AWS" id="L-JWT-AWS-0" d="M368.9765625,135.25L364.8098958333333,135.25C360.6432291666667,135.25,352.3098958333333,135.25,343.9765625,135.25C335.6432291666667,135.25,327.3098958333333,135.25,323.1432291666667,135.25L318.9765625,135.25"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(607.33984375, 170.625)" class="root"><g class="clusters"><g id="Terraform" class="cluster default"><rect height="83.5" width="209.5390625" y="8" x="-4.93359375" ry="0" rx="0" style=""></rect><g transform="translate(-4.93359375, 8)" class="cluster-label"><foreignObject height="18.5" width="209.5390625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Terraform Cloud Workflow #2</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(99.8359375, 49.75)" id="flowchart-OIDCProvider-23" class="node default default"><rect height="33.5" width="113.671875" y="-16.75" x="-56.8359375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-49.3359375, -9.25)" style="" class="label"><foreignObject height="18.5" width="98.671875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Provider</span></div></foreignObject></g></g></g></g><g transform="translate(172.015625, -8)" class="root"><g class="clusters"><g id="AWS" class="cluster default"><rect height="270.5" width="139.4609375" y="8" x="8" ry="0" rx="0" style=""></rect><g transform="translate(52.25, 8)" class="cluster-label"><foreignObject height="18.5" width="50.9609375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">AWS #1</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(77.73046875, 59.75)" id="flowchart-OIDC-20" class="node default default"><rect height="33.5" width="89.4609375" y="-16.75" x="-44.73046875" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-37.23046875, -9.25)" style="" class="label"><foreignObject height="18.5" width="74.4609375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Trust</span></div></foreignObject></g></g><g transform="translate(77.73046875, 143.25)" id="flowchart-Roles-21" class="node default default"><rect height="33.5" width="52.171875" y="-16.75" x="-26.0859375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-18.5859375, -9.25)" style="" class="label"><foreignObject height="18.5" width="37.171875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Roles</span></div></foreignObject></g></g><g transform="translate(77.73046875, 226.75)" id="flowchart-Resources-22" class="node default default"><rect height="33.5" width="85.5390625" y="-16.75" x="-42.76953125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-35.26953125, -9.25)" style="" class="label"><foreignObject height="18.5" width="70.5390625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Resources</span></div></foreignObject></g></g></g></g><g transform="translate(64.7578125, 220.375)" id="flowchart-Token-25" class="node default default"><rect height="33.5" width="129.515625" y="-16.75" x="-64.7578125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-57.2578125, -9.25)" style="" class="label"><foreignObject height="18.5" width="114.515625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Access Token #4</span></div></foreignObject></g></g><g transform="translate(460.44140625, 135.25)" id="flowchart-JWT-28" class="node default default"><rect height="33.5" width="182.9296875" y="-16.75" x="-91.46484375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-83.96484375, -9.25)" style="" class="label"><foreignObject height="18.5" width="167.9296875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">JWT &#x26; Cloud Role ID #3</span></div></foreignObject></g></g></g></g></g></svg></div>
 <ol>
 <li>In AWS, create an OIDC trust between a role and our terraform cloud
 workflow(s) that need access to the cloud.</li>
@@ -701,7 +701,9 @@ created:</p>
 <center>
 <img src="/images/posts/aws_apply_before_merge/required_checks.png" height="200">
 </center>
-<h1>Next Steps</h1>
+<h1>Conclusion</h1>
+<p>I made a video of me doing this here:</p>
+<iframe width="854" height="480" src="ttps://www.youtube.com/embed/3oZd1m8_KIo" title="AWS From Scratch - Preparing your account to be managed by IaC via Terraform and Github Actions" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;web-share" allowfullscreen></iframe>
 <h1>Helpful Resources</h1>
 <ul>
 <li><a href="https://developer.hashicorp.com/terraform/tutorials/cloud/dynamic-credentials?product_intent=terraform">Terraform Dynamic Credentials Tutorial</a></li>
@@ -907,983 +909,6 @@ few times.</p>
             <link>https://sontek.net/blog/2023/nuking_aws_account</link>
             <guid isPermaLink="true">https://sontek.net/blog/2023/nuking_aws_account</guid>
             <pubDate>Thu, 22 Jun 2023 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[AWS From Scratch with Terraform - Setting up your VPC and CIDR Ranges]]></title>
-            <description><![CDATA[<ul>
-<li>
-<p>When defining your private and public subnets, they should be a subset of the
-CIDR range defined for the VPC.</p>
-</li>
-<li>
-<p>Should enable DNS on the VPC by default, somethings require it.</p>
-</li>
-<li>
-<p>Don't use default VPC.</p>
-</li>
-<li>
-<p>S3 Endpoints</p>
-<ul>
-<li>https://medium.com/tensult/creating-vpc-endpoint-for-amazon-s3-using-terraform-7a15c840d36f</li>
-</ul>
-</li>
-<li>
-<p>AWS has default VPC per region -- AWS creates these.</p>
-<ul>
-<li>Comes with a CIDR range 172.31.0.0/16</li>
-<li>How do you lock down default VPC?</li>
-</ul>
-</li>
-<li>
-<p>VPC is regional</p>
-</li>
-<li>
-<p>Make one subnet per Availability Zone.</p>
-</li>
-</ul>
-<p>Resources:</p>
-<ul>
-<li>https://www.youtube.com/watch?v=yduHaOj3XMg</li>
-</ul>]]></description>
-            <link>https://sontek.net/blog/drafts/aws_from_scratch_networking</link>
-            <guid isPermaLink="true">https://sontek.net/blog/drafts/aws_from_scratch_networking</guid>
-            <pubDate>Sun, 16 Apr 2023 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[AWS From Scratch with Terraform - Apply before Merge with Github Actions]]></title>
-            <description><![CDATA[<p>The two most popular workflows when using terraform are:</p>
-<ul>
-<li>
-<p><strong>Apply after Merge</strong>: This is the default for things like
-<a href="https://terraform.io">terraform cloud</a> and most github actions.</p>
-</li>
-<li>
-<p><strong>Apply before Merge</strong>: This is the default for things like
-<a href="https://www.runatlantis.io/">Atlantis</a>.</p>
-</li>
-</ul>
-<p>I don't like apply-after-merge.  There are a lot of ways where a <code>plan</code>
-can succeed but an <code>apply</code> will fail and you end up with broken configuration
-in <code>main</code>.</p>
-<p>So in this article I'll show you how to implement <strong>apply-before-merge</strong> with
-github actions.</p>
-<p>If you haven't ready my <a href="/blog/2023/aws_from_scratch_root_account">previous article</a>,
-it covers how to setup terraform cloud with apply after merge and bootstrap your AWS
-account with terraform.  I will assume you have read that article going forward.</p>
-<h1>TL;DR</h1>
-<p>The code for the github actions we create in this post can be found
-<a href="https://github.com/sontek/aws-terraform-github-actions">here</a> and the code for the
-terraform configs can be found <a href="https://github.com/sontek/aws-apply-before-merge">here</a></p>
-<h1>Repairing the bootstrap</h1>
-<p>Skip this section if you are starting from scratch following this article.</p>
-<p>With apply-before-merge we need to implement it in github actions rather than
-utilizing the terraform cloud webhooks.  So lets drop the VCS repo and usage of
-the webhook from our github repository. Basically anything that references
-<code>github_oauth_client</code> can be removed because we will no longer be using OAuth
-with Github for our CI/CD pipeline.</p>
-<pre><code class="hljs language-diff"><span class="hljs-comment">diff --git a/1-variables.tf b/1-variables.tf</span>
-<span class="hljs-comment">index bf1f434..7109924 100644</span>
-<span class="hljs-comment">--- a/1-variables.tf</span>
-<span class="hljs-comment">+++ b/1-variables.tf</span>
-<span class="hljs-meta">@@ -47,12 +47,6 @@</span> variable "github_default_branch" {
-   default     = "main"
- }
- 
-<span class="hljs-deletion">-variable "github_oauth_client_id" {</span>
-<span class="hljs-deletion">-  description = "The token for the TFC OAuth client shown under VCS providers"</span>
-<span class="hljs-deletion">-  type        = string</span>
-<span class="hljs-deletion">-  default     = null</span>
-<span class="hljs-deletion">-}</span>
-<span class="hljs-deletion">-</span>
- variable "aws_root_account_id" {
-   description = "The AWS root account we want to apply these changes to"
-   type        = string
-<span class="hljs-comment">diff --git a/4-tfc.tf b/4-tfc.tf</span>
-<span class="hljs-comment">index a8217b7..9852228 100644</span>
-<span class="hljs-comment">--- a/4-tfc.tf</span>
-<span class="hljs-comment">+++ b/4-tfc.tf</span>
-<span class="hljs-meta">@@ -77,31 +77,12 @@</span> resource "aws_iam_role_policy_attachment" "tfc-access-attach" {
-   policy_arn = aws_iam_policy.tfc-agent.arn
- }
- 
-<span class="hljs-deletion">-/* Fetch an oauth token from the client */</span>
-<span class="hljs-deletion">-data "tfe_oauth_client" "github" {</span>
-<span class="hljs-deletion">-  /* Don't fetch the client if we don't have the client_id */</span>
-<span class="hljs-deletion">-  count           = var.github_oauth_client_id != null ? 1 : 0</span>
-<span class="hljs-deletion">-  oauth_client_id = var.github_oauth_client_id</span>
-<span class="hljs-deletion">-}</span>
-<span class="hljs-deletion">-</span>
- resource "tfe_workspace" "workspaces" {
-   count        = length(var.tfc_workspaces)
-   name         = var.tfc_workspaces[count.index]
-   organization = tfe_organization.organization.name
- 
-   working_directory = var.tfc_workspaces[count.index]
-<span class="hljs-deletion">-</span>
-<span class="hljs-deletion">-  /* This generates a webhook on the github repository so plans are triggered</span>
-<span class="hljs-deletion">-  automatically.   We dynamically set the setting because we will not have the</span>
-<span class="hljs-deletion">-  oauth client ID on first pass.</span>
-<span class="hljs-deletion">-  */</span>
-<span class="hljs-deletion">-  dynamic "vcs_repo" {</span>
-<span class="hljs-deletion">-    for_each = var.github_oauth_client_id != null ? [var.github_oauth_client_id] : []</span>
-<span class="hljs-deletion">-    content {</span>
-<span class="hljs-deletion">-      identifier     = format("%s/%s", var.github_organization, github_repository.repo.name)</span>
-<span class="hljs-deletion">-      oauth_token_id = data.tfe_oauth_client.github[0].oauth_token_id</span>
-<span class="hljs-deletion">-    }</span>
-<span class="hljs-deletion">-  }</span>
- }
- 
- /* These variables tell the agent to use dynamic credentials */
-<span class="hljs-comment">diff --git a/settings.auto.tfvars.example b/settings.auto.tfvars.example</span>
-<span class="hljs-comment">index 3327f02..79221c1 100644</span>
-<span class="hljs-comment">--- a/settings.auto.tfvars.example</span>
-<span class="hljs-comment">+++ b/settings.auto.tfvars.example</span>
-<span class="hljs-meta">@@ -4,6 +4,5 @@</span> tfc_workspaces = [
-   "root"
- ]
- github_organization    = "github-org"
-<span class="hljs-deletion">-github_oauth_client_id = "oc-..."</span>
- github_repo_name       = "my-infra"
- aws_root_account_id    =  "888888888888"
-</code></pre>
-<p>Once that is removed from your <code>infra-bootstrap</code> repository we need to create
-a new github secret with a token for Github to be able to talk with TFC. Make
-a new file called <code>5-github-actions.tf</code> with the following content:</p>
-<pre><code class="hljs language-hcl"><span class="hljs-keyword">data</span> <span class="hljs-string">"tfe_team"</span> <span class="hljs-string">"owners"</span> {
-  name         = <span class="hljs-string">"owners"</span>
-  organization = tfe_organization.organization.name
-}
-
-<span class="hljs-keyword">resource</span> <span class="hljs-string">"tfe_team_token"</span> <span class="hljs-string">"github_actions_token"</span> {
-  team_id = <span class="hljs-keyword">data</span>.tfe_team.owners.id
-}
-
-<span class="hljs-keyword">resource</span> <span class="hljs-string">"github_actions_secret"</span> <span class="hljs-string">"tfe_secret"</span> {
-  repository      = github_repository.repo.name
-  secret_name     = <span class="hljs-string">"TFE_TOKEN"</span>
-  plaintext_value = tfe_team_token.github_actions_token.token
-}
-</code></pre>
-<p>Then you should <code>plan</code> and <code>apply</code> the change:</p>
-<pre><code class="hljs language-bash">❯ terraform plan
-❯ terraform apply
-</code></pre>
-<p>The only change to the infrastructure should be to remove the VCS link and
-adding the secret:</p>
-<pre><code class="hljs language-diff">  # tfe_workspace.workspaces[0] will be updated in-place
-  ~ resource "tfe_workspace" "workspaces" {
-        id                            = "ws-K1M4tdXUUeASgmUR"
-        name                          = "root"
-        # (20 unchanged attributes hidden)
-
-<span class="hljs-deletion">-       vcs_repo {</span>
-<span class="hljs-deletion">-           identifier         = "sontek/sontek-infra" -> null</span>
-<span class="hljs-deletion">-           ingress_submodules = false -> null</span>
-<span class="hljs-deletion">-           oauth_token_id     = "ot-nMYJRbBb2SH9zCP7" -> null</span>
-        }
-    }
-
-  # github_actions_secret.tfe_secret will be created
-<span class="hljs-addition">+   resource "github_actions_secret" "tfe_secret" {</span>
-<span class="hljs-addition">+       created_at      = (known after apply)</span>
-<span class="hljs-addition">+       id              = (known after apply)</span>
-<span class="hljs-addition">+       plaintext_value = (sensitive value)</span>
-<span class="hljs-addition">+       repository      = "sontek-infra"</span>
-<span class="hljs-addition">+       secret_name     = "TFE_TOKEN"</span>
-<span class="hljs-addition">+       updated_at      = (known after apply)</span>
-    }
-
-  # tfe_team_token.github_actions_token will be created
-<span class="hljs-addition">+   resource "tfe_team_token" "github_actions_token" {</span>
-<span class="hljs-addition">+       id      = (known after apply)</span>
-<span class="hljs-addition">+       team_id = "team-..."</span>
-<span class="hljs-addition">+       token   = (sensitive value)</span>
-    }
-</code></pre>
-<h1>Github Actions</h1>
-<p>Now we need to connect the github actions to replace the plan and apply actions
-that were being taken by the TFC webhook previously. All of these changes will
-be in the <code>infra</code> repository that was generated from <code>bootstrap</code>.  We are done
-with the bootstrap at this point.</p>
-<p>First, lets setup the <code>.github</code> folder, the end result we want is:</p>
-<pre><code class="hljs language-bash">.github/
-└── workflows
-    ├── on-apply-finished.yml
-    ├── on-pull-request-labeled.yml
-    └── on-pull-request.yml
-</code></pre>
-<p>So create the folders:</p>
-<pre><code class="hljs language-bash">❯ <span class="hljs-built_in">mkdir</span> -p .github/workflows
-❯ terraform apply
-</code></pre>
-<h1>On Pull Request</h1>
-<p>The first flow we'll create is the <code>terraform plan</code> workflow which should be
-ran whenever a pull request is opened. Create the file
-<code>.github/workflows/on-pull-request.yml</code> and put this content in it:</p>
-<pre><code class="hljs language-yml"><span class="hljs-attr">name:</span> <span class="hljs-string">pr_build</span>
-
-<span class="hljs-attr">on:</span>
-  <span class="hljs-attr">pull_request:</span>
-    <span class="hljs-attr">branches:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-string">main</span>
-
-<span class="hljs-attr">env:</span>
-  <span class="hljs-attr">TERRAFORM_CLOUD_TOKENS:</span> <span class="hljs-string">app.terraform.io=${{</span> <span class="hljs-string">secrets.TFE_TOKEN</span> <span class="hljs-string">}}</span>
-  <span class="hljs-attr">GITHUB_TOKEN:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.GITHUB_TOKEN</span> <span class="hljs-string">}}</span>
-
-<span class="hljs-attr">jobs:</span>
-  <span class="hljs-attr">terraform_validate:</span>
-    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-22.04</span>
-    <span class="hljs-attr">strategy:</span>
-      <span class="hljs-attr">fail-fast:</span> <span class="hljs-literal">false</span>
-      <span class="hljs-attr">matrix:</span>
-        <span class="hljs-attr">folder:</span>
-          <span class="hljs-bullet">-</span> <span class="hljs-string">root</span>
-    <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Checkout</span>
-        <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v3</span>
-
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">terraform</span> <span class="hljs-string">validate</span>
-        <span class="hljs-attr">uses:</span> <span class="hljs-string">dflook/terraform-validate@v1</span>
-        <span class="hljs-attr">with:</span>
-          <span class="hljs-attr">path:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.folder</span> <span class="hljs-string">}}</span>
-          <span class="hljs-attr">workspace:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.folder</span> <span class="hljs-string">}}</span>
-
-  <span class="hljs-attr">terraform_fmt:</span>
-    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-22.04</span>
-    <span class="hljs-attr">strategy:</span>
-      <span class="hljs-attr">fail-fast:</span> <span class="hljs-literal">false</span>
-      <span class="hljs-attr">matrix:</span>
-        <span class="hljs-attr">folder:</span>
-          <span class="hljs-bullet">-</span> <span class="hljs-string">root</span>
-    <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v3</span>
-
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">terraform</span> <span class="hljs-string">fmt</span>
-        <span class="hljs-attr">uses:</span> <span class="hljs-string">dflook/terraform-fmt-check@v1</span>
-        <span class="hljs-attr">with:</span>
-          <span class="hljs-attr">path:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.folder</span> <span class="hljs-string">}}</span>
-          <span class="hljs-attr">workspace:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.folder</span> <span class="hljs-string">}}</span>
-
-  <span class="hljs-attr">terraform_plan:</span>
-    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-22.04</span>
-    <span class="hljs-attr">permissions:</span>
-      <span class="hljs-attr">contents:</span> <span class="hljs-string">read</span>
-      <span class="hljs-attr">pull-requests:</span> <span class="hljs-string">write</span>
-    <span class="hljs-attr">strategy:</span>
-      <span class="hljs-attr">fail-fast:</span> <span class="hljs-literal">false</span>
-      <span class="hljs-attr">matrix:</span>
-        <span class="hljs-attr">folder:</span>
-          <span class="hljs-bullet">-</span> <span class="hljs-string">root</span>
-    <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v3</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">terraform</span> <span class="hljs-string">plan</span>
-        <span class="hljs-attr">uses:</span> <span class="hljs-string">dflook/terraform-plan@v1</span>
-        <span class="hljs-attr">with:</span>
-          <span class="hljs-attr">path:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.folder</span> <span class="hljs-string">}}</span>
-          <span class="hljs-attr">workspace:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.folder</span> <span class="hljs-string">}}</span>
-</code></pre>
-<p>This creates three jobs:</p>
-<ul>
-<li><strong>terraform_validate</strong>: This validates the terraform via <code>terraform validate</code>
-command to make sure that it is correct and doesn't have duplicate resources
-or anything like that.</li>
-<li><strong>terraform_fmt</strong>: This verifies that the terraform is well formatted by
-running the <code>terraform fmt</code> command.`</li>
-<li><strong>terraform_plan</strong>: This runs the <code>terraform</code> plan and comments on the PR a
-diff of the changes for you to verify.</li>
-</ul>
-<p>To verify this is working, lets make a change to the infrastructure so that we
-can see a plan executed. We can bring back the <code>SQS</code> resource we destroyed in
-the previous article. Create a file called <code>root/2-sqs.tf</code>:</p>
-<pre><code class="hljs language-hcl"><span class="hljs-keyword">resource</span> <span class="hljs-string">"aws_sqs_queue"</span> <span class="hljs-string">"example-sqs"</span> {
-  name                      = <span class="hljs-string">"example-sqs"</span>
-  message_retention_seconds = <span class="hljs-number">86400</span>
-  receive_wait_time_seconds = <span class="hljs-number">10</span>
-}
-</code></pre>
-<p>Lets push a branch and make a pull request to see the result so far:</p>
-<pre><code class="hljs language-bash">❯ git add .github/ root/
-❯ git checkout -b apply-before-merge
-❯ git commit -m <span class="hljs-string">"Implemented on-pull-request"</span>
-❯ git push origin <span class="hljs-built_in">head</span>
-</code></pre>
-<p>After you make the pull request you should 3 checks on it and a comment that
-shows the plan:</p>
-<center>
-<img src="/images/posts/aws_apply_before_merge/github_comment.png" width="400">
-<img src="/images/posts/aws_apply_before_merge/github_checks.png" width="400">
-</center>
-<h1>Apply on Label</h1>
-<p>So now that the plan is working we need some way to <code>apply</code> the changes. I've
-found the best way to do this is via a label rather than a comment because of
-the way github actions work. Their event based actions like <code>on-comment</code> aren't
-executed in the context of a pull-request.</p>
-<p>Since we will be using a label to signal a plan is ready to be applied lets
-create a new file <code>.github/workflows/on-pull-request-labeled.yml</code> and provide
-this content:</p>
-<pre><code class="hljs language-yaml"><span class="hljs-attr">name:</span> <span class="hljs-string">pr_apply</span>
-
-<span class="hljs-attr">on:</span>
-  <span class="hljs-attr">pull_request:</span>
-    <span class="hljs-attr">types:</span> [ <span class="hljs-string">labeled</span> ]
-
-<span class="hljs-attr">env:</span>
-  <span class="hljs-attr">TERRAFORM_CLOUD_TOKENS:</span> <span class="hljs-string">app.terraform.io=${{</span> <span class="hljs-string">secrets.TFE_TOKEN</span> <span class="hljs-string">}}</span>
-  <span class="hljs-attr">GITHUB_TOKEN:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.GITHUB_TOKEN</span> <span class="hljs-string">}}</span>
-
-<span class="hljs-attr">jobs:</span>
-  <span class="hljs-attr">terraform_apply:</span>
-    <span class="hljs-attr">if:</span> <span class="hljs-string">${{</span> <span class="hljs-string">github.event.label.name</span> <span class="hljs-string">==</span> <span class="hljs-string">'tfc-apply'</span> <span class="hljs-string">}}</span>
-    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-22.04</span>
-    <span class="hljs-attr">permissions:</span>
-      <span class="hljs-attr">contents:</span> <span class="hljs-string">read</span>
-      <span class="hljs-attr">pull-requests:</span> <span class="hljs-string">write</span>
-    <span class="hljs-attr">strategy:</span>
-      <span class="hljs-attr">fail-fast:</span> <span class="hljs-literal">false</span>
-      <span class="hljs-attr">matrix:</span>
-        <span class="hljs-attr">folder:</span>
-          <span class="hljs-bullet">-</span> <span class="hljs-string">root</span>
-    <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v3</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">dflook/terraform-apply@v1</span>
-        <span class="hljs-attr">with:</span>
-          <span class="hljs-attr">path:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.folder</span> <span class="hljs-string">}}</span>
-          <span class="hljs-attr">workspace:</span> <span class="hljs-string">${{</span> <span class="hljs-string">matrix.folder</span> <span class="hljs-string">}}</span>
-</code></pre>
-<p>This will fire whenever a pull request is labeled with the <code>tfc-apply</code> label.
-It will run the <code>apply</code> and update the previous plan comment to let you
-know the status.</p>
-<center>
-<img src="/images/posts/aws_apply_before_merge/tfc_applying.png" width="400">
-<img src="/images/posts/aws_apply_before_merge/tfc_applying_comment.png" width="400">
-</center>
-<h1>Merge on Apply</h1>
-<p>One thing you'll notice is that the pull request stayed open even after the
-infrastructure is applied and we don't want that. We want any changes that have
-made it into the environment to be merged into <code>main</code> automatically. To do
-this we'll create our final action.</p>
-<p>Create a new file <code>.github/workflows/on-apply-finished.yml</code> with this content:</p>
-<pre><code class="hljs language-yaml"><span class="hljs-attr">name:</span> <span class="hljs-string">pr_merge</span>
-
-<span class="hljs-comment"># Only trigger, when the build workflow succeeded</span>
-<span class="hljs-attr">on:</span>
-  <span class="hljs-attr">workflow_run:</span>
-    <span class="hljs-attr">workflows:</span> [<span class="hljs-string">pr_apply</span>]
-    <span class="hljs-attr">types:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-string">completed</span>
-
-<span class="hljs-attr">jobs:</span>
-  <span class="hljs-attr">merge:</span>
-    <span class="hljs-attr">if:</span> <span class="hljs-string">${{</span> <span class="hljs-string">github.event.workflow_run.conclusion</span> <span class="hljs-string">==</span> <span class="hljs-string">'success'</span> <span class="hljs-string">}}</span>
-    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-22.04</span>
-    <span class="hljs-attr">permissions:</span>
-      <span class="hljs-attr">contents:</span> <span class="hljs-string">write</span>
-      <span class="hljs-attr">pull-requests:</span> <span class="hljs-string">write</span>
-      <span class="hljs-attr">checks:</span> <span class="hljs-string">read</span>
-      <span class="hljs-attr">statuses:</span> <span class="hljs-string">read</span>
-      <span class="hljs-attr">actions:</span> <span class="hljs-string">read</span>
-    <span class="hljs-attr">outputs:</span>
-      <span class="hljs-attr">pullRequestNumber:</span> <span class="hljs-string">${{</span> <span class="hljs-string">steps.workflow-run-info.outputs.pullRequestNumber</span> <span class="hljs-string">}}</span>
-    <span class="hljs-attr">steps:</span>
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">"Get information about the current run"</span>
-        <span class="hljs-attr">uses:</span> <span class="hljs-string">potiuk/get-workflow-origin@v1_5</span>
-        <span class="hljs-attr">id:</span> <span class="hljs-string">workflow-run-info</span>
-        <span class="hljs-attr">with:</span>
-          <span class="hljs-attr">token:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.GITHUB_TOKEN</span> <span class="hljs-string">}}</span>
-          <span class="hljs-attr">sourceRunId:</span> <span class="hljs-string">${{</span> <span class="hljs-string">github.event.workflow_run.id</span> <span class="hljs-string">}}</span>
-
-      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">merge</span> <span class="hljs-string">a</span> <span class="hljs-string">pull</span> <span class="hljs-string">request</span> <span class="hljs-string">after</span> <span class="hljs-string">terraform</span> <span class="hljs-string">apply</span>
-        <span class="hljs-attr">uses:</span> <span class="hljs-string">sudo-bot/action-pull-request-merge@v1.2.0</span>
-        <span class="hljs-attr">with:</span>
-            <span class="hljs-attr">github-token:</span> <span class="hljs-string">${{</span> <span class="hljs-string">secrets.GITHUB_TOKEN</span> <span class="hljs-string">}}</span>
-            <span class="hljs-attr">number:</span> <span class="hljs-string">${{</span> <span class="hljs-string">steps.workflow-run-info.outputs.pullRequestNumber</span> <span class="hljs-string">}}</span>
-</code></pre>
-<p>This will wait until the <code>pr_apply</code> job completes and as long as it was
-successful it'll merge the branch!</p>
-<p><strong>NOTE</strong>: As I mentioned earlier, the event based actions do not run in the
-context of the pull request which means you cannot test changes to them during
-the PR either.  You must merge the <code>on-apply-finished.yml</code> file to <code>main</code>
-before it starts working.</p>
-<h1>Branch Protection</h1>
-<p>The final step to the process is to make sure you go to your github settings
-and make sure these status checks are required before merging. Branch protection
-is a feature that will prevent merging changes into a branch unless all
-required checks are passing.</p>
-<p>Go to <code>Settings</code> -> <code>Branches</code> -> <code>Branch Protection</code> and add a branch
-protection rule:</p>
-<center>
-<img src="/images/posts/aws_apply_before_merge/branch_protection.png" width="500">
-</center>
-<p>You want to enable the following settings:</p>
-<ul>
-<li><strong>Branch Name</strong>: main</li>
-<li>✅ Require a pull request before merging</li>
-<li>✅ Require status checks to pass before merging</li>
-</ul>
-<p>Then for <code>Status checks that are required.</code> select all of the ones we've
-created:</p>
-<center>
-<img src="/images/posts/aws_apply_before_merge/required_checks.png" height="200">
-</center>
-<h1>Next Steps</h1>
-<p>Now that you have the ability to manage your AWS accounts through terraform
-via pull request the next step is to start creating infrastructure that can
-create real workloads.   In my next post I'll show you how to boostrap an
-EKS (Kubernetes cluster) using terraform.</p>]]></description>
-            <link>https://sontek.net/blog/scraps/aws_from_scratch_apply_before_merge</link>
-            <guid isPermaLink="true">https://sontek.net/blog/scraps/aws_from_scratch_apply_before_merge</guid>
-            <pubDate>Sun, 02 Apr 2023 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[AWS From Scratch with Terraform - Setting up your Root Account for IaC (using Terraform Cloud)]]></title>
-            <description><![CDATA[<p>Following this article will get you setup with an AWS Root account that can be
-managed through through Terraform Cloud with OIDC. As a best practice you
-should not keep long-lived access keys in your CI/CD pipelines when
-deploying to AWS, instead you should use OIDC (OpenID Connect) to securely
-deploy to AWS when using Terraform Cloud or Github Actions.</p>
-<h1>TL;DR</h1>
-<p>Download all the source from the blog post here:</p>
-<p><a href="https://github.com/sontek/aws-terraform-bootstrap">https://github.com/sontek/aws-terraform-bootstrap</a></p>
-<h1>How does OIDC work</h1>
-<p>OIDC enables us to request a short-lived access token directly from AWS. We
-just have to create trust relationship that controls which workflows are able
-to request the access tokens.</p>
-<ul>
-<li>No need to duplicate AWS credentials as long-lived GitHub secrets.</li>
-<li>Since we are using a short-lived access token that is only valid for a single
-job there is no reason to worry about rotating secrets.</li>
-</ul>
-<p>The following diagram gives an overview of how we can use Terraform Cloud's
-OIDC provider to integrate with AWS:</p>
-<div class="remark-mermaid remark-mermaid-default"><svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8 843.078125 320" style="max-width: 843.078px; background-color: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1687487110025"><style>#mermaid-1687487110025{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1687487110025 .error-icon{fill:#552222;}#mermaid-1687487110025 .error-text{fill:#552222;stroke:#552222;}#mermaid-1687487110025 .edge-thickness-normal{stroke-width:2px;}#mermaid-1687487110025 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1687487110025 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1687487110025 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1687487110025 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1687487110025 .marker{fill:#333333;stroke:#333333;}#mermaid-1687487110025 .marker.cross{stroke:#333333;}#mermaid-1687487110025 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1687487110025 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1687487110025 .cluster-label text{fill:#333;}#mermaid-1687487110025 .cluster-label span{color:#333;}#mermaid-1687487110025 .label text,#mermaid-1687487110025 span{fill:#333;color:#333;}#mermaid-1687487110025 .node rect,#mermaid-1687487110025 .node circle,#mermaid-1687487110025 .node ellipse,#mermaid-1687487110025 .node polygon,#mermaid-1687487110025 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-1687487110025 .node .label{text-align:center;}#mermaid-1687487110025 .node.clickable{cursor:pointer;}#mermaid-1687487110025 .arrowheadPath{fill:#333333;}#mermaid-1687487110025 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-1687487110025 .flowchart-link{stroke:#333333;fill:none;}#mermaid-1687487110025 .edgeLabel{background-color:#e8e8e8;text-align:center;}#mermaid-1687487110025 .edgeLabel rect{opacity:0.5;background-color:#e8e8e8;fill:#e8e8e8;}#mermaid-1687487110025 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-1687487110025 .cluster text{fill:#333;}#mermaid-1687487110025 .cluster span{color:#333;}#mermaid-1687487110025 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1687487110025 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1687487110025 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="10" viewBox="0 0 12 20" class="marker flowchart" id="flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-AWS LE-Token" id="L-AWS-Token-0" d="M185.671875,134.5L181.50520833333334,134.5C177.33854166666666,134.5,169.00520833333334,134.5,152.378260969764,145.875C135.75131360619469,157.25,110.83075221238937,180,98.37047151548673,191.375L85.91019081858407,202.75"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Token LE-Terraform" id="L-Token-Terraform-0" d="M85.91019081858407,235.75L98.37047151548673,247.125C110.83075221238937,258.5,135.75131360619469,281.25,164.46289638643069,292.625C193.17447916666666,304,225.67708333333334,304,258.1796875,304C290.6822916666667,304,323.1848958333333,304,359.3528645833333,304C395.5208333333333,304,435.3541666666667,304,475.1875,304C515.0208333333334,304,554.8541666666666,304,585.6956312991642,296.7916666666667C616.5370959316618,289.5833333333333,638.3866918633236,275.1666666666667,649.3114898291544,267.9583333333333L660.2362877949853,260.75"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Terraform LE-JWT" id="L-Terraform-JWT-0" d="M660.2362877949853,177.75L649.3114898291544,170.54166666666666C638.3866918633236,163.33333333333334,616.5370959316618,148.91666666666666,601.4456312991642,141.70833333333334C586.3541666666666,134.5,578.0208333333334,134.5,573.8541666666666,134.5L569.6875,134.5"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-JWT LE-AWS" id="L-JWT-AWS-0" d="M380.6875,134.5L376.5208333333333,134.5C372.3541666666667,134.5,364.0208333333333,134.5,355.6875,134.5C347.3541666666667,134.5,339.0208333333333,134.5,334.8541666666667,134.5L330.6875,134.5"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(621.1171875, 169.75)" class="root"><g class="clusters"><g id="Terraform" class="cluster default"><rect height="83" width="206.890625" y="8" x="-0.9296875" ry="0" rx="0" style=""></rect><g transform="translate(-0.9296875, 8)" class="cluster-label"><foreignObject height="18" width="206.890625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Terraform Cloud Workflow #2</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(102.515625, 49.5)" id="flowchart-OIDCProvider-23" class="node default default"><rect height="33" width="119.03125" y="-16.5" x="-59.515625" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-52.015625, -9)" style="" class="label"><foreignObject height="18" width="104.03125"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Provider</span></div></foreignObject></g></g></g></g><g transform="translate(178.171875, -8)" class="root"><g class="clusters"><g id="AWS" class="cluster default"><rect height="269" width="145.015625" y="8" x="8" ry="0" rx="0" style=""></rect><g transform="translate(51.4609375, 8)" class="cluster-label"><foreignObject height="18" width="58.09375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">AWS #1</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(80.5078125, 59.5)" id="flowchart-OIDC-20" class="node default default"><rect height="33" width="95.015625" y="-16.5" x="-47.5078125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-40.0078125, -9)" style="" class="label"><foreignObject height="18" width="80.015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Trust</span></div></foreignObject></g></g><g transform="translate(80.5078125, 142.5)" id="flowchart-Roles-21" class="node default default"><rect height="33" width="55.90625" y="-16.5" x="-27.953125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-20.453125, -9)" style="" class="label"><foreignObject height="18" width="40.90625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Roles</span></div></foreignObject></g></g><g transform="translate(80.5078125, 225.5)" id="flowchart-Resources-22" class="node default default"><rect height="33" width="91.484375" y="-16.5" x="-45.7421875" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-38.2421875, -9)" style="" class="label"><foreignObject height="18" width="76.484375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Resources</span></div></foreignObject></g></g></g></g><g transform="translate(67.8359375, 219.25)" id="flowchart-Token-25" class="node default default"><rect height="33" width="135.671875" y="-16.5" x="-67.8359375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-60.3359375, -9)" style="" class="label"><foreignObject height="18" width="120.671875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Access Token #4</span></div></foreignObject></g></g><g transform="translate(475.1875, 134.5)" id="flowchart-JWT-28" class="node default default"><rect height="33" width="189" y="-16.5" x="-94.5" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-87, -9)" style="" class="label"><foreignObject height="18" width="174"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">JWT &#x26; Cloud Role ID #3</span></div></foreignObject></g></g></g></g></g></svg></div>
-<ol>
-<li>In AWS, create an OIDC trust between a role and our terraform cloud
-workflow(s) that need access to the cloud.</li>
-<li>Every time a job runs, TFC's OIDC Provider auto-generates an OIDC token.
-This token contains multiple claims to establish a security-hardened and
-verifiable identity about the specific workflow that is trying to authenticate.</li>
-<li>Request this token from TFC's OIDC provider, and present it to AWS</li>
-<li>Once AWS successfully validates the claims presented in the token, it then
-provides a short-lived cloud access token that is available only for the duration
-of the job.</li>
-</ol>
-<h1>What does this post accomplish</h1>
-<ul>
-<li>Setup a root AWS account that is managed througuh terraform</li>
-<li>Setup OIDC authentication with Terraform Cloud so it can talk to AWS</li>
-<li>Setup Github Actions authentication with Terraform Cloud so we can run plan
-and apply through the CI/CD pipeline.</li>
-</ul>
-<h1>Setup AWS Access</h1>
-<p>It is very bad practice to use the root account for much of anything but for
-bootstrapping the account it is necessary, so the first step is to get your
-<code>AWS_ACCESS_KEY_ID</code> and <code>AWS_SECRET_ACCESS_KEY</code></p>
-<p>To do this click your account and choose <code>Security Credentials</code> in the top
-right:</p>
-<center>
-<img src="/images/posts/aws_root_account/security_credentials.png" height="200">
-</center>
-<p>Then choose <code>Create Access key</code>:</p>
-<center>
-<img src="/images/posts/aws_root_account/create_access_token.png" width="200">
-</center>
-<p>You need to set these environment variables in your shell so that your local
-shell has access to AWS. After you set them you can verify you set them correct
-by running:</p>
-<pre><code class="hljs language-bash">❯ aws sts get-caller-identity
-</code></pre>
-<p>and you should get a result similar to:</p>
-<pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
-    <span class="hljs-attr">"UserId"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"777777777777"</span><span class="hljs-punctuation">,</span>
-    <span class="hljs-attr">"Account"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"888888888888"</span><span class="hljs-punctuation">,</span>
-    <span class="hljs-attr">"Arn"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"arn:aws:iam::888888888888:root"</span>
-<span class="hljs-punctuation">}</span>
-</code></pre>
-<h2>Bootstrap</h2>
-<p>Before you can manage any of your accounts through Terraform Cloud you'll need
-bootstrap some core infrastructure like OIDC so Terraform Cloud can authenticate
-securely and manage AWS Resources on your behalf.</p>
-<p>I personally prefer doing this in two repositories:</p>
-<ul>
-<li>
-<p><code>infra-bootstrap</code>: This repository does the bare minimum to hook up terraform
-cloud with your AWS account and stores the state in git.  Its the only infra
-that will not be controlled by your CI/CD pipeline.</p>
-</li>
-<li>
-<p><code>infra</code>: The actual repository where all the rest of your AWS resources are
-managed.  It will store state in Terraform Cloud and you can introduce a
-CI/CD pipeline for approving changes.</p>
-<p><strong>Note</strong>: This repository will be generated with the terraform code.</p>
-</li>
-</ul>
-<p>After manually creating the git repository <code>infra-boostrap</code> in your Github
-account We will need 3 providers to bootstrap the account <code>aws</code>, <code>github</code>, and
-<code>tfe</code>.</p>
-<h3>Variables</h3>
-<p>Create a <code>1-variables.tf</code> where we can define the variables we'll need
-for creating these resources.</p>
-<pre><code class="hljs language-hcl"><span class="hljs-keyword">variable</span> <span class="hljs-string">"tfc_aws_audience"</span> {
-  type        = string
-  default     = <span class="hljs-string">"aws.workload.identity"</span>
-  description = <span class="hljs-string">"The audience value to use in run identity tokens"</span>
-}
-
-<span class="hljs-keyword">variable</span> <span class="hljs-string">"tfc_hostname"</span> {
-  type        = string
-  default     = <span class="hljs-string">"app.terraform.io"</span>
-  description = <span class="hljs-string">"The hostname of the TFC or TFE instance you'd like to use with AWS"</span>
-}
-
-<span class="hljs-keyword">variable</span> <span class="hljs-string">"tfc_project_name"</span> {
-  type        = string
-  default     = <span class="hljs-string">"Default Project"</span>
-  description = <span class="hljs-string">"The project under which a workspace will be created"</span>
-}
-
-<span class="hljs-keyword">variable</span> <span class="hljs-string">"tfc_organization_name"</span> {
-  type        = string
-  description = <span class="hljs-string">"The name of your Terraform Cloud organization"</span>
-}
-
-<span class="hljs-keyword">variable</span> <span class="hljs-string">"tfc_organization_owner"</span> {
-  type        = string
-  description = <span class="hljs-string">"The owner of the TFC organization"</span>
-}
-
-<span class="hljs-keyword">variable</span> <span class="hljs-string">"tfc_workspaces"</span> {
-  type        = list(string)
-  description = <span class="hljs-string">"The list of TFC workspaces"</span>
-}
-
-<span class="hljs-keyword">variable</span> <span class="hljs-string">"github_organization"</span> {
-  description = <span class="hljs-string">"The organization the repositories are owned by"</span>
-  type        = string
-}
-
-<span class="hljs-keyword">variable</span> <span class="hljs-string">"github_repo_name"</span> {
-  description = <span class="hljs-string">"The name of the git reppository we'll create for managing infra"</span>
-  type        = string
-}
-
-<span class="hljs-keyword">variable</span> <span class="hljs-string">"github_default_branch"</span> {
-  description = <span class="hljs-string">"The default branch to utilize"</span>
-  type        = string
-  default     = <span class="hljs-string">"main"</span>
-}
-
-<span class="hljs-keyword">variable</span> <span class="hljs-string">"github_oauth_client_id"</span> {
-  description = <span class="hljs-string">"The token for the TFC OAuth client shown under VCS providers"</span>
-  type        = string
-  default     = null
-}
-
-<span class="hljs-keyword">variable</span> <span class="hljs-string">"aws_root_account_id"</span> {
-  description = <span class="hljs-string">"The AWS root account we want to apply these changes to"</span>
-  type        = string
-}
-</code></pre>
-<p>We will use these variables in the later modules but they are mostly metadata
-around the terraform and github accounts you'll need to setup manually.</p>
-<h3>Providers</h3>
-<p>Create a file called <code>2-main.tf</code> and define the providers:</p>
-<pre><code class="hljs language-hcl"><span class="hljs-keyword">terraform</span> {
-  required_providers {
-    tfe = {
-      source  = <span class="hljs-string">"hashicorp/tfe"</span>
-      version = <span class="hljs-string">"0.41.0"</span>
-    }
-
-    aws = {
-      source  = <span class="hljs-string">"hashicorp/aws"</span>
-      version = <span class="hljs-string">"4.58.0"</span>
-    }
-
-    github = {
-      source  = <span class="hljs-string">"integrations/github"</span>
-      version = <span class="hljs-string">"5.18.3"</span>
-    }
-  }
-}
-
-<span class="hljs-keyword">provider</span> <span class="hljs-string">"aws"</span> {
-  region = <span class="hljs-string">"us-east-1"</span>
-
-  <span class="hljs-comment"># Root account, all other accounts should be provisioned</span>
-  <span class="hljs-comment"># via pull requests</span>
-  allowed_account_ids = [var.aws_root_account_id]
-}
-
-<span class="hljs-keyword">provider</span> <span class="hljs-string">"github"</span> {
-  owner = var.github_organization
-}
-</code></pre>
-<p>The key things there are we define <code>allowed_account_ids</code> to prevent us from
-working against any account that isn't the root and we are using one of the
-variables we defines earlier.</p>
-<h3>Github</h3>
-<p>We will utilize <code>terraform</code> to create the second git repository where the rest
-of the infrastructure will go. Create a file called <code>3-github.tf</code>:</p>
-<pre><code class="hljs language-hcl"><span class="hljs-keyword">resource</span> <span class="hljs-string">"github_repository"</span> <span class="hljs-string">"repo"</span> {
-  name        = var.github_repo_name
-  description = <span class="hljs-string">"Infrastructure Repository"</span>
-  visibility  = <span class="hljs-string">"private"</span>
-  auto_init   = true
-  has_issues  = true
-}
-
-<span class="hljs-keyword">resource</span> <span class="hljs-string">"github_branch_default"</span> <span class="hljs-string">"default"</span> {
-  repository = github_repository.repo.name
-  branch     = var.github_default_branch
-}
-
-<span class="hljs-keyword">output</span> <span class="hljs-string">"repository_id"</span> {
-  value = github_repository.repo.id
-}
-</code></pre>
-<p>This will generate a new repository in your account called <code>infra</code>.</p>
-<h3>Terraform Cloud</h3>
-<p>Now we need to setup dynamic credentials so the terraform cloud agent is
-allowed to take actions on your behalf.   To do this we'll setup an IAM
-role and an OIDC provider. Create a file called <code>4-tfc.tf</code>:</p>
-<pre><code class="hljs language-hcl"><span class="hljs-keyword">resource</span> <span class="hljs-string">"tfe_organization"</span> <span class="hljs-string">"organization"</span> {
-  name  = var.tfc_organization_name
-  email = var.tfc_organization_owner
-}
-
-/* AWS will use this TLS certificate to verify that requests for dynamic
-credentials come from Terraform Cloud.*/
-<span class="hljs-keyword">data</span> <span class="hljs-string">"tls_certificate"</span> <span class="hljs-string">"tfc_certificate"</span> {
-  url = <span class="hljs-string">"https://<span class="hljs-variable">${var.tfc_hostname}</span>"</span>
-}
-
-/* sets up an OIDC <span class="hljs-keyword">provider</span> in AWS with Terraform Cloud's TLS certificate,
-the SHA1 fingerprint from the TLS certificate 
-*/
-<span class="hljs-keyword">resource</span> <span class="hljs-string">"aws_iam_openid_connect_provider"</span> <span class="hljs-string">"tfc_provider"</span> {
-  url            = <span class="hljs-keyword">data</span>.tls_certificate.tfc_certificate.url
-  client_id_list = [var.tfc_aws_audience]
-  thumbprint_list = [
-    <span class="hljs-keyword">data</span>.tls_certificate.tfc_certificate.certificates[<span class="hljs-number">0</span>].sha1_fingerprint
-  ]
-}
-
-/* Policy to allow TFC to assume the AWS IAM role in our account */
-<span class="hljs-keyword">data</span> <span class="hljs-string">"aws_iam_policy_document"</span> <span class="hljs-string">"assume_role"</span> {
-  statement {
-    effect = <span class="hljs-string">"Allow"</span>
-
-    principals {
-      type        = <span class="hljs-string">"Federated"</span>
-      identifiers = [aws_iam_openid_connect_provider.tfc_provider.arn]
-    }
-    condition {
-      test     = <span class="hljs-string">"StringEquals"</span>
-      <span class="hljs-keyword">variable</span> = <span class="hljs-string">"<span class="hljs-variable">${var.tfc_hostname}</span>:aud"</span>
-
-      values = [
-        <span class="hljs-string">"<span class="hljs-variable">${<span class="hljs-meta">one(aws_iam_openid_connect_provider.tfc_provider.client_id_list)</span>}</span>"</span>
-      ]
-    }
-
-    condition {
-      test     = <span class="hljs-string">"StringLike"</span>
-      <span class="hljs-keyword">variable</span> = <span class="hljs-string">"<span class="hljs-variable">${var.tfc_hostname}</span>:sub"</span>
-
-      values = [
-        for workspace in var.tfc_workspaces : <span class="hljs-string">"organization:<span class="hljs-variable">${tfe_organization.organization.name}</span>:project:<span class="hljs-variable">${var.tfc_project_name}</span>:workspace:<span class="hljs-variable">${workspace}</span>:run_phase:*"</span>
-      ]
-    }
-    actions = [<span class="hljs-string">"sts:AssumeRoleWithWebIdentity"</span>]
-  }
-}
-
-<span class="hljs-keyword">resource</span> <span class="hljs-string">"aws_iam_role"</span> <span class="hljs-string">"tfc-agent"</span> {
-  name               = <span class="hljs-string">"tfc-agent"</span>
-  assume_role_policy = <span class="hljs-keyword">data</span>.aws_iam_policy_document.assume_role.json
-}
-
-/* Policy for what the TFC agent is allowed to do */
-<span class="hljs-keyword">data</span> <span class="hljs-string">"aws_iam_policy_document"</span> <span class="hljs-string">"tfc-agent"</span> {
-  version = <span class="hljs-string">"2012-10-17"</span>
-
-  statement {
-    actions   = [<span class="hljs-string">"*"</span>]
-    effect    = <span class="hljs-string">"Allow"</span>
-    resources = [<span class="hljs-string">"*"</span>]
-  }
-}
-
-<span class="hljs-keyword">resource</span> <span class="hljs-string">"aws_iam_policy"</span> <span class="hljs-string">"tfc-agent"</span> {
-  name        = <span class="hljs-string">"tfc-agent-access-policy"</span>
-  description = <span class="hljs-string">"Access policy for the TFC agent"</span>
-  policy      = <span class="hljs-keyword">data</span>.aws_iam_policy_document.tfc-agent.json
-}
-
-<span class="hljs-keyword">resource</span> <span class="hljs-string">"aws_iam_role_policy_attachment"</span> <span class="hljs-string">"tfc-access-attach"</span> {
-  role       = aws_iam_role.tfc-agent.name
-  policy_arn = aws_iam_policy.tfc-agent.arn
-}
-
-/* Fetch an oauth token from the client */
-<span class="hljs-keyword">data</span> <span class="hljs-string">"tfe_oauth_client"</span> <span class="hljs-string">"github"</span> {
-  /* Don't fetch the client if we don't have the client_id */
-  count           = var.github_oauth_client_id != null ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>
-  oauth_client_id = var.github_oauth_client_id
-}
-
-<span class="hljs-keyword">resource</span> <span class="hljs-string">"tfe_workspace"</span> <span class="hljs-string">"workspaces"</span> {
-  count        = length(var.tfc_workspaces)
-  name         = var.tfc_workspaces[count.index]
-  organization = tfe_organization.organization.name
-
-  working_directory = var.tfc_workspaces[count.index]
-
-  /* This generates a webhook on the github repository so plans are triggered
-  automatically.   We dynamically set the setting because we will not have the
-  oauth client ID on first pass.
-  */
-  dynamic <span class="hljs-string">"vcs_repo"</span> {
-    for_each = var.github_oauth_client_id != null ? [var.github_oauth_client_id] : []
-    content {
-      identifier     = format(<span class="hljs-string">"%s/%s"</span>, var.github_organization, github_repository.repo.name)
-      oauth_token_id = <span class="hljs-keyword">data</span>.tfe_oauth_client.github[<span class="hljs-number">0</span>].oauth_token_id
-    }
-  }
-}
-
-/* These variables tell the agent to use dynamic credentials */
-<span class="hljs-keyword">resource</span> <span class="hljs-string">"tfe_variable"</span> <span class="hljs-string">"tfc-auth"</span> {
-  count        = length(var.tfc_workspaces)
-  key          = <span class="hljs-string">"TFC_AWS_PROVIDER_AUTH"</span>
-  value        = true
-  category     = <span class="hljs-string">"env"</span>
-  workspace_id = tfe_workspace.workspaces[count.index].id
-  description  = <span class="hljs-string">"Enable dynamic auth on the TFC agents"</span>
-}
-
-<span class="hljs-keyword">resource</span> <span class="hljs-string">"tfe_variable"</span> <span class="hljs-string">"tfc-role"</span> {
-  count        = length(var.tfc_workspaces)
-  key          = <span class="hljs-string">"TFC_AWS_RUN_ROLE_ARN"</span>
-  value        = aws_iam_role.tfc-agent.arn
-  category     = <span class="hljs-string">"env"</span>
-  workspace_id = tfe_workspace.workspaces[count.index].id
-  description  = <span class="hljs-string">"Tell TFC what Role to run as"</span>
-}
-</code></pre>
-<p>This module is dynamic because there is one piece that will require a
-manual oauth setup for github.  So the first pass will apply without it
-and then later on we'll create it and run the apply again.</p>
-<h2>Applying the changes</h2>
-<p>Now we just need to define our settings for the module and we'll get our
-infrastructure applied.  Create a file called <code>settings.auto.tfvars</code> and
-populate it with the content for your account.  This is an example of what
-this should look like:</p>
-<pre><code class="hljs language-hcl">tfc_organization_name  = <span class="hljs-string">"sontek"</span>
-tfc_organization_owner = <span class="hljs-string">"john@sontek.net"</span>
-
-<span class="hljs-comment"># The workspaces you want to create and be able to manage with IaC</span>
-tfc_workspaces = [
-  <span class="hljs-string">"root"</span>
-]
-<span class="hljs-comment"># this can be your username</span>
-github_organization    = <span class="hljs-string">"sontek"</span>
-github_repo_name       = <span class="hljs-string">"sontek-infra"</span>
-aws_root_account_id    =  <span class="hljs-string">"888888888888"</span>
-</code></pre>
-<p>Now run:</p>
-<pre><code class="hljs language-bash">❯ terraform login
-❯ terraform init
-</code></pre>
-<p>and you should see:</p>
-<pre><code class="hljs">Terraform has been successfully initialized!
-</code></pre>
-<p>Now lets run our plan:</p>
-<pre><code class="hljs language-hcl">❯ <span class="hljs-keyword">terraform</span> plan
-</code></pre>
-<p>You should see a result:</p>
-<pre><code class="hljs language-vbnet"><span class="hljs-symbol">Plan:</span> <span class="hljs-number">10</span> <span class="hljs-keyword">to</span> add, <span class="hljs-number">0</span> <span class="hljs-keyword">to</span> change, <span class="hljs-number">0</span> <span class="hljs-keyword">to</span> destroy.
-</code></pre>
-<p>Apply it to make those resources:</p>
-<pre><code class="hljs language-hcl">❯ <span class="hljs-keyword">terraform</span> apply
-</code></pre>
-<p>At this point it:</p>
-<ol>
-<li>Created a terraform cloud organization</li>
-<li>Created a terraform cloud workspace</li>
-<li>Created a git repository</li>
-</ol>
-<h1>Verify TFC can talk to AWS</h1>
-<p>To verify that TFC can communicate with AWS through the dynamic credentials,
-lets clone the repository and make some dummy resources. After you've cloned
-the repository lets make a folder for the workspace <code>root</code> that we defined in
-bootstrap:</p>
-<pre><code class="hljs language-bash">❯ <span class="hljs-built_in">mkdir</span> root
-❯ <span class="hljs-built_in">cd</span> root
-</code></pre>
-<p>Now create a <code>1-providers.tf</code>:</p>
-<pre><code class="hljs language-hcl"><span class="hljs-keyword">terraform</span> {
-  cloud {
-    organization = <span class="hljs-string">"sontek"</span>
-
-    workspaces {
-      name = <span class="hljs-string">"root"</span>
-    }
-  }
-
-  required_providers {
-    aws = {
-      source  = <span class="hljs-string">"hashicorp/aws"</span>
-      version = <span class="hljs-string">"4.58.0"</span>
-    }
-
-    tfe = {
-      source  = <span class="hljs-string">"hashicorp/tfe"</span>
-      version = <span class="hljs-string">"0.42.0"</span>
-    }
-  }
-}
-
-<span class="hljs-keyword">provider</span> <span class="hljs-string">"aws"</span> {
-  region = <span class="hljs-string">"us-east-1"</span>
-
-  default_tags {
-    tags = {
-      Owner   = <span class="hljs-string">"john@sontek.net"</span>
-      Env     = <span class="hljs-string">"Root"</span>
-      Service = <span class="hljs-string">"BusinessOperations"</span>
-    }
-  }
-}
-</code></pre>
-<p><strong>NOTE</strong>: You should replace <code>organization</code>, <code>workspaces.name</code>, and
-<code>tags.Owner</code> to be your own values.</p>
-<p>Now create a small resource to prove everything is working, we'll use SQS for
-this. Create a file called <code>2-sqs.tf</code>:</p>
-<pre><code class="hljs language-hcl"><span class="hljs-keyword">resource</span> <span class="hljs-string">"aws_sqs_queue"</span> <span class="hljs-string">"example-sqs"</span> {
-  name                        = <span class="hljs-string">"example-sqs"</span>
-  message_retention_seconds = <span class="hljs-number">86400</span>
-  receive_wait_time_seconds = <span class="hljs-number">10</span>
-}
-</code></pre>
-<p>If you run the plan you should see the resource it wants to create:</p>
-<pre><code class="hljs language-bash">❯ terraform init
-❯ terraform plan
-
-</code></pre>
-<p>and you should see the run is executing in terraform cloud:</p>
-<pre><code class="hljs language-arduino">Running plan in Terraform Cloud. Output will stream here. Pressing Ctrl-C
-will stop streaming the logs, but will <span class="hljs-keyword">not</span> stop the plan running remotely.
-</code></pre>
-<p>You can click the link it provides to see the logs. Now lets apply this
-resource to see it all working:</p>
-<pre><code class="hljs language-hcl">❯ <span class="hljs-keyword">terraform</span> apply
-</code></pre>
-<p>You should get a response like:</p>
-<pre><code class="hljs language-yaml"><span class="hljs-string">Apply</span> <span class="hljs-string">complete!</span> <span class="hljs-attr">Resources:</span> <span class="hljs-number">1</span> <span class="hljs-string">added,</span> <span class="hljs-number">0</span> <span class="hljs-string">changed,</span> <span class="hljs-number">0</span> <span class="hljs-string">destroyed.</span>
-</code></pre>
-<p>So Terraform Cloud has full access to create AWS resources!   The final step
-is to get github running the plan/apply on pull requests. Commit these files
-to your repository and we'll remove them in a pull request. Create a
-<code>.gitignore</code> file in the root:</p>
-<pre><code class="hljs language-hcl">.<span class="hljs-keyword">terraform</span>*
-</code></pre>
-<p>and commit all the files:</p>
-<pre><code class="hljs language-bash">❯ git add *
-❯ git commit -m <span class="hljs-string">"initial infra"</span>
-❯ git push origin <span class="hljs-built_in">head</span>
-</code></pre>
-<h1>Github VCS Provider</h1>
-<p>To setup oauth between github and terraform cloud so it can manage the webhooks
-you need to login to the [https://app.terraform.io](Terraform Cloud Console) and
-initiate the connection.</p>
-<p>Select the newly created organization and then click <code>Settings</code>.  In the sidebar
-there will be a section <code>Version Control</code> and you want to select <code>Providers</code> under
-that.</p>
-<p>At this point you should see an <code>Add a VCS Provider</code> button, you want to select
-<code>Github.com (Custom)</code>:</p>
-<center>
-<img src="/images/posts/aws_root_account/tfc_vcs_provider.png" height="250">
-</center>
-<p>Follow the on-screen instructions to create a new GitHub OAuth application on your
-account. For me, I went to <a href="https://github.com/settings/applications/new">here</a> and
-provided the information TFC displayed:</p>
-<center>
-<img src="/images/posts/aws_root_account/tfc_github_app.png" height="300">
-</center>
-<p>On the Github side you need to save the <code>Client ID</code> and you need to click
-<code>Generate a new client secret</code>.   Provide those details to terraform cloud and
-then we should be ready to send our first PR!</p>
-<center>
-<img src="/images/posts/aws_root_account/tfc_oauth_settings.png" height="300">
-</center>
-<h2>Finish Bootstrap</h2>
-<p>At this point we need to return to the bootstrap repository and provide it the
-new OAuth Client ID for its <code>github_oauth_client_id</code> setting.  To get the value
-for this the easiest way is to drill into the VCS provider in terraform and click
-<code>Edit Client</code>.   In the URL you'll see the Client ID, it should start with
-<code>oc-...</code>.</p>
-<p>Now return back to the <code>bootstrap</code> repository and edit <code>settings.auto.tfvars</code> and
-set the final setting:</p>
-<pre><code class="hljs language-ini"><span class="hljs-attr">github_oauth_client_id</span> = <span class="hljs-string">"oc-......"</span>
-</code></pre>
-<p>Now you should be able to run a plan and see the <code>vcs_repo</code> get added in-place:</p>
-<pre><code class="hljs language-bash">❯ terraform plan
-
-  ~ update in-place
-
-Terraform will perform the following actions:
-
-  <span class="hljs-comment"># tfe_workspace.workspaces[0] will be updated in-place</span>
-  ~ resource <span class="hljs-string">"tfe_workspace"</span> <span class="hljs-string">"workspaces"</span> {
-        <span class="hljs-built_in">id</span>                            = <span class="hljs-string">"ws-..."</span>
-        name                          = <span class="hljs-string">"root"</span>
-        <span class="hljs-comment"># (20 unchanged attributes hidden)</span>
-
-      + vcs_repo {
-          + identifier         = <span class="hljs-string">"sontek/sontek-infra"</span>
-          + ingress_submodules = <span class="hljs-literal">false</span>
-          + oauth_token_id     = <span class="hljs-string">"ot-..."</span>
-        }
-    }
-
-Plan: 0 to add, 1 to change, 0 to destroy.
-</code></pre>
-<p>Apply the change!</p>
-<pre><code class="hljs language-hcl">❯ <span class="hljs-keyword">terraform</span> apply
-</code></pre>
-<p>After you apply the change, if you go to <code>Settings</code> -> <code>Webhooks</code> of the <code>infra</code>
-repository that was created earlier you should see a new terraform cloud webhook
-was created.</p>
-<center>
-<img src="/images/posts/aws_root_account/github_webhooks.png" width="350">
-</center>
-<h1>Send your first pull request</h1>
-<p>Now you should be able to send a pull request tearing down the SQS resource we
-generated at the beginning and terraform cloud will take care of the rest! Make
-sure you are on the generated <code>infra</code> repo and:</p>
-<pre><code class="hljs language-bash">❯ <span class="hljs-built_in">rm</span> root/sqs.tf
-</code></pre>
-<p>and commit / push that to a branch and open a pull request. When you merge it
-will apply the changes.</p>
-<h1>Next Steps</h1>
-<p>This should be good enough for you to manage your AWS cloud infrastructure as
-code with terraform but I <strong>personally</strong> don't like that terraform cloud applies
-the changes on merge.  There are a lot of ways where a <code>plan</code> can succeed but an
-<code>apply</code> will fail and you end up with broken configuration in <code>main</code>.</p>
-<p>I prefer a worfklow called <code>apply-before-merge</code> and in my next post I'll show you
-how to do that through github actions instead of utilizing the TFC webhook.</p>
-<p>Check out that post <a href="/blog/2023/aws_from_scratch_apply_before_merge">here</a>!</p>
-<h1>Helpful Resources</h1>
-<ul>
-<li><a href="https://developer.hashicorp.com/terraform/tutorials/cloud/dynamic-credentials?product_intent=terraform">Terraform Dynamic Credentials Tutorial</a></li>
-<li><a href="https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/aws-configuration">Terraform docs on Dynamic Credentials</a></li>
-<li><a href="https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#understanding-the-oidc-token">Github's understanding OIDC</a></li>
-</ul>]]></description>
-            <link>https://sontek.net/blog/scraps/aws_from_scratch_root_account</link>
-            <guid isPermaLink="true">https://sontek.net/blog/scraps/aws_from_scratch_root_account</guid>
-            <pubDate>Sat, 01 Apr 2023 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[How to speak spanish like a colombian drug lord!]]></title>
@@ -2640,146 +1665,6 @@ worker         Ready    &#x3C;none>                 11m   v1.23.5
             <pubDate>Sun, 17 Apr 2022 00:00:00 GMT</pubDate>
         </item>
         <item>
-            <title><![CDATA[AWS from scratch - EKS]]></title>
-            <description><![CDATA[<ul>
-<li>
-<p>kubectl with jumphost:</p>
-<ul>
-<li>https://diegosucaria.info/how-to-access-a-private-eks-cluster-from-your-local-machine-without-a-vpn/</li>
-</ul>
-</li>
-<li>
-<p>using ssm:</p>
-<ul>
-<li>https://awstip.com/accessing-private-eks-cluster-from-your-local-machine-using-ssm-port-forwarding-92244c2f3534</li>
-<li>https://medium.com/@metturarun/manage-aws-eks-nodes-through-aws-systems-manager-9483317e2ff4</li>
-</ul>
-</li>
-</ul>]]></description>
-            <link>https://sontek.net/blog/drafts/aws_from_scratch_eks</link>
-            <guid isPermaLink="true">https://sontek.net/blog/drafts/aws_from_scratch_eks</guid>
-            <pubDate>Sun, 03 Apr 2022 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[Introduction to CUE Lang]]></title>
-            <description><![CDATA[<blockquote>
-<p>inheritance is questionable in programming, its fatal in configuration
-code does not provide a contract between developer intent and runtime operation
-can think of it like a spreadsheet where you can reference other cells and run functions but for JSON.</p>
-</blockquote>
-<ul>
-<li>
-<p>Show tags (@ syntax) for metadata</p>
-</li>
-<li>
-<p>Show eval cmd</p>
-</li>
-<li>
-<p>Show export cmd</p>
-</li>
-<li>
-<p>Show vet cmd</p>
-</li>
-<li>
-<p>Showing nesting and generating multiple files</p>
-<ul>
-<li>https://www.youtube.com/watch?v=OaPLbvHpVlc</li>
-</ul>
-</li>
-<li>
-<p>Show interpolation of other variables like:</p>
-<ul>
-<li>"(p), (q)"</li>
-</ul>
-</li>
-<li>
-<p>Show errors when it doesn't have all concrete values</p>
-</li>
-<li>
-<p>Show math a + b</p>
-</li>
-<li>
-<p>Show generating OpenAPI specs?</p>
-</li>
-<li>
-<p>Show combining JSON and YAML</p>
-</li>
-<li>
-<p>Show wildcard on key select <code>[=~"Name$" ]</code></p>
-</li>
-<li>
-<p>Show regex validation: <code>^[A-Z]</code></p>
-</li>
-<li>
-<p>Show constraints like <code>foo: >=4 &#x26; &#x3C;=12</code></p>
-</li>
-<li>
-<p>Show optional field like <code>bar?: int</code></p>
-</li>
-<li>
-<h2>Show trim <strong>:chefs_kiss:</strong></h2>
-</li>
-<li>
-<p>Compare to JSON Schema</p>
-<ul>
-<li>Can generate JSON Schema from CUE</li>
-<li>Can generate CUE from a JSON Schema</li>
-</ul>
-</li>
-<li>
-<p>Show how to validates kubernetes manifests</p>
-<ul>
-<li>maybe require prometheus scraping turned on?</li>
-<li>initialDelaySeconds > 15?</li>
-<li>standardize liveness path?</li>
-</ul>
-</li>
-<li>
-<p>Syntax:</p>
-<ul>
-<li>
-<ul>
-<li>is default value</li>
-</ul>
-</li>
-<li><code>import</code> / <code>module</code> / <code>package</code></li>
-</ul>
-</li>
-<li>
-<p>What is CUE?</p>
-<ul>
-<li>Configuration</li>
-<li>Validation</li>
-<li>Logic Programming Engine</li>
-<li>Strongly Typed</li>
-<li>Treats values and types the same</li>
-<li>Idempotent (order doesn't matter!!)</li>
-<li>No overrides / overlays -- 1 layer</li>
-<li>No mixing code with configuration</li>
-<li>Requires everything gets more specific</li>
-</ul>
-</li>
-</ul>
-<p>Data:
-<code>cue     foo: {         name: "Bar"         cash: 1.2M         age: 36     }     </code></p>
-<p>Type:
-```cue
-foo: {
-name: string
-cash: int &#x26; > 1M
-age: > 30
-}</p>
-<h1>Resources</h1>
-<ul>
-<li>https://www.youtube.com/watch?v=e4v1_2bSeGI</li>
-<li>https://www.youtube.com/watch?v=fR_yApIf6jU</li>
-<li>Good use of CUE: https://github.com/cueblox/blox</li>
-</ul>]]></description>
-            <link>https://sontek.net/blog/drafts/cue_lang_intro</link>
-            <guid isPermaLink="true">https://sontek.net/blog/drafts/cue_lang_intro</guid>
-            <pubDate>Sun, 03 Apr 2022 00:00:00 GMT</pubDate>
-        </item>
-        <item>
             <title><![CDATA[Automate project workflows with the command runner Just!]]></title>
             <description><![CDATA[<p>I believe every project should have a CLI built around the standard workflows of developing
 on the project.  Things like:</p>
@@ -2950,6 +1835,959 @@ you can check out the one I use to maintain my <a href="https://github.com/sonte
             <link>https://sontek.net/blog/2022/intro_to_just</link>
             <guid isPermaLink="true">https://sontek.net/blog/2022/intro_to_just</guid>
             <pubDate>Sat, 26 Feb 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Use asdf to manage Python, NodeJS, GoLang and more!]]></title>
+            <description><![CDATA[<p><a href="https://asdf-vm.com/">asdf</a> is a general purpose version manager that
+can manage versions of most programming language runtimes through a set
+of plugins.</p>
+<p>With micro-services being all the rage and the ever changing landscape
+of the development world, it is rare to utilize a single version of
+language runtime. Even when you want to upgrade from one to the other
+you'll need both usable on your system at the same time.</p>
+<p>I've used tools like <code>pyenv</code> and <code>nvm</code> in the past when I needed to change
+versions depending on which project I'm contributing to. But with <code>asdf</code>
+you have one tool to rule them all!</p>
+<h2>Getting Started</h2>
+<p>The first thing you need to do when working with <code>asdf</code> is grab the
+plugins for the languages you are interested in working with. You can list
+what plugins are available:</p>
+<pre><code class="hljs language-bash">> asdf plugin list all
+golang                       *https://github.com/kennyp/asdf-golang.git
+golangci-lint                 https://github.com/hypnoglow/asdf-golangci-lint.git
+nodejs                       *https://github.com/asdf-vm/asdf-nodejs.git
+poetry                       *https://github.com/asdf-community/asdf-poetry.git
+python                       *https://github.com/danhper/asdf-python.git
+yarn                         *https://github.com/twuni/asdf-yarn.git
+</code></pre>
+<p>On the left will be the name of the plugin and on the right will be the repository
+where it lives.  It'll me marked with an asterisk if you already have it installed.</p>
+<p>To install a plugin you say <code>asdf plugin add &#x3C;plugin></code> to get it installed.  You can
+also provide the repository where you want it pulled from, for example:</p>
+<pre><code class="hljs language-bash">> asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+> asdf plugin add python https://github.com/danhper/asdf-python.git
+</code></pre>
+<p>This will not give you any version of those languages, it is only installing the
+plugin that knows how to work with those languages.   You are ready to pull down
+any versions you want at that point:</p>
+<pre><code class="hljs language-bash">> asdf install nodejs 14.19.0
+> asdf install python 3.9.10
+</code></pre>
+<p>Once you have the versions installed you will be able to view them like this:</p>
+<pre><code class="hljs language-bash">> asdf list
+golang
+  1.17.7
+nodejs
+  --<span class="hljs-built_in">help</span>
+  12.22.10
+  14.19.0
+  16.14.0
+  17.5.0
+poetry
+  1.1.13
+python
+  3.9.10
+yarn
+  1.22.17
+</code></pre>
+<h2>Using the installed languages</h2>
+<p>To activate a specific version of a language you have you have three options:</p>
+<h3>Make it global</h3>
+<p>You can make it global, meaning when you run the tool like <code>python</code> it'll use
+this version for the system:</p>
+<pre><code class="hljs language-bash">> asdf global python 3.9.10
+</code></pre>
+<h3>Make it local</h3>
+<p>You can make it local, which means it will generate a file in the current
+directory named <code>.tool-versions</code> and so whenever you change into a directory
+it will activate the versions defined in there.</p>
+<pre><code class="hljs language-bash">> asdf <span class="hljs-built_in">local</span> nodejs 12.22.10
+> <span class="hljs-built_in">cat</span> .tool-versions 
+nodejs 12.22.10
+</code></pre>
+<p>The great thing about this is you can commit that file to git and then anyone
+who checks out the project and uses <code>asdf</code> will have the same versions activated!</p>
+<h3>Temporary</h3>
+<p>If you want to activate a version of a language temporarily you can swap to it
+for the current shell:</p>
+<pre><code class="hljs language-bash">> asdf shell golang 1.17.7
+> <span class="hljs-built_in">env</span>|grep -i ASDF
+ASDF_GOLANG_VERSION=1.17.7
+</code></pre>
+<p>It sets an environment variable that will have preference over the file. If you
+ever wonder what versions a directory is using you can run:</p>
+<pre><code class="hljs language-bash">> asdf current
+golang          ______          No version <span class="hljs-built_in">set</span>. Run <span class="hljs-string">"asdf &#x3C;global|shell|local> golang &#x3C;version>"</span>
+nodejs          12.22.10        .tool-versions
+poetry          ______          No version <span class="hljs-built_in">set</span>. Run <span class="hljs-string">"asdf &#x3C;global|shell|local> poetry &#x3C;version>"</span>
+python          3.9.10          .tool-versions
+yarn            1.22.17         .tool-versions
+</code></pre>
+<h2>Conclusion</h2>
+<p><a href="https://asdf-vm.com/">asdf</a>  is an AWESOME tool to utilize if you find yourself using many
+different languages or many different versions of the same language. You should check it out
+and see if it can improve your workflow.</p>
+<p>I made a video of me using the tool here:</p>
+<iframe width="854" height="480" src="https://www.youtube.com/embed/RTaqWRj-6Lg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>]]></description>
+            <link>https://sontek.net/blog/2022/intro_to_asdf</link>
+            <guid isPermaLink="true">https://sontek.net/blog/2022/intro_to_asdf</guid>
+            <pubDate>Fri, 18 Feb 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Preparing custom images for OpenStack]]></title>
+            <description><![CDATA[<p>This article will show you how to use libvirt to create base images that
+can be uploaded to OpenStack.</p>
+<h1>Why would you want to do this?</h1>
+<p>Linux distributions like Fedora and Ubuntu already ship "cloud" images
+and most providers also have their own custom images for you to use, but
+I find it much more comforting to have full control of the software that
+is installed and I like the ability to easily apply new security patches
+to base images.</p>
+<p>I wouldn't use images to replace config management (CM) with something
+like <a href="http://www.saltstack.com/">Salt</a> or
+<a href="http://www.ansible.com/">Ansible</a> but they are nice to give sane system
+defaults in things like <code>grub.conf</code>, <code>sysctl.conf</code>, and shipping a Chef
+or Salt agent so that your CM engine can communicate with your server
+right away.</p>
+<h1>Setting up your environment</h1>
+<p>The first thing you need to do is get a minimal install disk for the
+Linux distribution you want to use. I prefer using Fedora netinst disks
+but another popular option is Ubuntu Server.</p>
+<p>To get the latest Fedora here, you can choose "netinst" under Direct
+Downloads: <a href="http://fedoraproject.org/en/get-fedora-all">http://fedoraproject.org/en/get-fedora-all</a></p>
+<p>To get the latest Ubuntu you can go here:
+<a href="http://www.ubuntu.com/download/server">http://www.ubuntu.com/download/server</a></p>
+<p>Once you have acquired your distribution of choice you just need to
+verify that you have <code>virt-install</code> and <code>virt-viewer</code> installed:</p>
+<p>Fedora:</p>
+<pre><code class="hljs language-bash">yum install virt-install virt-viewer
+</code></pre>
+<p>Ubuntu:</p>
+<pre><code class="hljs language-bash">apt-get install virtinst virt-viewer
+</code></pre>
+<p>If you prefer a graphical user interface, you may use <code>virt-manager</code>
+instead, but I try to keep everything in the CLI; that way it can be
+repeated easily.</p>
+<h1>Preparing your disk</h1>
+<p>Now that you have a base ISO and the tools necessary, let's get started
+by creating a disk to install the virtual server into. Resizing an image
+isn't an impossible task but it is much easier to choose a reasonably
+sized disk for the purpose it will be used for.</p>
+<p>I primarily use 8 GB disks -- that way we can fit all the system
+components required as well as our own web applications. Any large files
+should be placed in a SAN or something like Dreamhost's dreamobjects.</p>
+<p>The other big decision you must make upfront is what disk format you
+want to use -- the trade-off is disk space vs performance. The two
+primary formats are qcow2 (QEMU Copy on Write) and Raw. qcow2 is great
+if you have limited disk space and don't want to allocate the full 8 GB
+up front. Raw is preferred if you want the best performance.</p>
+<p>If you choose qcow2, you'll also need to make sure you have <code>qemu-img</code>:</p>
+<p>Fedora:</p>
+<pre><code class="hljs language-bash">yum install qemu-img
+</code></pre>
+<p>Ubuntu:</p>
+<pre><code class="hljs language-bash">apt-get install qemu-utils
+</code></pre>
+<p>Create a raw disk:</p>
+<pre><code class="hljs language-bash">fallocate -l 8192M server.img
+</code></pre>
+<p>Create a qcow2 disk:</p>
+<pre><code class="hljs language-bash">qemu-img create -f qcow2 server.qcow2 8G
+</code></pre>
+<h1>Installing your distribution onto the disk</h1>
+<p>We will use the <code>virt-install</code> command to get the distribution installed
+onto the disk image.</p>
+<p>To install Fedora on a qcow2 disk image:</p>
+<pre><code class="hljs language-bash">virt-install --name base_server --ram 1024 --cdrom=./Fedora-20-x86_64-netinst.iso \
+--disk path=./server.qcow2,format=qcow2
+</code></pre>
+<p>To install Ubuntu Server on a raw disk image:</p>
+<pre><code class="hljs language-bash">virt-install --name base_server --ram 1024 --cdrom=./ubuntu-12.04.4-server-amd64.iso \
+--disk path=./server.img,format=raw
+</code></pre>
+<p>You should follow the standard install steps that you normally would
+when setting up your distribution. But here are some tips for each:</p>
+<p>Fedora:</p>
+<ul>
+<li>Choose minimal install -- by default it selects "GNOME".</li>
+</ul>
+<p>Ubuntu:</p>
+<ul>
+<li>
+<p>Be sure to select OpenSSH server -- it won't install it by
+default.</p>
+</li>
+<li>
+<p>On Ubuntu 12.04, there is a bug that makes it hang after running
+<code>fsck</code>. You will need to edit grub to get it to boot, hit _<a href="">e</a> at
+the boot prompt and add "nomodeset" on the linux line. You will
+know that you need to do this if your boot hangs on fsck:</p>
+<pre><code class="hljs language-bash">fsck from util-linux 2.20.1
+/dev/mapper/ubuntu--vg-root: clean, 57106/441504 files, 286779/1764352 blocks
+/dev/sda1: clean, 230/62248 files, 39833/248832 blocks
+</code></pre>
+</li>
+</ul>
+<h1>Preparing image for openstack</h1>
+<p>To prepare a virtual machine for the cloud, you will need to install the
+<code>cloud-init</code> package, which allows the cloud providers to inject certain
+system settings when creating servers based on the image. These are
+things like hostname and ssh keys.</p>
+<p>On Fedora:</p>
+<pre><code class="hljs language-bash">yum install cloud-init
+</code></pre>
+<p>On Ubuntu:</p>
+<pre><code class="hljs language-bash">apt-get install cloud-init
+</code></pre>
+<p>Then you need to just configure <code>cloud-init</code> by editing
+<code>/etc/cloud/cloud.cfg</code> and update the <code>datasources_list</code> section to
+include EC2. OpenStack uses EC2 metadata for <code>cloud-init</code>.</p>
+<p>You should also verify the user setting in this same config and define
+the user you plan to use, it will be where the <code>authorized_keys</code> file is
+setup for when the cloud provider injects your SSH key into the server.</p>
+<p><code>cloud-init</code> will not create the user for you, it will just assign the
+SSH keypair and reset the password. So make sure the user defined in
+<code>cloud.cfg</code> is also created on the system.</p>
+<p>Once you have your <code>cloud-init</code> settings the way you want them, just
+shutdown and run the <code>virt-sysprep</code> command.</p>
+<p>On the guest machine:</p>
+<pre><code class="hljs language-bash">shutdown -h now
+</code></pre>
+<p>On the host machine:</p>
+<pre><code class="hljs language-bash">virt-sysprep -d base_server
+</code></pre>
+<h1>Uploading your image to OpenStack</h1>
+<p>Using the glance API it is very straightforward to upload the image to
+OpenStack. Just run the following command:</p>
+<pre><code class="hljs language-bash">glance image-create --name base_server --disk-format=qcow2 \
+--container-format=bare --is-public=True --file server.qcow2 --progress
+</code></pre>
+<p>Once the image upload completes you will be able to use it immediately
+within nova. You can reference it by name or by the id from [glance
+image-list]{.title-ref}.</p>
+<p>To create your first instance from the image:</p>
+<pre><code class="hljs language-bash">nova boot --flavor m1.tiny --image base_server --key-name devops \
+--security-groups free_for_all test_server
+</code></pre>
+<p>Obviously the security groups, key name, and flavors are based on your
+installation of OpenStack but can all easily be queried from the nova
+API:</p>
+<pre><code class="hljs language-bash">nova flavor-list
+nova secgroup-list
+nova keypair-list
+</code></pre>
+<p>And you are done! You'll be able to re-use your new image as a base for
+all new instances you spin up in openstack!</p>]]></description>
+            <link>https://sontek.net/blog/old/preparing_cloud_images_with_libvirt</link>
+            <guid isPermaLink="true">https://sontek.net/blog/old/preparing_cloud_images_with_libvirt</guid>
+            <pubDate>Sun, 03 Aug 2014 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Writing tests for Pyramid and SQLAlchemy]]></title>
+            <description><![CDATA[<p>TL;DR: Putting it all together, the full code can be found here:
+<a href="https://gist.github.com/1420255">https://gist.github.com/1420255</a></p>
+<h1>Intro</h1>
+<p>Pyramid's documentation doesn't cover the preferred way to test with
+SQLAlchemy, because Pyramid tries to stay out of your way and allow you
+to make your own decisions. However, I feel i'ts necessary to document
+what I think is the best way to test.</p>
+<p>When I first started writing tests with SQLAlchemy I found plenty of
+examples of how to to get started by doing something like this:</p>
+<pre><code class="hljs language-python"><span class="hljs-keyword">from</span> db <span class="hljs-keyword">import</span> session <span class="hljs-comment"># probably a contextbound sessionmaker</span>
+<span class="hljs-keyword">from</span> db <span class="hljs-keyword">import</span> model
+
+<span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> create_engine
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">setup</span>():
+    engine = create_engine(<span class="hljs-string">'sqlite:///test.db'</span>)
+    session.configure(bind=engine)
+    model.metadata.create_all(engine)
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">teardown</span>():
+    model.metadata.drop_all(engine)
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">test_something</span>():
+    <span class="hljs-keyword">pass</span>
+</code></pre>
+<p>I have seen this done so many times, but I feel there is so much wrong
+with it! So let's establish some base rules when testing:</p>
+<blockquote>
+<ul>
+<li>Always test your system like it would be used in production.
+SQLite does not enforce the same rules or have the same features
+as Postgres or MySQL and will allow tests to pass that would
+otherwise fail in production.</li>
+<li>Tests should be fast! You should be writing tests for all your
+code. This is the main reason people do test against SQLite, but
+we can't violate rule number one. We have to make sure tests
+against Postgres are fast, so we shouldn't be tearing down and
+recreating tables for every single test.</li>
+<li>You should be able to execute in parallel to speed up when you
+have thousands of tests. Dropping and creating tables per test
+would not work in a parallel environment.</li>
+</ul>
+</blockquote>
+<p>For an example, I have a project with 600+ tests and it would take 2 and
+half minutes to execute running against SQLite. But when we swapped our
+test configuration to execute against Postgres, testing took well over
+an hour. That is unacceptable!</p>
+<p>But running them in parallel will give us a huge speed up. Check out the
+results of the tests running in single proc mode vs using all 4 cores:</p>
+<pre><code class="hljs language-ini">$ <span class="hljs-attr">py.test</span>
+======= 616 passed in 143.67 <span class="hljs-attr">seconds</span> =======
+
+$ py.test <span class="hljs-attr">-n4</span>
+======= 616 passed in 68.12 <span class="hljs-attr">seconds</span> =======
+</code></pre>
+<h1>The right way</h1>
+<p>So what is the proper way to setup your tests? You should initialize the
+database when you start your test runner and then use transactions to
+rollback any data changes your tests made. This allows you to keep a
+clean database for each test in a very efficient way.</p>
+<p>In py.test, you just have to create a file called conftest.py that looks
+similar to:</p>
+<pre><code class="hljs language-python"><span class="hljs-keyword">import</span> os
+
+ROOT_PATH = os.path.dirname(__file__)
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">pytest_sessionstart</span>():
+    <span class="hljs-keyword">from</span> py.test <span class="hljs-keyword">import</span> config
+
+    <span class="hljs-comment"># Only run database setup on master (in case of xdist/multiproc mode)</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">hasattr</span>(config, <span class="hljs-string">'slaveinput'</span>):
+        <span class="hljs-keyword">from</span> models <span class="hljs-keyword">import</span> initialize_sql
+        <span class="hljs-keyword">from</span> pyramid.config <span class="hljs-keyword">import</span> Configurator
+        <span class="hljs-keyword">from</span> paste.deploy.loadwsgi <span class="hljs-keyword">import</span> appconfig
+        <span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> engine_from_config
+        <span class="hljs-keyword">import</span> os
+
+        ROOT_PATH = os.path.dirname(__file__)
+        settings = appconfig(<span class="hljs-string">'config:'</span> + os.path.join(ROOT_PATH, <span class="hljs-string">'test.ini'</span>))
+        engine = engine_from_config(settings, prefix=<span class="hljs-string">'sqlalchemy.'</span>)
+
+        <span class="hljs-built_in">print</span> <span class="hljs-string">'Creating the tables on the test database %s'</span> % engine
+
+        config = Configurator(settings=settings)
+        initialize_sql(settings, config)
+</code></pre>
+<p>With py.test, when you are running in parallel mode, the
+pytest_sessionstart hook gets fired for each node, so we check that we
+are on the master node. Then we just grab our test.ini configuration
+file and execute the initialize_sql function.</p>
+<p>Now that you have your initial test configuration finished, you have to
+define a base test class that does the transaction management in setUp
+and teardown.</p>
+<p>First, lets setup the Base testing class what will manage our
+transactions:</p>
+<pre><code class="hljs language-python"><span class="hljs-keyword">import</span> unittest
+<span class="hljs-keyword">from</span> pyramid <span class="hljs-keyword">import</span> testing
+<span class="hljs-keyword">from</span> paste.deploy.loadwsgi <span class="hljs-keyword">import</span> appconfig
+
+<span class="hljs-keyword">from</span> webtest <span class="hljs-keyword">import</span> TestApp
+<span class="hljs-keyword">from</span> mock <span class="hljs-keyword">import</span> Mock
+
+<span class="hljs-keyword">from</span> sqlalchemy <span class="hljs-keyword">import</span> engine_from_config
+<span class="hljs-keyword">from</span> sqlalchemy.orm <span class="hljs-keyword">import</span> sessionmaker
+<span class="hljs-keyword">from</span> app.db <span class="hljs-keyword">import</span> Session
+<span class="hljs-keyword">from</span> app.db <span class="hljs-keyword">import</span> Entity  <span class="hljs-comment"># base declarative object</span>
+<span class="hljs-keyword">from</span> app <span class="hljs-keyword">import</span> main
+<span class="hljs-keyword">import</span> os
+here = os.path.dirname(__file__)
+settings = appconfig(<span class="hljs-string">'config:'</span> + os.path.join(here, <span class="hljs-string">'../../'</span>, <span class="hljs-string">'test.ini'</span>))
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">BaseTestCase</span>(unittest.TestCase):
+<span class="hljs-meta">    @classmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">setUpClass</span>(<span class="hljs-params">cls</span>):
+        cls.engine = engine_from_config(settings, prefix=<span class="hljs-string">'sqlalchemy.'</span>)
+        cls.Session = sessionmaker()
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">setUp</span>(<span class="hljs-params">self</span>):
+        connection = self.engine.connect()
+
+        <span class="hljs-comment"># begin a non-ORM transaction</span>
+        self.trans = connection.begin()
+
+        <span class="hljs-comment"># bind an individual Session to the connection</span>
+        Session.configure(bind=connection)
+        self.session = self.Session(bind=connection)
+        Entity.session = self.session
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">tearDown</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-comment"># rollback - everything that happened with the</span>
+        <span class="hljs-comment"># Session above (including calls to commit())</span>
+        <span class="hljs-comment"># is rolled back.</span>
+        testing.tearDown()
+        self.trans.rollback()
+        self.session.close()
+</code></pre>
+<p>This base test case will wrap all your sessions in an external
+transaction so that you still have the ability to call flush/commit/etc
+and it will still be able to rollback any data changes you make.</p>
+<h1>Unit Tests</h1>
+<p>Now there are a few different types of tests you will want to run.
+First, you will want to do unit tests, which are small tests that only
+test 1 thing at a time. This means you will skip the routes, templates,
+etc. So let's setup our Unit Test Base class:</p>
+<pre><code class="hljs language-python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">UnitTestBase</span>(<span class="hljs-title class_ inherited__">BaseTestCase</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">setUp</span>(<span class="hljs-params">self</span>):
+        self.config = testing.setUp(request=testing.DummyRequest())
+        <span class="hljs-built_in">super</span>(UnitTestBase, self).setUp()
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">get_csrf_request</span>(<span class="hljs-params">self, post=<span class="hljs-literal">None</span></span>):
+        csrf = <span class="hljs-string">'abc'</span>
+
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-string">u'csrf_token'</span> <span class="hljs-keyword">in</span> post.keys():
+            post.update({
+                <span class="hljs-string">'csrf_token'</span>: csrf
+            })
+
+        request = testing.DummyRequest(post)
+
+        request.session = Mock()
+        csrf_token = Mock()
+        csrf_token.return_value = csrf
+
+        request.session.get_csrf_token = csrf_token
+
+        <span class="hljs-keyword">return</span> request
+</code></pre>
+<p>We built in a utility function to help us test requests that require a
+csrf token as well. Here is how we would use this class:</p>
+<pre><code class="hljs language-python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">TestViews</span>(<span class="hljs-title class_ inherited__">UnitTestBase</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">test_login_fails_empty</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-string">""" Make sure we can't login with empty credentials"""</span>
+        <span class="hljs-keyword">from</span> app.accounts.views <span class="hljs-keyword">import</span> LoginView
+        self.config.add_route(<span class="hljs-string">'index'</span>, <span class="hljs-string">'/'</span>)
+        self.config.add_route(<span class="hljs-string">'dashboard'</span>, <span class="hljs-string">'/'</span>)
+
+        request = testing.DummyRequest(post={
+            <span class="hljs-string">'submit'</span>: <span class="hljs-literal">True</span>,
+        })
+
+        view = LoginView(request)
+        response = view.post()
+        errors = response[<span class="hljs-string">'errors'</span>]
+
+        <span class="hljs-keyword">assert</span> errors[<span class="hljs-number">0</span>].node.name == <span class="hljs-string">u'csrf_token'</span>
+        <span class="hljs-keyword">assert</span> errors[<span class="hljs-number">0</span>].msg == <span class="hljs-string">u'Required'</span>
+        <span class="hljs-keyword">assert</span> errors[<span class="hljs-number">1</span>].node.name == <span class="hljs-string">u'Username'</span>
+        <span class="hljs-keyword">assert</span> errors[<span class="hljs-number">1</span>].msg == <span class="hljs-string">u'Required'</span>
+        <span class="hljs-keyword">assert</span> errors[<span class="hljs-number">2</span>].node.name == <span class="hljs-string">u'Password'</span>
+        <span class="hljs-keyword">assert</span> errors[<span class="hljs-number">2</span>].msg == <span class="hljs-string">u'Required'</span>
+
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">test_login_succeeds</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-string">""" Make sure we can login """</span>
+        admin = User(username=<span class="hljs-string">'sontek'</span>, password=<span class="hljs-string">'temp'</span>, kind=<span class="hljs-string">u'admin'</span>)
+        admin.activated = <span class="hljs-literal">True</span>
+        self.session.add(admin)
+        self.session.flush()
+
+        <span class="hljs-keyword">from</span> app.accounts.views <span class="hljs-keyword">import</span> LoginView
+        self.config.add_route(<span class="hljs-string">'index'</span>, <span class="hljs-string">'/'</span>)
+        self.config.add_route(<span class="hljs-string">'dashboard'</span>, <span class="hljs-string">'/dashboard'</span>)
+
+        request = self.get_csrf_request(post={
+                <span class="hljs-string">'submit'</span>: <span class="hljs-literal">True</span>,
+                <span class="hljs-string">'Username'</span>: <span class="hljs-string">'sontek'</span>,
+                <span class="hljs-string">'Password'</span>: <span class="hljs-string">'temp'</span>,
+            })
+
+        view = LoginView(request)
+        response = view.post()
+
+        <span class="hljs-keyword">assert</span> response.status_int == <span class="hljs-number">302</span>
+</code></pre>
+<h1>Integration Tests</h1>
+<p>The second type of test you will want to write is an integration test.
+This will integrate with the whole web framework and actually hit the
+define routes, render the templates, and actually test the full stack of
+your application.</p>
+<p>Luckily this is pretty easy to do with Pyramid using WebTest:</p>
+<pre><code class="hljs language-python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">IntegrationTestBase</span>(<span class="hljs-title class_ inherited__">BaseTestCase</span>):
+<span class="hljs-meta">    @classmethod</span>
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">setUpClass</span>(<span class="hljs-params">cls</span>):
+        cls.app = main({}, **settings)
+        <span class="hljs-built_in">super</span>(IntegrationTestBase, cls).setUpClass()
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">setUp</span>(<span class="hljs-params">self</span>):
+        self.app = TestApp(self.app)
+        self.config = testing.setUp()
+        <span class="hljs-built_in">super</span>(IntegrationTestBase, self).setUp()
+</code></pre>
+<p>In setUpClass, we run the main function of the applications
+__init__.py that sets up the WSGI application and then we wrap it in
+a TestApp that gives us the ability to call get/post on it.</p>
+<p>Here is an example of it in use:</p>
+<pre><code class="hljs language-python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">TestViews</span>(<span class="hljs-title class_ inherited__">IntegrationTestBase</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">test_get_login</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-string">""" Call the login view, make sure routes are working """</span>
+        res = self.app.get(<span class="hljs-string">'/login'</span>)
+        self.assertEqual(res.status_int, <span class="hljs-number">200</span>)
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">test_empty_login</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-string">""" Empty login fails """</span>
+        res = self.app.post(<span class="hljs-string">'/login'</span>, {<span class="hljs-string">'submit'</span>: <span class="hljs-literal">True</span>})
+
+        <span class="hljs-keyword">assert</span> <span class="hljs-string">"There was a problem with your submission"</span> <span class="hljs-keyword">in</span> res.body
+        <span class="hljs-keyword">assert</span> <span class="hljs-string">"Required"</span> <span class="hljs-keyword">in</span> res.body
+        <span class="hljs-keyword">assert</span> res.status_int == <span class="hljs-number">200</span>
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">test_valid_login</span>(<span class="hljs-params">self</span>):
+        <span class="hljs-string">""" Call the login view, make sure routes are working """</span>
+        admin = User(username=<span class="hljs-string">'sontek'</span>, password=<span class="hljs-string">'temp'</span>, kind=<span class="hljs-string">u'admin'</span>)
+        admin.activated = <span class="hljs-literal">True</span>
+        self.session.add(admin)
+        self.session.flush()
+
+        res = self.app.get(<span class="hljs-string">'/login'</span>)
+
+        csrf = res.form.fields[<span class="hljs-string">'csrf_token'</span>][<span class="hljs-number">0</span>].value
+
+        res = self.app.post(<span class="hljs-string">'/login'</span>,
+            {
+                <span class="hljs-string">'submit'</span>: <span class="hljs-literal">True</span>,
+                <span class="hljs-string">'Username'</span>: <span class="hljs-string">'sontek'</span>,
+                <span class="hljs-string">'Password'</span>: <span class="hljs-string">'temp'</span>,
+                <span class="hljs-string">'csrf_token'</span>: csrf
+            }
+        )
+
+        <span class="hljs-keyword">assert</span> res.status_int == <span class="hljs-number">302</span>
+</code></pre>
+<h1>Problems with this approach</h1>
+<p>If a test causes an error that will prevent the transaction from rolling
+back, such as closing the engine, then this approach will leave your
+database in a state that might cause other tests to fail.</p>
+<p>If this happens tracing the root cause could be difficult but you should
+be able to just look at the first failed test unless you are running the
+tests in parallel.</p>
+<p>If you are good about writing and running your tests regularly you
+should be able to catch individual tests causing issues like this fairly
+quickly.</p>
+<h1>Resources</h1>
+<p><a href="http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/testing.html">http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/testing.html</a></p>
+<p><a href="http://www.sqlalchemy.org/docs/orm/session.html#joining-a-session-into-an-external-transaction">http://www.sqlalchemy.org/docs/orm/session.html#joining-a-session-into-an-external-transaction</a></p>
+<p>John Anderson &#x3C;<a href="mailto:sontek@gmail.com">sontek@gmail.com</a>> 2011</p>]]></description>
+            <link>https://sontek.net/blog/old/writing_tests_for_pyramid_and_sqlalchemy</link>
+            <guid isPermaLink="true">https://sontek.net/blog/old/writing_tests_for_pyramid_and_sqlalchemy</guid>
+            <pubDate>Thu, 01 Dec 2011 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Turning Vim into a modern Python IDE]]></title>
+            <description><![CDATA[<p>TL;DR:</p>
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="bash">git <span class="hljs-built_in">clone</span> https://github.com/sontek/dotfiles.git</span>
+<span class="hljs-meta prompt_">$ </span><span class="bash"><span class="hljs-built_in">cd</span> dotfiles</span>
+<span class="hljs-meta prompt_">$ </span><span class="bash">./install.sh vim</span>
+</code></pre>
+<h1>Intro</h1>
+<p>Back in 2008, I wrote the article <a href="http://sontek.net/python-with-a-modular-ide-vim">Python with a modular IDE
+(Vim)</a>. Years later, I
+have people e-mailing me and commenting daily asking for more
+information, even though most of the information in it is outdated. Here
+is the modern way to work with Python and Vim to achieve the perfect
+environment.</p>
+<p>Because one of the most important parts about a development environment
+is the ability to easily reproduce across machines, we are going to
+store our vim configuration in git:</p>
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="bash"><span class="hljs-built_in">mkdir</span> ~/.vim/</span>
+<span class="hljs-meta prompt_">$ </span><span class="bash"><span class="hljs-built_in">mkdir</span> ~/.vim/{<span class="hljs-built_in">autoload</span>,bundle}</span>
+<span class="hljs-meta prompt_">$ </span><span class="bash"><span class="hljs-built_in">cd</span> ~/.vim/</span>
+<span class="hljs-meta prompt_">$ </span><span class="bash">git init</span>
+</code></pre>
+<p>The purpose of the autoload directory is to automatically load the vim
+plugin <a href="https://github.com/tpope/vim-pathogen">Pathogen</a>, which we'll
+then use to load all other plugins that are located in the bundle
+directory. So download pathogen and put it in your autoload folder.</p>
+<p>You'll need to add the following to your ~/.vimrc so that pathogen
+will be loaded properly. Filetype detection must be off when you run the
+commands so its best to execute them first:</p>
+<pre><code class="hljs language-r">filetype off
+<span class="hljs-built_in">call</span> pathogen<span class="hljs-comment">#runtime_append_all_bundles()</span>
+<span class="hljs-built_in">call</span> pathogen<span class="hljs-comment">#helptags()</span>
+</code></pre>
+<p>Now lets add all of the vim plugins we plan on using as submodules to
+our git repository:</p>
+<pre><code class="hljs language-bash">git submodule add http://github.com/tpope/vim-fugitive.git bundle/fugitive
+git submodule add https://github.com/msanders/snipmate.vim.git bundle/snipmate
+git submodule add https://github.com/tpope/vim-surround.git bundle/surround
+git submodule add https://github.com/tpope/vim-git.git bundle/git
+git submodule add https://github.com/ervandew/supertab.git bundle/supertab
+git submodule add https://github.com/sontek/minibufexpl.vim.git bundle/minibufexpl
+git submodule add https://github.com/wincent/Command-T.git bundle/command-t
+git submodule add https://github.com/mitechie/pyflakes-pathogen.git
+git submodule add https://github.com/mileszs/ack.vim.git bundle/ack
+git submodule add https://github.com/sjl/gundo.vim.git bundle/gundo
+git submodule add https://github.com/fs111/pydoc.vim.git bundle/pydoc
+git submodule add https://github.com/vim-scripts/pep8.git bundle/pep8
+git submodule add https://github.com/alfredodeza/pytest.vim.git bundle/py.test
+git submodule add https://github.com/reinh/vim-makegreen bundle/makegreen
+git submodule add https://github.com/vim-scripts/TaskList.vim.git bundle/tasklist
+git submodule add https://github.com/vim-scripts/The-NERD-tree.git bundle/nerdtree
+git submodule add https://github.com/sontek/rope-vim.git bundle/ropevim
+git submodule init
+git submodule update
+git submodule foreach git submodule init
+git submodule foreach git submodule update
+</code></pre>
+<p>Thats it! Now that we've got our vim configuration in git!</p>
+<p>Now lets look at how to use each of these plugins to improve the power
+of vim:</p>
+<h1>Basic Editing and Debugging</h1>
+<h2>Code Folding</h2>
+<p>Lets first enable code folding. This makes it a lot easier to organize
+your code and hide portions that you aren't interested in working on.
+This is quite easy for Python, since whitespace is required.</p>
+<p>In your ~/.vimrc just add:</p>
+<pre><code class="hljs language-ini">set <span class="hljs-attr">foldmethod</span>=indent
+set <span class="hljs-attr">foldlevel</span>=<span class="hljs-number">99</span>
+</code></pre>
+<p>Then you will be able to be inside a method and type 'za' to open and
+close a fold.</p>
+<h2>Window Splits</h2>
+<p>Sometimes code folding isn't enough; you may need to start opening up
+multiple windows and working on multiple files at once or different
+locations within the same file. To do this in vim, you can use these
+shortcuts:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">Vertical Split :</span> <span class="hljs-string">Ctrl+w</span> <span class="hljs-string">+</span> <span class="hljs-string">v</span>
+<span class="hljs-attr">Horizontal Split:</span> <span class="hljs-string">Ctrl+w</span> <span class="hljs-string">+</span> <span class="hljs-string">s</span>
+<span class="hljs-attr">Close current windows:</span> <span class="hljs-string">Ctrl+w</span> <span class="hljs-string">+</span> <span class="hljs-string">q</span>
+</code></pre>
+<p>I also like to bind Ctrl+&#x3C;movement> keys to move around the windows,
+instead of using Ctrl+w + &#x3C;movement>:</p>
+<pre><code class="hljs language-arduino">map &#x3C;c-j> &#x3C;c-w>j
+map &#x3C;c-k> &#x3C;c-w>k
+map &#x3C;c-l> &#x3C;c-w>l
+map &#x3C;c-h> &#x3C;c-w>h
+</code></pre>
+<p><img src="http://i.imgur.com/krj0l.png" alt="image"></p>
+<h2>Snippets</h2>
+<p>The next tweak that really speeds up development is using snipmate.
+We've already included it in our bundle/ folder so its already enabled.
+Try opening up a python file and typing 'def&#x3C;tab>'. It should stub
+out a method definition for you and allow you to tab through and fill
+out the arguments, doc string, etc.</p>
+<p>I also like to create my own snippets folder to put in some custom
+snippets:</p>
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="bash"><span class="hljs-built_in">mkdir</span> ~/.vim/snippets</span>
+<span class="hljs-meta prompt_">$ </span><span class="bash">vim ~/.vim/snippets/python.snippets</span>
+</code></pre>
+<p>Put this in the file:</p>
+<pre><code class="hljs language-arduino">snippet pdb
+    <span class="hljs-keyword">import</span> pdb; pdb.<span class="hljs-built_in">set_trace</span>()
+</code></pre>
+<p>Now you can type pdb&#x3C;tab> and it'll insert your breakpoint!</p>
+<h2>Task lists</h2>
+<p>Another really useful thing is to mark some of your code as TODO or
+FIXME! I know we all like to think we write perfect code, but sometimes
+you just have to settle and leave a note for yourself to come back
+later. One of the plugins we included was the tasklist plugin that will
+allow us to search all open buffers for things to fix. Just add a
+mapping to open it in ~/.vimrc:</p>
+<pre><code class="hljs language-arduino">map &#x3C;leader>td &#x3C;Plug>TaskList
+</code></pre>
+<p>Now you can hit &#x3C;leader>td to open your task list and hit 'q' to
+close it. You can also hit enter on the task to jump to the buffer and
+line that it is placed on.</p>
+<h2>Revision History</h2>
+<p>The final basic editing tweak I suggest everyone start utilizing is the
+Gundo plugin. It'll allow you to view diff's of every save on a file
+you've made and allow you to quickly revert back and forth:</p>
+<p><img src="http://i.imgur.com/2NrPS.png" alt="image"></p>
+<p>Just bind a key in your .vimrc to toggle the Gundo window:</p>
+<pre><code class="hljs language-ruby">map &#x3C;leader>g <span class="hljs-symbol">:GundoToggle&#x3C;CR></span>
+</code></pre>
+<h1>Syntax Highlighting and Validation</h1>
+<p>Simply enable syntax highlighting in your ~/.vimrc:</p>
+<pre><code class="hljs language-vbnet">syntax <span class="hljs-keyword">on</span>                           <span class="hljs-string">" syntax highlighing
+filetype on                          "</span> <span class="hljs-keyword">try</span> <span class="hljs-keyword">to</span> detect filetypes
+filetype plugin indent <span class="hljs-keyword">on</span>    <span class="hljs-string">" enable loading indent file for filetype
+</span></code></pre>
+<p>Because we enabled pyflakes when we added it as a submodule in
+~/.vim/bundle, it will notify you about unused imports and invalid
+syntax. It will save you a lot of time saving and running just to find
+out you missed a colon. I like to tell it not use the quickfix window:</p>
+<pre><code class="hljs language-ini">let g:<span class="hljs-attr">pyflakes_use_quickfix</span> = <span class="hljs-number">0</span>
+</code></pre>
+<p><img src="http://i.imgur.com/ZfjFe.png" alt="image"></p>
+<h2>Pep8</h2>
+<p>The final plugin that really helps validate your code is the pep8
+plugin, it'll make sure your code is consistent across all projects.
+Add a key mapping to your ~/.vimrc and then you'll be able to jump to
+each of the pep8 violations in the quickfix window:</p>
+<pre><code class="hljs language-ini">let g:<span class="hljs-attr">pep8_map</span>=<span class="hljs-string">'&#x3C;leader>8'</span>
+</code></pre>
+<p><img src="http://i.imgur.com/VU9AB.png" alt="image"></p>
+<h1>Tab Completion and Documentation</h1>
+<p>Vim has many different code completion options. We are going to use the
+SuperTab plugin to check the context of the code you are working on and
+choose the best for the situation. We've already enabled the SuperTab
+plugin in the bundle/ folder, so we just have to configure it to be
+context sensitive and to enable omni code completion in your ~/.vimrc:</p>
+<pre><code class="hljs language-ini">au FileType python set <span class="hljs-attr">omnifunc</span>=pythoncomplete<span class="hljs-comment">#Complete</span>
+let g:<span class="hljs-attr">SuperTabDefaultCompletionType</span> = <span class="hljs-string">"context"</span>
+</code></pre>
+<p>Now we just enable the menu and pydoc preview to get the most useful
+information out of the code completion:</p>
+<pre><code class="hljs language-ini">set <span class="hljs-attr">completeopt</span>=menuone,longest,preview
+</code></pre>
+<p><img src="http://i.imgur.com/g4lxP.png" alt="image"></p>
+<p>We also enabled the pydoc plugin at the beginning with all the
+submodules; that gives us the ability to hit &#x3C;leader>pw when our
+cursor is on a module and have a new window open with the whole
+documentation page for it.</p>
+<h1>Code Navigation</h1>
+<h2>Buffers</h2>
+<p>The most important part about navigating code within vim, is to
+completely understand how to use buffers. There is no reason to use
+tabs. Open files with :e &#x3C;filename> to place in a buffer. We already
+installed the minibufexpl plugin, so you will already visually see every
+buffer opened. You can also get a list of them doing :buffers.</p>
+<p>You can switch between the buffers using b&#x3C;number>, such as :b1 for
+the first buffer. You can also use its name to match, so you can type :b
+mod&#x3C;tab> to autocomplete opening the models.py buffer. You need to
+make sure you are using the minibufexpl from my github since it has
+patches that make it much better to work with.</p>
+<p>To close a buffer you use :bd or :bw.</p>
+<h2>Fuzzy Text File Search</h2>
+<p>To make finding and opening files within your project even easier, we
+are going to use the command-t plugin. It does have some parts that need
+to be compiled, so its not already installed by adding it as a
+submodule. Go to your ~/.vim/bundle/command-t folder and run 'rake
+make'. Yes you need ruby installed. By default, command-t is bound to
+&#x3C;leader>t. This will use fuzzy text matching to find any file in your
+project.</p>
+<p>It also supports searching only through opened buffers, instead of files
+using &#x3C;leader>b.</p>
+<p><img src="http://i.imgur.com/hUcSl.png" alt="image"></p>
+<h2>File Browser</h2>
+<p>NERD Tree is a project file browser. I must admit I used this heavily
+back when I was migrating from Visual Studio and used to the Solution
+Explorer, but I rarely use it anymore. Command-T is usually all you'll
+need. It is useful when you are getting to know a new codebase for the
+first time though. Lets bind a shortcut key for opening it:</p>
+<pre><code class="hljs language-ruby">map &#x3C;leader>n <span class="hljs-symbol">:NERDTreeToggle&#x3C;CR></span>
+</code></pre>
+<p><img src="http://i.imgur.com/R4ZzQ.png" alt="image"></p>
+<h2>Refactoring and Go to definition</h2>
+<p>Ropevim is also a great tool that will allow you to navigate around your
+code. It supports automatically inserting import statements, goto
+definition, refactoring, and code completion. You'll really want to
+read up on everything it does, but the two big things I use it for is to
+jump to function or class definitions quickly and to rename things
+(including all their references).</p>
+<p>For instance, if you are using django and you place your cursor over the
+class models.Model you reference and then called :RopeGotoDefintion, it
+would jump you straight to the django library to that class definition.
+We already have it installed in our bundles, so we bind it to a key to
+use it:</p>
+<pre><code class="hljs language-ruby">map &#x3C;leader>j <span class="hljs-symbol">:RopeGotoDefinition&#x3C;CR></span>
+map &#x3C;leader>r <span class="hljs-symbol">:RopeRename&#x3C;CR></span>
+</code></pre>
+<h2>Searching</h2>
+<p>The final tool that really speeds up navigating your code is the Ack
+plugin. Ack is similar to grep, but much better in my opinion. You can
+fuzzy text search for anything in your code (variable name, class,
+method, etc) and it'll give you a list of files and line numbers where
+they are defined so you can quickly cycle through them. Just bind the
+searching to a key:</p>
+<pre><code class="hljs language-php-template"><span class="xml">nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">leader</span>></span>a <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Ack!
+</span></code></pre>
+<p>We use ! at the end of it so it doesn't open the first result
+automatically.</p>
+<h1>Integration with Git</h1>
+<p>We installed 2 plugins, git.vim and fugitive, that give us all the
+integration we need. Git.vim will provide us syntax highlighting for git
+configuration files; fugitive provides a great interface for interacting
+with git including getting diffs, status updates, committing, and moving
+files.</p>
+<p>Fugitive also allows you to view what branch you are working in directly
+from vim. Add this to your statusline in ~/.vimrc:</p>
+<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">%</span><span class="bash">{fugitive<span class="hljs-comment">#statusline()}</span></span>
+</code></pre>
+<p>The big commands you need to know:</p>
+<ul>
+<li><strong>Gblame</strong>: This allows you to view a line by line comparison of who
+the last person to touch that line of code is.</li>
+<li><strong>Gwrite</strong>: This will stage your file for commit, basically doing
+git add &#x3C;filename></li>
+<li><strong>Gread</strong>: This will basically run a git checkout &#x3C;filename></li>
+<li><strong>Gcommit</strong>: This will just run git commit. Since its in a vim
+buffer, you can use keyword completion (Ctrl-N), like
+test_all&#x3C;Ctrl-N> to find the method name in your buffer and
+complete it for the commit message. You can also use + and - on the
+filenames in the message to stage/unstage them for the commit.</li>
+</ul>
+<p><img src="http://i.imgur.com/NuRRj.png" alt="image"></p>
+<h1>Test Integration</h1>
+<h2>django nose</h2>
+<p>Test runner integration really depends on the testing library you are
+using and what type of tests you are running but we included a great
+generic plugin called MakeGreen that executes off of vim's makeprg
+variable. So for instance, if you are using django with django-nose you
+could define a shortcut key in your ~/.vimrc like this:</p>
+<pre><code class="hljs language-arduino">map &#x3C;leader>dt :set makeprg=python\ manage.py\ test\|:call <span class="hljs-built_in">MakeGreen</span>()&#x3C;CR>
+</code></pre>
+<p>This will just give you a green bar at the bottom of vim if your test
+passed or a red bar with the message of the failed test if it doesn't.
+Very simple.</p>
+<h2>py.test</h2>
+<p>I also included the py.test vim plugin for those who prefer it. This
+plugin has a lot more functionality including executing individual tests
+by class, file, or method. You can also cycle through the individual
+assertion errors. I have the following bindings:</p>
+<pre><code class="hljs language-php-template"><span class="xml">" Execute the tests
+nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>tf <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest file<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
+nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>tc <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest class<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
+nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>tm <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest method<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
+" cycle through test errors
+nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>tn <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest next<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
+nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>tp <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest previous<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
+nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>te <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest error<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
+</span></code></pre>
+<p><img src="http://i.imgur.com/RAE7v.png" alt="image"></p>
+<h1>Virtualenv</h1>
+<p>Vim doesn't realize that you are in a virtualenv so it wont give you
+code completion for libraries only installed there. Add the following
+script to your ~/.vimrc to fix it:</p>
+<pre><code class="hljs language-ini">" Add the virtualenv's site-packages to vim path
+py &#x3C;&#x3C; EOF
+import os.path
+import sys
+import vim
+if 'VIRTUAL_ENV' in os.environ:
+    <span class="hljs-attr">project_base_dir</span> = os.environ[<span class="hljs-string">'VIRTUAL_ENV'</span>]
+    sys.path.insert(0, project_base_dir)
+    <span class="hljs-attr">activate_this</span> = os.path.join(project_base_dir, <span class="hljs-string">'bin/activate_this.py'</span>)
+    execfile(activate_this, dict(<span class="hljs-attr">__file__</span>=activate_this))
+EOF
+</code></pre>
+<h1>Django</h1>
+<p>The only true django tweak I make is before I open vim I'll export the
+DJANGO_SETTINGS_MODULE environment so that I get code completion for
+django modules as well:</p>
+<pre><code class="hljs language-ini">export <span class="hljs-attr">DJANGO_SETTINGS_MODULE</span>=project.settings
+</code></pre>
+<h1>Random Tips</h1>
+<p>If you want to find a new color scheme just go to
+<a href="http://code.google.com/p/vimcolorschemetest/">http://code.google.com/p/vimcolorschemetest/</a> to preview a large
+selection.</p>
+<p>John Anderson &#x3C;<a href="mailto:sontek@gmail.com">sontek@gmail.com</a>> 2011</p>]]></description>
+            <link>https://sontek.net/blog/old/turning_vim_into_a_modern_python_ide</link>
+            <guid isPermaLink="true">https://sontek.net/blog/old/turning_vim_into_a_modern_python_ide</guid>
+            <pubDate>Sat, 07 May 2011 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Tips and Tricks for the Python Interpreter]]></title>
+            <description><![CDATA[<p>I have seen a lot of people switch over to using ipython, bpython, etc
+to get auto-complete support without realizing that the standard
+interpreter does have this functionality.</p>
+<p>To enable auto-complete support in the python interpreter you need to
+create a python startup file that enables readline support. A python
+startup file is just a bunch of python code that gets executed at
+startup of the interpreter. To do this you just setup PYTHONSTARTUP in
+your ~/.bashrc and then create a ~/.pythonrc.py file:</p>
+<pre><code class="hljs language-python"><span class="hljs-comment">#.bashrc</span>
+PYTHONSTARTUP=~/.pythonrc.py
+export PYTHONSTARTUP
+
+<span class="hljs-comment">#.pythonrc.py</span>
+<span class="hljs-keyword">try</span>:
+    <span class="hljs-keyword">import</span> readline
+<span class="hljs-keyword">except</span> ImportError:
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">"Module readline not available."</span>)
+<span class="hljs-keyword">else</span>:
+    <span class="hljs-keyword">import</span> rlcompleter
+    readline.parse_and_bind(<span class="hljs-string">"tab: complete"</span>)
+</code></pre>
+<p>Now when you are in python you have tab completion on importing, calling
+methods on a module, etc.</p>
+<pre><code class="hljs language-python"><span class="hljs-meta">>>> </span><span class="hljs-keyword">import</span> o
+<span class="hljs-built_in">object</span>(  <span class="hljs-built_in">oct</span>(     <span class="hljs-built_in">open</span>(    <span class="hljs-keyword">or</span>       <span class="hljs-built_in">ord</span>(     os
+</code></pre>
+<p>I always end up using the pretty print module for viewing long lists and
+strings in the interpreter so I prefer to just use it by default:</p>
+<pre><code class="hljs language-python"><span class="hljs-comment"># Enable Pretty Printing for stdout</span>
+<span class="hljs-keyword">import</span> pprint
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">my_displayhook</span>(<span class="hljs-params">value</span>):
+    <span class="hljs-keyword">if</span> value <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:
+        <span class="hljs-keyword">try</span>:
+            <span class="hljs-keyword">import</span> __builtin__
+            __builtin__._ = value
+        <span class="hljs-keyword">except</span> ImportError:
+            __builtins__._ = value
+
+        pprint.pprint(value)
+
+sys.displayhook = my_displayhook
+</code></pre>
+<p>It is also very useful to be able to load up your favorite editor to
+edit lines of code from the interpreter, you can do this by adding the
+following into your ~/.pythonrc.py:</p>
+<pre><code class="hljs language-python"><span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">import</span> sys
+<span class="hljs-keyword">from</span> code <span class="hljs-keyword">import</span> InteractiveConsole
+<span class="hljs-keyword">from</span> tempfile <span class="hljs-keyword">import</span> mkstemp
+
+EDITOR = os.environ.get(<span class="hljs-string">'EDITOR'</span>, <span class="hljs-string">'vi'</span>)
+EDIT_CMD = <span class="hljs-string">'\e'</span>
+
+<span class="hljs-keyword">class</span> <span class="hljs-title class_">EditableBufferInteractiveConsole</span>(<span class="hljs-title class_ inherited__">InteractiveConsole</span>):
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, *args, **kwargs</span>):
+        self.last_buffer = [] <span class="hljs-comment"># This holds the last executed statement</span>
+        InteractiveConsole.__init__(self, *args, **kwargs)
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">runsource</span>(<span class="hljs-params">self, source, *args</span>):
+        self.last_buffer = [ source.encode(<span class="hljs-string">'latin-1'</span>) ]
+        <span class="hljs-keyword">return</span> InteractiveConsole.runsource(self, source, *args)
+
+    <span class="hljs-keyword">def</span> <span class="hljs-title function_">raw_input</span>(<span class="hljs-params">self, *args</span>):
+        line = InteractiveConsole.raw_input(self, *args)
+        <span class="hljs-keyword">if</span> line == EDIT_CMD:
+            fd, tmpfl = mkstemp(<span class="hljs-string">'.py'</span>)
+            os.write(fd, <span class="hljs-string">b'\n'</span>.join(self.last_buffer))
+            os.close(fd)
+            os.system(<span class="hljs-string">'%s %s'</span> % (EDITOR, tmpfl))
+            line = <span class="hljs-built_in">open</span>(tmpfl).read()
+            os.unlink(tmpfl)
+            tmpfl = <span class="hljs-string">''</span>
+            lines = line.split( <span class="hljs-string">'\n'</span> )
+            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(lines) - <span class="hljs-number">1</span>): self.push( lines[i] )
+            line = lines[-<span class="hljs-number">1</span>]
+        <span class="hljs-keyword">return</span> line
+
+c = EditableBufferInteractiveConsole(<span class="hljs-built_in">locals</span>=<span class="hljs-built_in">locals</span>())
+c.interact(banner=<span class="hljs-string">''</span>)
+
+<span class="hljs-comment"># Exit the Python shell on exiting the InteractiveConsole</span>
+sys.exit()
+</code></pre>
+<p>For Django developers when you load up the ./manage.py shell it is nice
+to have access to all your models and settings for testing:</p>
+<pre><code class="hljs language-python"><span class="hljs-comment"># If we're working with a Django project, set up the environment</span>
+<span class="hljs-keyword">if</span> <span class="hljs-string">'DJANGO_SETTINGS_MODULE'</span> <span class="hljs-keyword">in</span> os.environ:
+    <span class="hljs-keyword">from</span> django.db.models.loading <span class="hljs-keyword">import</span> get_models
+    <span class="hljs-keyword">from</span> django.test.client <span class="hljs-keyword">import</span> Client
+    <span class="hljs-keyword">from</span> django.test.utils <span class="hljs-keyword">import</span> setup_test_environment, teardown_test_environment
+    <span class="hljs-keyword">from</span> django.conf <span class="hljs-keyword">import</span> settings <span class="hljs-keyword">as</span> S
+
+    <span class="hljs-keyword">class</span> <span class="hljs-title class_">DjangoModels</span>(<span class="hljs-title class_ inherited__">object</span>):
+        <span class="hljs-string">"""Loop through all the models in INSTALLED_APPS and import them."""</span>
+        <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):
+            <span class="hljs-keyword">for</span> m <span class="hljs-keyword">in</span> get_models():
+                <span class="hljs-built_in">setattr</span>(self, m.__name__, m)
+
+    A = DjangoModels()
+    C = Client()
+</code></pre>
+<p>After these tweaks the python interpreter is a lot more powerful and you
+really lose the need for the more interactive shells like ipython and
+bpython. All of these settings work in both python2 and python3.</p>
+<p>If you want to see my complete ~/.pythonrc.py you can get it on
+<a href="https://github.com/sontek/dotfiles/blob/master/_pythonrc.py">github</a></p>]]></description>
+            <link>https://sontek.net/blog/old/tips_and_tricks_for_the_python_interpreter</link>
+            <guid isPermaLink="true">https://sontek.net/blog/old/tips_and_tricks_for_the_python_interpreter</guid>
+            <pubDate>Tue, 28 Dec 2010 00:00:00 GMT</pubDate>
         </item>
     </channel>
 </rss>
