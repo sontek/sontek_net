@@ -818,7 +818,7 @@ created:
 # Conclusion
 I made a video of me doing this here:
 
-<iframe width="854" height="480" src="ttps://www.youtube.com/embed/3oZd1m8_KIo"
+<iframe width="854" height="480" src="https://www.youtube.com/embed/3oZd1m8_KIo"
     title="AWS From Scratch - Preparing your account to be managed by IaC via Terraform and Github Actions"
     frameborder="0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;web-share"
