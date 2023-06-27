@@ -1,0 +1,1 @@
+- showfigfonts command: show all fonts available for filget and toilet
