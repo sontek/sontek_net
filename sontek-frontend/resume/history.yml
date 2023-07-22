@@ -1,6 +1,19 @@
 companies:
+  - name: Ditto.live
+    dates: July 2023 - Present
+    title: Engineering Manager, SRE
+    description: >
+      Ditto is a casually consistent distributed database
+      utilizing CRDTs. Through a Rust SDK we are able to
+      provide peer to peer communication and local first
+      development for web and mobile applications.
+
+    accomplishments:
+      - Managed 12 engineers developing custom kubernetes operators
+        that managed our distributed database.
+
   - name: Zapier
-    dates: March 2021 - present
+    dates: March 2021 - July 2023
     title: Engineering Manager, SRE
     description: >
       Zapier is a no-code solution for automation. It
@@ -55,7 +68,7 @@ companies:
         bastion access.
 
   - name: Stacklet
-    dates: March 2022 - present
+    dates: March 2022 - June 2023
     title: Engineering Manager, SRE
     description: >
       Stacklet is a cloud governance and FinOps tool that allows organizations
