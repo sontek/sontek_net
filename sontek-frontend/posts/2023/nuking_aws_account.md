@@ -218,6 +218,36 @@ accounts:
       - sso
 ```
 
+So your final config should look something like this:
+
+```yaml
+regions:
+  - us-east-1
+  - global
+
+account-blocklist:
+  - "888888888888" # production
+
+
+presets:
+  sso:
+    filters:
+      _DEFAULT_FILTERS: &DEFAULT
+        - type: "contains"
+          value: "DO_NOT_DELETE"
+        - type: "contains"
+          value: "AWSReservedSSO"
+
+      IAMSAMLProvider: *DEFAULT
+      IAMRole: *DEFAULT
+      IAMRolePolicyAttachment: *DEFAULT
+
+accounts:
+  "777777777777":
+    "presets":
+      - sso
+```
+
 When you run this you should see now the resources we want to keep are filtered
 out:
 
