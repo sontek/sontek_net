@@ -9,10 +9,134 @@
             <link>https://sontek.net</link>
         </image>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Fri, 04 Aug 2023 14:25:48 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 29 Oct 2023 02:06:21 GMT</lastBuildDate>
         <atom:link href="https://sontek.net/rss.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Fri, 04 Aug 2023 14:25:46 GMT</pubDate>
+        <pubDate>Sun, 29 Oct 2023 02:06:19 GMT</pubDate>
         <copyright><![CDATA[All rights reserved 2023, @sontek]]></copyright>
+        <item>
+            <title><![CDATA[Speed up github actions with conditional jobs, even with required checks]]></title>
+            <description><![CDATA[<p>Having every github action run on every pull request will end up slowing you
+down and sometimes even discourage you from making changes.  For example, if you
+see an error in the <code>README.md</code> but you know you'll have to wait for the entire
+test suite to run you may choose not to push the change.</p>
+<h1>Path Filtering</h1>
+<p>To address this problem, Github has a feature called <a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore">path filtering</a>
+which works really well!  You can include and excluxe paths with a simple syntax:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span>
+    <span class="hljs-attr">paths:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'*'</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'*/**'</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'!README.md'</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'!.gitignore'</span>
+</code></pre>
+<p>Which will run on any changes except for <code>README.md</code> and <code>.gitignore</code>.  There is
+even a simpler format to this by using <code>paths-ignore</code>:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span>
+    <span class="hljs-attr">paths-ignore:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'README.md'</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'.gitignore'</span>
+</code></pre>
+<p>Although this works, I do not recommend using it.</p>
+<h1>Branch Protection / Required Checks</h1>
+<p>Path Filtering has one major flaw which is that it skips the run of the job
+completely which means if you are using <a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches">branch protection</a>
+your PR will be stuck in <code>pending</code> state.</p>
+<p>To resolve this we will have to run the job, but skip the actions inside it that
+are slow conditionally. There are a few opensource actions out there that make
+this easy but the one I recommend is:</p>
+<p>https://github.com/tj-actions/changed-files</p>
+<p>I creates a lot of useful outputs you can use in your conditional out of the box
+which makes your action easy to write.</p>
+<h1>Skipping a required check</h1>
+<p>So using <code>tj-actions/changed-files</code> to skip a required check, it will look very
+similar to the path filtering from github.  You first define what files you care
+about:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">terraform-lint:</span> 
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-22.04</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v3</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Check</span> <span class="hljs-string">if</span> <span class="hljs-string">files</span> <span class="hljs-string">changed</span>
+        <span class="hljs-attr">id:</span> <span class="hljs-string">changed-files-yaml</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">tj-actions/changed-files@v40</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">files_yaml:</span> <span class="hljs-string">|
+            src:
+              - '*'
+              - '*/**'
+              - '!README.md'
+              - '!.gitignore'
+</span></code></pre>
+<p>The <code>src</code> is just a key selection I made here.  You can have many groups of
+files like <code>tests</code>, <code>docs</code>, etc. and conditionally do things if each of them
+changed.</p>
+<p>So from our example, this step will generate output we can use <code>steps.changed-files-yaml.outputs.src_any_changed</code>
+that is either <code>true</code> or <code>false.</code>. To use this we can us the <code>if</code> conditional
+block on our jobs.</p>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">steps:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">if:</span> <span class="hljs-string">steps.changed-files-yaml.outputs.src_any_changed</span> <span class="hljs-string">==</span> <span class="hljs-string">'true'</span>
+    <span class="hljs-attr">run:</span> <span class="hljs-string">|
+        earthly \
+        +ci-terraform-lint \
+            --TERRAFORM_VERSION=${{ env.RTX_TERRAFORM_VERSION }}
+</span></code></pre>
+<p>This will then skip linting if we didn't change any terraform and the job will
+be marked successful!</p>
+<center>
+<img src="/images/posts/github_skip_required_checks/skipped_checks.png">
+</center>
+<p>This can be confusing sometimes and the people you work with (or future you!)
+may wonder why these critical checks are being skipped.   I like to include
+a message with the decision that was made so its obvious that we wanted to skip
+them:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">if:</span> <span class="hljs-string">steps.changed-files-yaml.outputs.src_any_changed</span> <span class="hljs-string">==</span> <span class="hljs-string">'false'</span>
+  <span class="hljs-attr">run:</span> <span class="hljs-string">|
+    echo "No terraform files changed"```
+</span>
+</code></pre>
+<p>Which will output:</p>
+<pre><code class="hljs language-arduino">✅ <span class="hljs-string">"No terraform files changed"</span>
+</code></pre>
+<p>Right next to the skipped job which is exactly what we wanted to see! So the end
+result would look something like this:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span>
+    
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">terraform-lint:</span> 
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-22.04</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v3</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Check</span> <span class="hljs-string">if</span> <span class="hljs-string">real</span> <span class="hljs-string">files</span> <span class="hljs-string">changed</span>
+        <span class="hljs-attr">id:</span> <span class="hljs-string">changed-files-yaml</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">tj-actions/changed-files@v40</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">files_yaml:</span> <span class="hljs-string">|
+            src:
+              - '*'
+              - '*/**'
+              - '!README.md'
+              - '!.gitignore'
+</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">if:</span> <span class="hljs-string">steps.changed-files-yaml.outputs.src_any_changed</span> <span class="hljs-string">==</span> <span class="hljs-string">'true'</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          earthly \
+            +ci-terraform-lint \
+              --TERRAFORM_VERSION=${{ env.RTX_TERRAFORM_VERSION }}
+</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">if:</span> <span class="hljs-string">steps.changed-files-yaml.outputs.src_any_changed</span> <span class="hljs-string">==</span> <span class="hljs-string">'false'</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          echo "No terraform files changed"
+</span></code></pre>
+<h1>Conclusion</h1>
+<p>Hopefully with this you can start speeding up your github actions and making the
+developer experience enjoyable!</p>]]></description>
+            <link>https://sontek.net/blog/2023/github_skip_required_checks</link>
+            <guid isPermaLink="true">https://sontek.net/blog/2023/github_skip_required_checks</guid>
+            <pubDate>Sun, 29 Oct 2023 00:00:00 GMT</pubDate>
+        </item>
         <item>
             <title><![CDATA[Running a kubernetes cluster locally with kind]]></title>
             <description><![CDATA[<p>Previously I <a href="/blog/2022/local_kubeadm_cluster">showed</a> how to run kubernetes
@@ -292,7 +416,7 @@ job there is no reason to worry about rotating secrets.</li>
 </ul>
 <p>The following diagram gives an overview of how we can use Terraform Cloud's
 OIDC provider to integrate with AWS:</p>
-<div class="remark-mermaid remark-mermaid-default"><svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8 843.078125 320" style="max-width: 843.078px; background-color: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1691159148387"><style>#mermaid-1691159148387{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1691159148387 .error-icon{fill:#552222;}#mermaid-1691159148387 .error-text{fill:#552222;stroke:#552222;}#mermaid-1691159148387 .edge-thickness-normal{stroke-width:2px;}#mermaid-1691159148387 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1691159148387 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1691159148387 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1691159148387 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1691159148387 .marker{fill:#333333;stroke:#333333;}#mermaid-1691159148387 .marker.cross{stroke:#333333;}#mermaid-1691159148387 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1691159148387 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1691159148387 .cluster-label text{fill:#333;}#mermaid-1691159148387 .cluster-label span{color:#333;}#mermaid-1691159148387 .label text,#mermaid-1691159148387 span{fill:#333;color:#333;}#mermaid-1691159148387 .node rect,#mermaid-1691159148387 .node circle,#mermaid-1691159148387 .node ellipse,#mermaid-1691159148387 .node polygon,#mermaid-1691159148387 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-1691159148387 .node .label{text-align:center;}#mermaid-1691159148387 .node.clickable{cursor:pointer;}#mermaid-1691159148387 .arrowheadPath{fill:#333333;}#mermaid-1691159148387 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-1691159148387 .flowchart-link{stroke:#333333;fill:none;}#mermaid-1691159148387 .edgeLabel{background-color:#e8e8e8;text-align:center;}#mermaid-1691159148387 .edgeLabel rect{opacity:0.5;background-color:#e8e8e8;fill:#e8e8e8;}#mermaid-1691159148387 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-1691159148387 .cluster text{fill:#333;}#mermaid-1691159148387 .cluster span{color:#333;}#mermaid-1691159148387 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1691159148387 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1691159148387 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="10" viewBox="0 0 12 20" class="marker flowchart" id="flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-AWS LE-Token" id="L-AWS-Token-0" d="M185.671875,134.5L181.50520833333334,134.5C177.33854166666666,134.5,169.00520833333334,134.5,152.378260969764,145.875C135.75131360619469,157.25,110.83075221238937,180,98.37047151548673,191.375L85.91019081858407,202.75"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Token LE-Terraform" id="L-Token-Terraform-0" d="M85.91019081858407,235.75L98.37047151548673,247.125C110.83075221238937,258.5,135.75131360619469,281.25,164.46289638643069,292.625C193.17447916666666,304,225.67708333333334,304,258.1796875,304C290.6822916666667,304,323.1848958333333,304,359.3528645833333,304C395.5208333333333,304,435.3541666666667,304,475.1875,304C515.0208333333334,304,554.8541666666666,304,585.6956312991642,296.7916666666667C616.5370959316618,289.5833333333333,638.3866918633236,275.1666666666667,649.3114898291544,267.9583333333333L660.2362877949853,260.75"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Terraform LE-JWT" id="L-Terraform-JWT-0" d="M660.2362877949853,177.75L649.3114898291544,170.54166666666666C638.3866918633236,163.33333333333334,616.5370959316618,148.91666666666666,601.4456312991642,141.70833333333334C586.3541666666666,134.5,578.0208333333334,134.5,573.8541666666666,134.5L569.6875,134.5"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-JWT LE-AWS" id="L-JWT-AWS-0" d="M380.6875,134.5L376.5208333333333,134.5C372.3541666666667,134.5,364.0208333333333,134.5,355.6875,134.5C347.3541666666667,134.5,339.0208333333333,134.5,334.8541666666667,134.5L330.6875,134.5"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(621.1171875, 169.75)" class="root"><g class="clusters"><g id="Terraform" class="cluster default"><rect height="83" width="206.890625" y="8" x="-0.9296875" ry="0" rx="0" style=""></rect><g transform="translate(-0.9296875, 8)" class="cluster-label"><foreignObject height="18" width="206.890625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Terraform Cloud Workflow #2</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(102.515625, 49.5)" id="flowchart-OIDCProvider-23" class="node default default"><rect height="33" width="119.03125" y="-16.5" x="-59.515625" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-52.015625, -9)" style="" class="label"><foreignObject height="18" width="104.03125"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Provider</span></div></foreignObject></g></g></g></g><g transform="translate(178.171875, -8)" class="root"><g class="clusters"><g id="AWS" class="cluster default"><rect height="269" width="145.015625" y="8" x="8" ry="0" rx="0" style=""></rect><g transform="translate(51.4609375, 8)" class="cluster-label"><foreignObject height="18" width="58.09375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">AWS #1</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(80.5078125, 59.5)" id="flowchart-OIDC-20" class="node default default"><rect height="33" width="95.015625" y="-16.5" x="-47.5078125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-40.0078125, -9)" style="" class="label"><foreignObject height="18" width="80.015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Trust</span></div></foreignObject></g></g><g transform="translate(80.5078125, 142.5)" id="flowchart-Roles-21" class="node default default"><rect height="33" width="55.90625" y="-16.5" x="-27.953125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-20.453125, -9)" style="" class="label"><foreignObject height="18" width="40.90625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Roles</span></div></foreignObject></g></g><g transform="translate(80.5078125, 225.5)" id="flowchart-Resources-22" class="node default default"><rect height="33" width="91.484375" y="-16.5" x="-45.7421875" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-38.2421875, -9)" style="" class="label"><foreignObject height="18" width="76.484375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Resources</span></div></foreignObject></g></g></g></g><g transform="translate(67.8359375, 219.25)" id="flowchart-Token-25" class="node default default"><rect height="33" width="135.671875" y="-16.5" x="-67.8359375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-60.3359375, -9)" style="" class="label"><foreignObject height="18" width="120.671875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Access Token #4</span></div></foreignObject></g></g><g transform="translate(475.1875, 134.5)" id="flowchart-JWT-28" class="node default default"><rect height="33" width="189" y="-16.5" x="-94.5" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-87, -9)" style="" class="label"><foreignObject height="18" width="174"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">JWT &#x26; Cloud Role ID #3</span></div></foreignObject></g></g></g></g></g></svg></div>
+<div class="remark-mermaid remark-mermaid-default"><svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8 827.9453125 321.5" style="max-width: 827.945px; background-color: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1698545180928"><style>#mermaid-1698545180928{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1698545180928 .error-icon{fill:#552222;}#mermaid-1698545180928 .error-text{fill:#552222;stroke:#552222;}#mermaid-1698545180928 .edge-thickness-normal{stroke-width:2px;}#mermaid-1698545180928 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1698545180928 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1698545180928 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1698545180928 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1698545180928 .marker{fill:#333333;stroke:#333333;}#mermaid-1698545180928 .marker.cross{stroke:#333333;}#mermaid-1698545180928 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1698545180928 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1698545180928 .cluster-label text{fill:#333;}#mermaid-1698545180928 .cluster-label span{color:#333;}#mermaid-1698545180928 .label text,#mermaid-1698545180928 span{fill:#333;color:#333;}#mermaid-1698545180928 .node rect,#mermaid-1698545180928 .node circle,#mermaid-1698545180928 .node ellipse,#mermaid-1698545180928 .node polygon,#mermaid-1698545180928 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-1698545180928 .node .label{text-align:center;}#mermaid-1698545180928 .node.clickable{cursor:pointer;}#mermaid-1698545180928 .arrowheadPath{fill:#333333;}#mermaid-1698545180928 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-1698545180928 .flowchart-link{stroke:#333333;fill:none;}#mermaid-1698545180928 .edgeLabel{background-color:#e8e8e8;text-align:center;}#mermaid-1698545180928 .edgeLabel rect{opacity:0.5;background-color:#e8e8e8;fill:#e8e8e8;}#mermaid-1698545180928 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-1698545180928 .cluster text{fill:#333;}#mermaid-1698545180928 .cluster span{color:#333;}#mermaid-1698545180928 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1698545180928 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1698545180928 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="10" viewBox="0 0 12 20" class="marker flowchart" id="flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-AWS LE-Token" id="L-AWS-Token-0" d="M179.515625,135.25L175.34895833333334,135.25C171.18229166666666,135.25,162.84895833333334,135.25,146.6662555830886,146.64583333333334C130.48355283284386,158.04166666666666,106.45148066568771,180.83333333333334,94.43544458210964,192.22916666666666L82.41940849853157,203.625"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Token LE-Terraform" id="L-Token-Terraform-0" d="M82.41940849853157,237.125L94.43544458210964,248.52083333333334C106.45148066568771,259.9166666666667,130.48355283284386,282.7083333333333,158.28800037475526,294.1041666666667C186.09244791666666,305.5,217.66927083333334,305.5,249.24609375,305.5C280.8229166666667,305.5,312.3997395833333,305.5,347.5989583333333,305.5C382.7981770833333,305.5,421.6197916666667,305.5,460.44140625,305.5C499.2630208333333,305.5,538.0846354166666,305.5,568.5160074033284,298.2708333333333C598.9473793899903,291.0416666666667,620.9885087799804,276.5833333333333,632.0090734749756,269.3541666666667L643.0296381699707,262.125"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Terraform LE-JWT" id="L-Terraform-JWT-0" d="M643.0296381699707,178.625L632.0090734749756,171.39583333333334C620.9885087799804,164.16666666666666,598.9473793899903,149.70833333333334,583.7601480283284,142.47916666666666C568.5729166666666,135.25,560.2395833333334,135.25,556.0729166666666,135.25L551.90625,135.25"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-JWT LE-AWS" id="L-JWT-AWS-0" d="M368.9765625,135.25L364.8098958333333,135.25C360.6432291666667,135.25,352.3098958333333,135.25,343.9765625,135.25C335.6432291666667,135.25,327.3098958333333,135.25,323.1432291666667,135.25L318.9765625,135.25"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(607.33984375, 170.625)" class="root"><g class="clusters"><g id="Terraform" class="cluster default"><rect height="83.5" width="209.5390625" y="8" x="-4.93359375" ry="0" rx="0" style=""></rect><g transform="translate(-4.93359375, 8)" class="cluster-label"><foreignObject height="18.5" width="209.5390625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Terraform Cloud Workflow #2</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(99.8359375, 49.75)" id="flowchart-OIDCProvider-23" class="node default default"><rect height="33.5" width="113.671875" y="-16.75" x="-56.8359375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-49.3359375, -9.25)" style="" class="label"><foreignObject height="18.5" width="98.671875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Provider</span></div></foreignObject></g></g></g></g><g transform="translate(172.015625, -8)" class="root"><g class="clusters"><g id="AWS" class="cluster default"><rect height="270.5" width="139.4609375" y="8" x="8" ry="0" rx="0" style=""></rect><g transform="translate(52.25, 8)" class="cluster-label"><foreignObject height="18.5" width="50.9609375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">AWS #1</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(77.73046875, 59.75)" id="flowchart-OIDC-20" class="node default default"><rect height="33.5" width="89.4609375" y="-16.75" x="-44.73046875" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-37.23046875, -9.25)" style="" class="label"><foreignObject height="18.5" width="74.4609375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Trust</span></div></foreignObject></g></g><g transform="translate(77.73046875, 143.25)" id="flowchart-Roles-21" class="node default default"><rect height="33.5" width="52.171875" y="-16.75" x="-26.0859375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-18.5859375, -9.25)" style="" class="label"><foreignObject height="18.5" width="37.171875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Roles</span></div></foreignObject></g></g><g transform="translate(77.73046875, 226.75)" id="flowchart-Resources-22" class="node default default"><rect height="33.5" width="85.5390625" y="-16.75" x="-42.76953125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-35.26953125, -9.25)" style="" class="label"><foreignObject height="18.5" width="70.5390625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Resources</span></div></foreignObject></g></g></g></g><g transform="translate(64.7578125, 220.375)" id="flowchart-Token-25" class="node default default"><rect height="33.5" width="129.515625" y="-16.75" x="-64.7578125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-57.2578125, -9.25)" style="" class="label"><foreignObject height="18.5" width="114.515625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Access Token #4</span></div></foreignObject></g></g><g transform="translate(460.44140625, 135.25)" id="flowchart-JWT-28" class="node default default"><rect height="33.5" width="182.9296875" y="-16.75" x="-91.46484375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-83.96484375, -9.25)" style="" class="label"><foreignObject height="18.5" width="167.9296875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">JWT &#x26; Cloud Role ID #3</span></div></foreignObject></g></g></g></g></g></svg></div>
 <ol>
 <li>In AWS, create an OIDC trust between a role and our terraform cloud
 workflow(s) that need access to the cloud.</li>
@@ -2650,310 +2774,6 @@ quickly.</p>
             <link>https://sontek.net/blog/old/writing_tests_for_pyramid_and_sqlalchemy</link>
             <guid isPermaLink="true">https://sontek.net/blog/old/writing_tests_for_pyramid_and_sqlalchemy</guid>
             <pubDate>Thu, 01 Dec 2011 00:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[Turning Vim into a modern Python IDE]]></title>
-            <description><![CDATA[<p>TL;DR:</p>
-<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="bash">git <span class="hljs-built_in">clone</span> https://github.com/sontek/dotfiles.git</span>
-<span class="hljs-meta prompt_">$ </span><span class="bash"><span class="hljs-built_in">cd</span> dotfiles</span>
-<span class="hljs-meta prompt_">$ </span><span class="bash">./install.sh vim</span>
-</code></pre>
-<h1>Intro</h1>
-<p>Back in 2008, I wrote the article <a href="http://sontek.net/python-with-a-modular-ide-vim">Python with a modular IDE
-(Vim)</a>. Years later, I
-have people e-mailing me and commenting daily asking for more
-information, even though most of the information in it is outdated. Here
-is the modern way to work with Python and Vim to achieve the perfect
-environment.</p>
-<p>Because one of the most important parts about a development environment
-is the ability to easily reproduce across machines, we are going to
-store our vim configuration in git:</p>
-<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="bash"><span class="hljs-built_in">mkdir</span> ~/.vim/</span>
-<span class="hljs-meta prompt_">$ </span><span class="bash"><span class="hljs-built_in">mkdir</span> ~/.vim/{<span class="hljs-built_in">autoload</span>,bundle}</span>
-<span class="hljs-meta prompt_">$ </span><span class="bash"><span class="hljs-built_in">cd</span> ~/.vim/</span>
-<span class="hljs-meta prompt_">$ </span><span class="bash">git init</span>
-</code></pre>
-<p>The purpose of the autoload directory is to automatically load the vim
-plugin <a href="https://github.com/tpope/vim-pathogen">Pathogen</a>, which we'll
-then use to load all other plugins that are located in the bundle
-directory. So download pathogen and put it in your autoload folder.</p>
-<p>You'll need to add the following to your ~/.vimrc so that pathogen
-will be loaded properly. Filetype detection must be off when you run the
-commands so its best to execute them first:</p>
-<pre><code class="hljs language-r">filetype off
-<span class="hljs-built_in">call</span> pathogen<span class="hljs-comment">#runtime_append_all_bundles()</span>
-<span class="hljs-built_in">call</span> pathogen<span class="hljs-comment">#helptags()</span>
-</code></pre>
-<p>Now lets add all of the vim plugins we plan on using as submodules to
-our git repository:</p>
-<pre><code class="hljs language-bash">git submodule add http://github.com/tpope/vim-fugitive.git bundle/fugitive
-git submodule add https://github.com/msanders/snipmate.vim.git bundle/snipmate
-git submodule add https://github.com/tpope/vim-surround.git bundle/surround
-git submodule add https://github.com/tpope/vim-git.git bundle/git
-git submodule add https://github.com/ervandew/supertab.git bundle/supertab
-git submodule add https://github.com/sontek/minibufexpl.vim.git bundle/minibufexpl
-git submodule add https://github.com/wincent/Command-T.git bundle/command-t
-git submodule add https://github.com/mitechie/pyflakes-pathogen.git
-git submodule add https://github.com/mileszs/ack.vim.git bundle/ack
-git submodule add https://github.com/sjl/gundo.vim.git bundle/gundo
-git submodule add https://github.com/fs111/pydoc.vim.git bundle/pydoc
-git submodule add https://github.com/vim-scripts/pep8.git bundle/pep8
-git submodule add https://github.com/alfredodeza/pytest.vim.git bundle/py.test
-git submodule add https://github.com/reinh/vim-makegreen bundle/makegreen
-git submodule add https://github.com/vim-scripts/TaskList.vim.git bundle/tasklist
-git submodule add https://github.com/vim-scripts/The-NERD-tree.git bundle/nerdtree
-git submodule add https://github.com/sontek/rope-vim.git bundle/ropevim
-git submodule init
-git submodule update
-git submodule foreach git submodule init
-git submodule foreach git submodule update
-</code></pre>
-<p>Thats it! Now that we've got our vim configuration in git!</p>
-<p>Now lets look at how to use each of these plugins to improve the power
-of vim:</p>
-<h1>Basic Editing and Debugging</h1>
-<h2>Code Folding</h2>
-<p>Lets first enable code folding. This makes it a lot easier to organize
-your code and hide portions that you aren't interested in working on.
-This is quite easy for Python, since whitespace is required.</p>
-<p>In your ~/.vimrc just add:</p>
-<pre><code class="hljs language-ini">set <span class="hljs-attr">foldmethod</span>=indent
-set <span class="hljs-attr">foldlevel</span>=<span class="hljs-number">99</span>
-</code></pre>
-<p>Then you will be able to be inside a method and type 'za' to open and
-close a fold.</p>
-<h2>Window Splits</h2>
-<p>Sometimes code folding isn't enough; you may need to start opening up
-multiple windows and working on multiple files at once or different
-locations within the same file. To do this in vim, you can use these
-shortcuts:</p>
-<pre><code class="hljs language-yaml"><span class="hljs-attr">Vertical Split :</span> <span class="hljs-string">Ctrl+w</span> <span class="hljs-string">+</span> <span class="hljs-string">v</span>
-<span class="hljs-attr">Horizontal Split:</span> <span class="hljs-string">Ctrl+w</span> <span class="hljs-string">+</span> <span class="hljs-string">s</span>
-<span class="hljs-attr">Close current windows:</span> <span class="hljs-string">Ctrl+w</span> <span class="hljs-string">+</span> <span class="hljs-string">q</span>
-</code></pre>
-<p>I also like to bind Ctrl+&#x3C;movement> keys to move around the windows,
-instead of using Ctrl+w + &#x3C;movement>:</p>
-<pre><code class="hljs language-arduino">map &#x3C;c-j> &#x3C;c-w>j
-map &#x3C;c-k> &#x3C;c-w>k
-map &#x3C;c-l> &#x3C;c-w>l
-map &#x3C;c-h> &#x3C;c-w>h
-</code></pre>
-<p><img src="http://i.imgur.com/krj0l.png" alt="image"></p>
-<h2>Snippets</h2>
-<p>The next tweak that really speeds up development is using snipmate.
-We've already included it in our bundle/ folder so its already enabled.
-Try opening up a python file and typing 'def&#x3C;tab>'. It should stub
-out a method definition for you and allow you to tab through and fill
-out the arguments, doc string, etc.</p>
-<p>I also like to create my own snippets folder to put in some custom
-snippets:</p>
-<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">$ </span><span class="bash"><span class="hljs-built_in">mkdir</span> ~/.vim/snippets</span>
-<span class="hljs-meta prompt_">$ </span><span class="bash">vim ~/.vim/snippets/python.snippets</span>
-</code></pre>
-<p>Put this in the file:</p>
-<pre><code class="hljs language-arduino">snippet pdb
-    <span class="hljs-keyword">import</span> pdb; pdb.<span class="hljs-built_in">set_trace</span>()
-</code></pre>
-<p>Now you can type pdb&#x3C;tab> and it'll insert your breakpoint!</p>
-<h2>Task lists</h2>
-<p>Another really useful thing is to mark some of your code as TODO or
-FIXME! I know we all like to think we write perfect code, but sometimes
-you just have to settle and leave a note for yourself to come back
-later. One of the plugins we included was the tasklist plugin that will
-allow us to search all open buffers for things to fix. Just add a
-mapping to open it in ~/.vimrc:</p>
-<pre><code class="hljs language-arduino">map &#x3C;leader>td &#x3C;Plug>TaskList
-</code></pre>
-<p>Now you can hit &#x3C;leader>td to open your task list and hit 'q' to
-close it. You can also hit enter on the task to jump to the buffer and
-line that it is placed on.</p>
-<h2>Revision History</h2>
-<p>The final basic editing tweak I suggest everyone start utilizing is the
-Gundo plugin. It'll allow you to view diff's of every save on a file
-you've made and allow you to quickly revert back and forth:</p>
-<p><img src="http://i.imgur.com/2NrPS.png" alt="image"></p>
-<p>Just bind a key in your .vimrc to toggle the Gundo window:</p>
-<pre><code class="hljs language-ruby">map &#x3C;leader>g <span class="hljs-symbol">:GundoToggle&#x3C;CR></span>
-</code></pre>
-<h1>Syntax Highlighting and Validation</h1>
-<p>Simply enable syntax highlighting in your ~/.vimrc:</p>
-<pre><code class="hljs language-vbnet">syntax <span class="hljs-keyword">on</span>                           <span class="hljs-string">" syntax highlighing
-filetype on                          "</span> <span class="hljs-keyword">try</span> <span class="hljs-keyword">to</span> detect filetypes
-filetype plugin indent <span class="hljs-keyword">on</span>    <span class="hljs-string">" enable loading indent file for filetype
-</span></code></pre>
-<p>Because we enabled pyflakes when we added it as a submodule in
-~/.vim/bundle, it will notify you about unused imports and invalid
-syntax. It will save you a lot of time saving and running just to find
-out you missed a colon. I like to tell it not use the quickfix window:</p>
-<pre><code class="hljs language-ini">let g:<span class="hljs-attr">pyflakes_use_quickfix</span> = <span class="hljs-number">0</span>
-</code></pre>
-<p><img src="http://i.imgur.com/ZfjFe.png" alt="image"></p>
-<h2>Pep8</h2>
-<p>The final plugin that really helps validate your code is the pep8
-plugin, it'll make sure your code is consistent across all projects.
-Add a key mapping to your ~/.vimrc and then you'll be able to jump to
-each of the pep8 violations in the quickfix window:</p>
-<pre><code class="hljs language-ini">let g:<span class="hljs-attr">pep8_map</span>=<span class="hljs-string">'&#x3C;leader>8'</span>
-</code></pre>
-<p><img src="http://i.imgur.com/VU9AB.png" alt="image"></p>
-<h1>Tab Completion and Documentation</h1>
-<p>Vim has many different code completion options. We are going to use the
-SuperTab plugin to check the context of the code you are working on and
-choose the best for the situation. We've already enabled the SuperTab
-plugin in the bundle/ folder, so we just have to configure it to be
-context sensitive and to enable omni code completion in your ~/.vimrc:</p>
-<pre><code class="hljs language-ini">au FileType python set <span class="hljs-attr">omnifunc</span>=pythoncomplete<span class="hljs-comment">#Complete</span>
-let g:<span class="hljs-attr">SuperTabDefaultCompletionType</span> = <span class="hljs-string">"context"</span>
-</code></pre>
-<p>Now we just enable the menu and pydoc preview to get the most useful
-information out of the code completion:</p>
-<pre><code class="hljs language-ini">set <span class="hljs-attr">completeopt</span>=menuone,longest,preview
-</code></pre>
-<p><img src="http://i.imgur.com/g4lxP.png" alt="image"></p>
-<p>We also enabled the pydoc plugin at the beginning with all the
-submodules; that gives us the ability to hit &#x3C;leader>pw when our
-cursor is on a module and have a new window open with the whole
-documentation page for it.</p>
-<h1>Code Navigation</h1>
-<h2>Buffers</h2>
-<p>The most important part about navigating code within vim, is to
-completely understand how to use buffers. There is no reason to use
-tabs. Open files with :e &#x3C;filename> to place in a buffer. We already
-installed the minibufexpl plugin, so you will already visually see every
-buffer opened. You can also get a list of them doing :buffers.</p>
-<p>You can switch between the buffers using b&#x3C;number>, such as :b1 for
-the first buffer. You can also use its name to match, so you can type :b
-mod&#x3C;tab> to autocomplete opening the models.py buffer. You need to
-make sure you are using the minibufexpl from my github since it has
-patches that make it much better to work with.</p>
-<p>To close a buffer you use :bd or :bw.</p>
-<h2>Fuzzy Text File Search</h2>
-<p>To make finding and opening files within your project even easier, we
-are going to use the command-t plugin. It does have some parts that need
-to be compiled, so its not already installed by adding it as a
-submodule. Go to your ~/.vim/bundle/command-t folder and run 'rake
-make'. Yes you need ruby installed. By default, command-t is bound to
-&#x3C;leader>t. This will use fuzzy text matching to find any file in your
-project.</p>
-<p>It also supports searching only through opened buffers, instead of files
-using &#x3C;leader>b.</p>
-<p><img src="http://i.imgur.com/hUcSl.png" alt="image"></p>
-<h2>File Browser</h2>
-<p>NERD Tree is a project file browser. I must admit I used this heavily
-back when I was migrating from Visual Studio and used to the Solution
-Explorer, but I rarely use it anymore. Command-T is usually all you'll
-need. It is useful when you are getting to know a new codebase for the
-first time though. Lets bind a shortcut key for opening it:</p>
-<pre><code class="hljs language-ruby">map &#x3C;leader>n <span class="hljs-symbol">:NERDTreeToggle&#x3C;CR></span>
-</code></pre>
-<p><img src="http://i.imgur.com/R4ZzQ.png" alt="image"></p>
-<h2>Refactoring and Go to definition</h2>
-<p>Ropevim is also a great tool that will allow you to navigate around your
-code. It supports automatically inserting import statements, goto
-definition, refactoring, and code completion. You'll really want to
-read up on everything it does, but the two big things I use it for is to
-jump to function or class definitions quickly and to rename things
-(including all their references).</p>
-<p>For instance, if you are using django and you place your cursor over the
-class models.Model you reference and then called :RopeGotoDefintion, it
-would jump you straight to the django library to that class definition.
-We already have it installed in our bundles, so we bind it to a key to
-use it:</p>
-<pre><code class="hljs language-ruby">map &#x3C;leader>j <span class="hljs-symbol">:RopeGotoDefinition&#x3C;CR></span>
-map &#x3C;leader>r <span class="hljs-symbol">:RopeRename&#x3C;CR></span>
-</code></pre>
-<h2>Searching</h2>
-<p>The final tool that really speeds up navigating your code is the Ack
-plugin. Ack is similar to grep, but much better in my opinion. You can
-fuzzy text search for anything in your code (variable name, class,
-method, etc) and it'll give you a list of files and line numbers where
-they are defined so you can quickly cycle through them. Just bind the
-searching to a key:</p>
-<pre><code class="hljs language-php-template"><span class="xml">nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">leader</span>></span>a <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Ack!
-</span></code></pre>
-<p>We use ! at the end of it so it doesn't open the first result
-automatically.</p>
-<h1>Integration with Git</h1>
-<p>We installed 2 plugins, git.vim and fugitive, that give us all the
-integration we need. Git.vim will provide us syntax highlighting for git
-configuration files; fugitive provides a great interface for interacting
-with git including getting diffs, status updates, committing, and moving
-files.</p>
-<p>Fugitive also allows you to view what branch you are working in directly
-from vim. Add this to your statusline in ~/.vimrc:</p>
-<pre><code class="hljs language-shell"><span class="hljs-meta prompt_">%</span><span class="bash">{fugitive<span class="hljs-comment">#statusline()}</span></span>
-</code></pre>
-<p>The big commands you need to know:</p>
-<ul>
-<li><strong>Gblame</strong>: This allows you to view a line by line comparison of who
-the last person to touch that line of code is.</li>
-<li><strong>Gwrite</strong>: This will stage your file for commit, basically doing
-git add &#x3C;filename></li>
-<li><strong>Gread</strong>: This will basically run a git checkout &#x3C;filename></li>
-<li><strong>Gcommit</strong>: This will just run git commit. Since its in a vim
-buffer, you can use keyword completion (Ctrl-N), like
-test_all&#x3C;Ctrl-N> to find the method name in your buffer and
-complete it for the commit message. You can also use + and - on the
-filenames in the message to stage/unstage them for the commit.</li>
-</ul>
-<p><img src="http://i.imgur.com/NuRRj.png" alt="image"></p>
-<h1>Test Integration</h1>
-<h2>django nose</h2>
-<p>Test runner integration really depends on the testing library you are
-using and what type of tests you are running but we included a great
-generic plugin called MakeGreen that executes off of vim's makeprg
-variable. So for instance, if you are using django with django-nose you
-could define a shortcut key in your ~/.vimrc like this:</p>
-<pre><code class="hljs language-arduino">map &#x3C;leader>dt :set makeprg=python\ manage.py\ test\|:call <span class="hljs-built_in">MakeGreen</span>()&#x3C;CR>
-</code></pre>
-<p>This will just give you a green bar at the bottom of vim if your test
-passed or a red bar with the message of the failed test if it doesn't.
-Very simple.</p>
-<h2>py.test</h2>
-<p>I also included the py.test vim plugin for those who prefer it. This
-plugin has a lot more functionality including executing individual tests
-by class, file, or method. You can also cycle through the individual
-assertion errors. I have the following bindings:</p>
-<pre><code class="hljs language-php-template"><span class="xml">" Execute the tests
-nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>tf <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest file<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
-nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>tc <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest class<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
-nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>tm <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest method<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
-" cycle through test errors
-nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>tn <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest next<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
-nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>tp <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest previous<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
-nmap <span class="hljs-tag">&#x3C;<span class="hljs-name">silent</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">Leader</span>></span>te <span class="hljs-tag">&#x3C;<span class="hljs-name">Esc</span>></span>:Pytest error<span class="hljs-tag">&#x3C;<span class="hljs-name">CR</span>></span>
-</span></code></pre>
-<p><img src="http://i.imgur.com/RAE7v.png" alt="image"></p>
-<h1>Virtualenv</h1>
-<p>Vim doesn't realize that you are in a virtualenv so it wont give you
-code completion for libraries only installed there. Add the following
-script to your ~/.vimrc to fix it:</p>
-<pre><code class="hljs language-ini">" Add the virtualenv's site-packages to vim path
-py &#x3C;&#x3C; EOF
-import os.path
-import sys
-import vim
-if 'VIRTUAL_ENV' in os.environ:
-    <span class="hljs-attr">project_base_dir</span> = os.environ[<span class="hljs-string">'VIRTUAL_ENV'</span>]
-    sys.path.insert(0, project_base_dir)
-    <span class="hljs-attr">activate_this</span> = os.path.join(project_base_dir, <span class="hljs-string">'bin/activate_this.py'</span>)
-    execfile(activate_this, dict(<span class="hljs-attr">__file__</span>=activate_this))
-EOF
-</code></pre>
-<h1>Django</h1>
-<p>The only true django tweak I make is before I open vim I'll export the
-DJANGO_SETTINGS_MODULE environment so that I get code completion for
-django modules as well:</p>
-<pre><code class="hljs language-ini">export <span class="hljs-attr">DJANGO_SETTINGS_MODULE</span>=project.settings
-</code></pre>
-<h1>Random Tips</h1>
-<p>If you want to find a new color scheme just go to
-<a href="http://code.google.com/p/vimcolorschemetest/">http://code.google.com/p/vimcolorschemetest/</a> to preview a large
-selection.</p>
-<p>John Anderson &#x3C;<a href="mailto:sontek@gmail.com">sontek@gmail.com</a>> 2011</p>]]></description>
-            <link>https://sontek.net/blog/old/turning_vim_into_a_modern_python_ide</link>
-            <guid isPermaLink="true">https://sontek.net/blog/old/turning_vim_into_a_modern_python_ide</guid>
-            <pubDate>Sat, 07 May 2011 00:00:00 GMT</pubDate>
         </item>
     </channel>
 </rss>

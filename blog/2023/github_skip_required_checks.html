@@ -1,0 +1,118 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width"/><meta charSet="utf-8"/><link rel="alternate" type="application/rss+xml" title="sontek&#x27;s Engineering Blog" href="/rss.xml"/><title>Speed up github actions with conditional jobs, even with required checks</title><meta name="next-head-count" content="4"/><link rel="preload" href="/_next/static/css/4e645f88d9d5f47b.css" as="style"/><link rel="stylesheet" href="/_next/static/css/4e645f88d9d5f47b.css" data-n-g=""/><link rel="preload" href="/_next/static/css/95e79f6f6f52c645.css" as="style"/><link rel="stylesheet" href="/_next/static/css/95e79f6f6f52c645.css" data-n-p=""/><noscript data-n-css=""></noscript><script defer="" nomodule="" src="/_next/static/chunks/polyfills-5cd94c89d3acac5f.js"></script><script src="/_next/static/chunks/webpack-d7b038a63b619762.js" defer=""></script><script src="/_next/static/chunks/framework-4556c45dd113b893.js" defer=""></script><script src="/_next/static/chunks/main-2a9c662ddd7329fb.js" defer=""></script><script src="/_next/static/chunks/pages/_app-2e2b8b955a26d1f2.js" defer=""></script><script src="/_next/static/chunks/996-9e3c12b77542c098.js" defer=""></script><script src="/_next/static/chunks/771-5e4a02ed896d5599.js" defer=""></script><script src="/_next/static/chunks/pages/blog/%5B...id%5D-426e76fedd45ec38.js" defer=""></script><script src="/_next/static/faRI_lDOffgYS3AAxw_cd/_buildManifest.js" defer=""></script><script src="/_next/static/faRI_lDOffgYS3AAxw_cd/_ssgManifest.js" defer=""></script><script src="/_next/static/faRI_lDOffgYS3AAxw_cd/_middlewareManifest.js" defer=""></script></head><body><div id="__next"><div><div class="grid"><div class="col"><header id="banner" class="body"><h1><a href="/">sontek.net</a></h1></header></div><div class="col menu"><nav><ul><li><a href="/">Home</a></li><li><a href="/blog">Blog</a></li><li><a href="/resume">Resume</a></li><li><a href="/about">About</a></li></ul></nav></div></div><div class="container"><article class="blog_article__NoEy4"><h1 class="util_headingXl__knZ_h">Speed up github actions with conditional jobs, even with required checks</h1><div class="util_lightText__xcqUE"><time dateTime="2023-10-28T20:00:00-04:00">October 28, 2023</time></div><div><p>Having every github action run on every pull request will end up slowing you
+down and sometimes even discourage you from making changes.  For example, if you
+see an error in the <code>README.md</code> but you know you'll have to wait for the entire
+test suite to run you may choose not to push the change.</p>
+<h1>Path Filtering</h1>
+<p>To address this problem, Github has a feature called <a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore">path filtering</a>
+which works really well!  You can include and excluxe paths with a simple syntax:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span>
+    <span class="hljs-attr">paths:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'*'</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'*/**'</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'!README.md'</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'!.gitignore'</span>
+</code></pre>
+<p>Which will run on any changes except for <code>README.md</code> and <code>.gitignore</code>.  There is
+even a simpler format to this by using <code>paths-ignore</code>:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span>
+    <span class="hljs-attr">paths-ignore:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'README.md'</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-string">'.gitignore'</span>
+</code></pre>
+<p>Although this works, I do not recommend using it.</p>
+<h1>Branch Protection / Required Checks</h1>
+<p>Path Filtering has one major flaw which is that it skips the run of the job
+completely which means if you are using <a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches">branch protection</a>
+your PR will be stuck in <code>pending</code> state.</p>
+<p>To resolve this we will have to run the job, but skip the actions inside it that
+are slow conditionally. There are a few opensource actions out there that make
+this easy but the one I recommend is:</p>
+<p>https://github.com/tj-actions/changed-files</p>
+<p>I creates a lot of useful outputs you can use in your conditional out of the box
+which makes your action easy to write.</p>
+<h1>Skipping a required check</h1>
+<p>So using <code>tj-actions/changed-files</code> to skip a required check, it will look very
+similar to the path filtering from github.  You first define what files you care
+about:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">terraform-lint:</span> 
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-22.04</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v3</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Check</span> <span class="hljs-string">if</span> <span class="hljs-string">files</span> <span class="hljs-string">changed</span>
+        <span class="hljs-attr">id:</span> <span class="hljs-string">changed-files-yaml</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">tj-actions/changed-files@v40</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">files_yaml:</span> <span class="hljs-string">|
+            src:
+              - '*'
+              - '*/**'
+              - '!README.md'
+              - '!.gitignore'
+</span></code></pre>
+<p>The <code>src</code> is just a key selection I made here.  You can have many groups of
+files like <code>tests</code>, <code>docs</code>, etc. and conditionally do things if each of them
+changed.</p>
+<p>So from our example, this step will generate output we can use <code>steps.changed-files-yaml.outputs.src_any_changed</code>
+that is either <code>true</code> or <code>false.</code>. To use this we can us the <code>if</code> conditional
+block on our jobs.</p>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">steps:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">if:</span> <span class="hljs-string">steps.changed-files-yaml.outputs.src_any_changed</span> <span class="hljs-string">==</span> <span class="hljs-string">'true'</span>
+    <span class="hljs-attr">run:</span> <span class="hljs-string">|
+        earthly \
+        +ci-terraform-lint \
+            --TERRAFORM_VERSION=${{ env.RTX_TERRAFORM_VERSION }}
+</span></code></pre>
+<p>This will then skip linting if we didn't change any terraform and the job will
+be marked successful!</p>
+<center>
+<img src="/images/posts/github_skip_required_checks/skipped_checks.png">
+</center>
+<p>This can be confusing sometimes and the people you work with (or future you!)
+may wonder why these critical checks are being skipped.   I like to include
+a message with the decision that was made so its obvious that we wanted to skip
+them:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-bullet">-</span> <span class="hljs-attr">if:</span> <span class="hljs-string">steps.changed-files-yaml.outputs.src_any_changed</span> <span class="hljs-string">==</span> <span class="hljs-string">'false'</span>
+  <span class="hljs-attr">run:</span> <span class="hljs-string">|
+    echo "No terraform files changed"```
+</span>
+</code></pre>
+<p>Which will output:</p>
+<pre><code class="hljs language-arduino">✅ <span class="hljs-string">"No terraform files changed"</span>
+</code></pre>
+<p>Right next to the skipped job which is exactly what we wanted to see! So the end
+result would look something like this:</p>
+<pre><code class="hljs language-yaml"><span class="hljs-attr">on:</span>
+  <span class="hljs-attr">pull_request:</span>
+    
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">terraform-lint:</span> 
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-22.04</span>
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v3</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Check</span> <span class="hljs-string">if</span> <span class="hljs-string">real</span> <span class="hljs-string">files</span> <span class="hljs-string">changed</span>
+        <span class="hljs-attr">id:</span> <span class="hljs-string">changed-files-yaml</span>
+        <span class="hljs-attr">uses:</span> <span class="hljs-string">tj-actions/changed-files@v40</span>
+        <span class="hljs-attr">with:</span>
+          <span class="hljs-attr">files_yaml:</span> <span class="hljs-string">|
+            src:
+              - '*'
+              - '*/**'
+              - '!README.md'
+              - '!.gitignore'
+</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">if:</span> <span class="hljs-string">steps.changed-files-yaml.outputs.src_any_changed</span> <span class="hljs-string">==</span> <span class="hljs-string">'true'</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          earthly \
+            +ci-terraform-lint \
+              --TERRAFORM_VERSION=${{ env.RTX_TERRAFORM_VERSION }}
+</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">if:</span> <span class="hljs-string">steps.changed-files-yaml.outputs.src_any_changed</span> <span class="hljs-string">==</span> <span class="hljs-string">'false'</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          echo "No terraform files changed"
+</span></code></pre>
+<h1>Conclusion</h1>
+<p>Hopefully with this you can start speeding up your github actions and making the
+developer experience enjoyable!</p></div></article></div></div></div><script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"postData":{"id":["2023","github_skip_required_checks"],"path":"2023/github_skip_required_checks","contentHtml":"\u003cp\u003eHaving every github action run on every pull request will end up slowing you\ndown and sometimes even discourage you from making changes.  For example, if you\nsee an error in the \u003ccode\u003eREADME.md\u003c/code\u003e but you know you'll have to wait for the entire\ntest suite to run you may choose not to push the change.\u003c/p\u003e\n\u003ch1\u003ePath Filtering\u003c/h1\u003e\n\u003cp\u003eTo address this problem, Github has a feature called \u003ca href=\"https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore\"\u003epath filtering\u003c/a\u003e\nwhich works really well!  You can include and excluxe paths with a simple syntax:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-yaml\"\u003e\u003cspan class=\"hljs-attr\"\u003eon:\u003c/span\u003e\n  \u003cspan class=\"hljs-attr\"\u003epull_request:\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003epaths:\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e'*'\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e'*/**'\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e'!README.md'\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e'!.gitignore'\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWhich will run on any changes except for \u003ccode\u003eREADME.md\u003c/code\u003e and \u003ccode\u003e.gitignore\u003c/code\u003e.  There is\neven a simpler format to this by using \u003ccode\u003epaths-ignore\u003c/code\u003e:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-yaml\"\u003e\u003cspan class=\"hljs-attr\"\u003eon:\u003c/span\u003e\n  \u003cspan class=\"hljs-attr\"\u003epull_request:\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003epaths-ignore:\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e'README.md'\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e'.gitignore'\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eAlthough this works, I do not recommend using it.\u003c/p\u003e\n\u003ch1\u003eBranch Protection / Required Checks\u003c/h1\u003e\n\u003cp\u003ePath Filtering has one major flaw which is that it skips the run of the job\ncompletely which means if you are using \u003ca href=\"https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches\"\u003ebranch protection\u003c/a\u003e\nyour PR will be stuck in \u003ccode\u003epending\u003c/code\u003e state.\u003c/p\u003e\n\u003cp\u003eTo resolve this we will have to run the job, but skip the actions inside it that\nare slow conditionally. There are a few opensource actions out there that make\nthis easy but the one I recommend is:\u003c/p\u003e\n\u003cp\u003ehttps://github.com/tj-actions/changed-files\u003c/p\u003e\n\u003cp\u003eI creates a lot of useful outputs you can use in your conditional out of the box\nwhich makes your action easy to write.\u003c/p\u003e\n\u003ch1\u003eSkipping a required check\u003c/h1\u003e\n\u003cp\u003eSo using \u003ccode\u003etj-actions/changed-files\u003c/code\u003e to skip a required check, it will look very\nsimilar to the path filtering from github.  You first define what files you care\nabout:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-yaml\"\u003e\u003cspan class=\"hljs-attr\"\u003ejobs:\u003c/span\u003e\n  \u003cspan class=\"hljs-attr\"\u003eterraform-lint:\u003c/span\u003e \n    \u003cspan class=\"hljs-attr\"\u003eruns-on:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003eubuntu-22.04\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003esteps:\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003euses:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003eactions/checkout@v3\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003ename:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003eCheck\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003eif\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003efiles\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003echanged\u003c/span\u003e\n        \u003cspan class=\"hljs-attr\"\u003eid:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003echanged-files-yaml\u003c/span\u003e\n        \u003cspan class=\"hljs-attr\"\u003euses:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003etj-actions/changed-files@v40\u003c/span\u003e\n        \u003cspan class=\"hljs-attr\"\u003ewith:\u003c/span\u003e\n          \u003cspan class=\"hljs-attr\"\u003efiles_yaml:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e|\n            src:\n              - '*'\n              - '*/**'\n              - '!README.md'\n              - '!.gitignore'\n\u003c/span\u003e\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThe \u003ccode\u003esrc\u003c/code\u003e is just a key selection I made here.  You can have many groups of\nfiles like \u003ccode\u003etests\u003c/code\u003e, \u003ccode\u003edocs\u003c/code\u003e, etc. and conditionally do things if each of them\nchanged.\u003c/p\u003e\n\u003cp\u003eSo from our example, this step will generate output we can use \u003ccode\u003esteps.changed-files-yaml.outputs.src_any_changed\u003c/code\u003e\nthat is either \u003ccode\u003etrue\u003c/code\u003e or \u003ccode\u003efalse.\u003c/code\u003e. To use this we can us the \u003ccode\u003eif\u003c/code\u003e conditional\nblock on our jobs.\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-yaml\"\u003e\u003cspan class=\"hljs-attr\"\u003esteps:\u003c/span\u003e\n    \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003eif:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003esteps.changed-files-yaml.outputs.src_any_changed\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e==\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e'true'\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003erun:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e|\n        earthly \\\n        +ci-terraform-lint \\\n            --TERRAFORM_VERSION=${{ env.RTX_TERRAFORM_VERSION }}\n\u003c/span\u003e\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eThis will then skip linting if we didn't change any terraform and the job will\nbe marked successful!\u003c/p\u003e\n\u003ccenter\u003e\n\u003cimg src=\"/images/posts/github_skip_required_checks/skipped_checks.png\"\u003e\n\u003c/center\u003e\n\u003cp\u003eThis can be confusing sometimes and the people you work with (or future you!)\nmay wonder why these critical checks are being skipped.   I like to include\na message with the decision that was made so its obvious that we wanted to skip\nthem:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-yaml\"\u003e\u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003eif:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003esteps.changed-files-yaml.outputs.src_any_changed\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e==\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e'false'\u003c/span\u003e\n  \u003cspan class=\"hljs-attr\"\u003erun:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e|\n    echo \"No terraform files changed\"```\n\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eWhich will output:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-arduino\"\u003e✅ \u003cspan class=\"hljs-string\"\u003e\"No terraform files changed\"\u003c/span\u003e\n\u003c/code\u003e\u003c/pre\u003e\n\u003cp\u003eRight next to the skipped job which is exactly what we wanted to see! So the end\nresult would look something like this:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"hljs language-yaml\"\u003e\u003cspan class=\"hljs-attr\"\u003eon:\u003c/span\u003e\n  \u003cspan class=\"hljs-attr\"\u003epull_request:\u003c/span\u003e\n    \n\u003cspan class=\"hljs-attr\"\u003ejobs:\u003c/span\u003e\n  \u003cspan class=\"hljs-attr\"\u003eterraform-lint:\u003c/span\u003e \n    \u003cspan class=\"hljs-attr\"\u003eruns-on:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003eubuntu-22.04\u003c/span\u003e\n    \u003cspan class=\"hljs-attr\"\u003esteps:\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003euses:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003eactions/checkout@v3\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003ename:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003eCheck\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003eif\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003ereal\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003efiles\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003echanged\u003c/span\u003e\n        \u003cspan class=\"hljs-attr\"\u003eid:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003echanged-files-yaml\u003c/span\u003e\n        \u003cspan class=\"hljs-attr\"\u003euses:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003etj-actions/changed-files@v40\u003c/span\u003e\n        \u003cspan class=\"hljs-attr\"\u003ewith:\u003c/span\u003e\n          \u003cspan class=\"hljs-attr\"\u003efiles_yaml:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e|\n            src:\n              - '*'\n              - '*/**'\n              - '!README.md'\n              - '!.gitignore'\n\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003eif:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003esteps.changed-files-yaml.outputs.src_any_changed\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e==\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e'true'\u003c/span\u003e\n        \u003cspan class=\"hljs-attr\"\u003erun:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e|\n          earthly \\\n            +ci-terraform-lint \\\n              --TERRAFORM_VERSION=${{ env.RTX_TERRAFORM_VERSION }}\n\u003c/span\u003e\n      \u003cspan class=\"hljs-bullet\"\u003e-\u003c/span\u003e \u003cspan class=\"hljs-attr\"\u003eif:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003esteps.changed-files-yaml.outputs.src_any_changed\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e==\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e'false'\u003c/span\u003e\n        \u003cspan class=\"hljs-attr\"\u003erun:\u003c/span\u003e \u003cspan class=\"hljs-string\"\u003e|\n          echo \"No terraform files changed\"\n\u003c/span\u003e\u003c/code\u003e\u003c/pre\u003e\n\u003ch1\u003eConclusion\u003c/h1\u003e\n\u003cp\u003eHopefully with this you can start speeding up your github actions and making the\ndeveloper experience enjoyable!\u003c/p\u003e","category":"Development","date":"2023-10-28T20:00:00-04:00","tags":["git","github"],"title":"Speed up github actions with conditional jobs, even with required checks"}},"__N_SSG":true},"page":"/blog/[...id]","query":{"id":["2023","github_skip_required_checks"]},"buildId":"faRI_lDOffgYS3AAxw_cd","isFallback":false,"gsp":true,"scriptLoader":[]}</script></body></html>
