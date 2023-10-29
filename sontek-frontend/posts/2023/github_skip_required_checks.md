@@ -106,8 +106,7 @@ them:
 ```yaml
 - if: steps.changed-files-yaml.outputs.src_any_changed == 'false'
   run: |
-    echo "No terraform files changed"```
-
+    echo "No terraform files changed"
 ```
 
 Which will output:
