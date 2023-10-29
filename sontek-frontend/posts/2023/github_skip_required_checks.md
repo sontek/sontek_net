@@ -36,7 +36,8 @@ on:
       - '.gitignore'
 ```
 
-Although this works, I do not recommend using it.
+Although the path filtering feature of github works, I do not recommend using
+it because it has some critical issues that I'll talk about below!
 
 # Branch Protection / Required Checks
 Path Filtering has one major flaw which is that it skips the run of the job
@@ -49,7 +50,7 @@ this easy but the one I recommend is:
 
 https://github.com/tj-actions/changed-files
 
-I creates a lot of useful outputs you can use in your conditional out of the box
+It creates a lot of useful outputs you can use in your conditional out of the box
 which makes your action easy to write.
 
 # Skipping a required check
