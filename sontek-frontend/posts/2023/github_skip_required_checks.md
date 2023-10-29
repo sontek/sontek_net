@@ -13,7 +13,7 @@ test suite to run you may choose not to push the change.
 
 # Path Filtering
 To address this problem, Github has a feature called [path filtering](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore)
-which works really well!  You can include and excluxe paths with a simple syntax:
+which works really well!  You can include and exclude paths with a simple syntax:
 
 ```yaml
 on:
