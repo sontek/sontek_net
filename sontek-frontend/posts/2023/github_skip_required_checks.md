@@ -48,7 +48,7 @@ To resolve this we will have to run the job, but skip the actions inside it that
 are slow conditionally. There are a few opensource actions out there that make
 this easy but the one I recommend is:
 
-https://github.com/tj-actions/changed-files
+[https://github.com/tj-actions/changed-files](https://github.com/tj-actions/changed-files)
 
 It creates a lot of useful outputs you can use in your conditional out of the box
 which makes your action easy to write.
