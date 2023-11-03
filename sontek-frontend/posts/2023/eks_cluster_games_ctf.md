@@ -2,9 +2,9 @@
 category: Kubernetes
 date: 2023-11-02
 tags:
-    - kubernetes
-    - sre
-    - security
+    - Kubernetes
+    - SRE
+    - Security
 title: eksclustergames.com walk through!
 ---
 [eksclustergames.com](https://eksclustergames.com) is a new CTF targetted at
