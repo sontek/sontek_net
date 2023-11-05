@@ -31,10 +31,10 @@ export default function Post({ postData }) {
                 <title>{postData.title}</title>
             </Head>
             <article className={blogStyles.article}>
-                <h1 className={utilStyles.headingXl}>{postData.title}</h1>
                 <div className={utilStyles.lightText}>
                     Published on <Date dateString={postData.date} />
                 </div>
+                <h1 className={utilStyles.headingXl}>{postData.title}</h1>
                 <div className={utilStyles.lightText}>
                     Tagged with: <TagList tags={postData.tags} />
                 </div>
