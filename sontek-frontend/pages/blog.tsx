@@ -2,10 +2,12 @@ import utilStyles from "../styles/util.module.css";
 import { getRecentPosts, getAllTags } from "../src/lib/posts";
 import { generateRSSFeed } from "../src/lib/rss";
 import Date from "../src/components/date";
+import TagList from "../src/components/taglist";
 import Link from "next/link";
 import Head from "next/head";
 import Layout from "../src/components/layout";
 import blogStyles from "../styles/blog.module.css";
+import {htmlSubstring} from "../src/lib/html";
 
 export async function getStaticProps() {
     const allTagData = await getAllTags();
@@ -21,6 +23,8 @@ export async function getStaticProps() {
 }
 
 export default function Home({ allPostsData, allTagData }) {
+    const tags = Object.keys(allTagData);
+
     return (
         <Layout>
             <Head>
@@ -31,15 +35,7 @@ export default function Home({ allPostsData, allTagData }) {
             >
                 <h2 className={utilStyles.headingLg}>Tags</h2>
                 <div className={blogStyles.tags}>
-                    {Object.keys(allTagData).map((tag) => {
-                        return (
-                            <Link href={`/blog/tags/${tag}`} key={tag}>
-                                <a className={blogStyles.tag}>
-                                    {tag}
-                                </a>
-                            </Link>
-                        );
-                    })}
+                    <TagList tags={tags} />
                 </div>
             </section>
             <section
@@ -47,30 +43,32 @@ export default function Home({ allPostsData, allTagData }) {
             >
                 <h2 className={utilStyles.headingLg}>Articles</h2>
                 <ul className={utilStyles.list}>
-                    {allPostsData.map(({ path, date, title, contentHtml }) => (
-                        <li key={path}>
-                            <article className={blogStyles.hentry}>
-                                <header>
-                                    <h3 className="entry-title">
-                                        <Link href={`/blog/${path}`}>
-                                            <a>{title}</a>
-                                        </Link>
-                                    </h3>
-                                </header>
-                                <br />
-                                <small className={utilStyles.lightText}>
-                                    <Date dateString={date} />
-                                </small>
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html:
-                                            contentHtml.substring(0, 300) +
-                                            "...",
-                                    }}
-                                />
-                            </article>
-                        </li>
-                    ))}
+                    {allPostsData.map(({ path, date, title, contentHtml }) => {
+                        return (
+                            <li key={path}>
+                                <article className={blogStyles.hentry}>
+                                    <header>
+                                        <h3 className="entry-title">
+                                            <Link href={`/blog/${path}`}>
+                                                <a>{title}</a>
+                                            </Link>
+                                        </h3>
+                                    </header>
+                                    <br />
+                                    <small className={utilStyles.lightText}>
+                                        Published on <Date dateString={date} />
+                                    </small>
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html:
+                                                htmlSubstring(contentHtml, 300) +
+                                                "...",
+                                        }}
+                                    />
+                                </article>
+                            </li>
+                        );
+                    })}
                 </ul>
             </section>
         </Layout>

@@ -1,5 +1,6 @@
 import Layout from "../../src/components/layout";
 import Date from "../../src/components/date";
+import TagList from "../../src/components/taglist";
 import { getAllPostIds, getPostData } from "../../src/lib/posts";
 import utilStyles from "../../styles/util.module.css";
 import blogStyles from "../../styles/blog.module.css";
@@ -32,7 +33,10 @@ export default function Post({ postData }) {
             <article className={blogStyles.article}>
                 <h1 className={utilStyles.headingXl}>{postData.title}</h1>
                 <div className={utilStyles.lightText}>
-                    <Date dateString={postData.date} />
+                    Published on <Date dateString={postData.date} />
+                </div>
+                <div className={utilStyles.lightText}>
+                    Tagged with: <TagList tags={postData.tags} />
                 </div>
                 <div
                     dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
