@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "deploy": "gh-pages -d out -t true",
+        "deploy": "gh-pages -d out -t",
         "build": "next build --webpack",
         "export": "next build --webpack",
         "format": "prettier --write .",
