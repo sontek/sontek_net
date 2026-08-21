@@ -26,8 +26,8 @@ export default function Home() {
                         <h1>Hi, I&apos;m sontek!</h1>
                         <p>
                             I&apos;m a full-stack software developer that enjoys
-                            Python, Rust, DevOps, and Linux. I live in Luquillo,
-                            PR.
+                            Python, Go, TypeScript, React.js, DevOps, and Linux.
+                            I live in Luquillo, PR.
                         </p>
                     </header>
                 </div>

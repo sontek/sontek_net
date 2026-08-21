@@ -1,28 +1,75 @@
 companies:
-  - name: Ditto.live
-    dates: July 2023 - Present
-    title: Engineering Manager, SRE
+  - name: Stacklet
+    dates: July 2024 - Present
+    title: Staff Engineer and Engineering Manager, SRE
     description: >
-      Ditto is a casually consistent distributed database
-      utilizing CRDTs. Through a Rust SDK we are able to
-      provide peer to peer communication and local first
-      development for web and mobile applications.
+      Stacklet is a cloud governance and FinOps platform built on Cloud
+      Custodian. I combine hands-on staff engineering with engineering
+      management, leading teams while contributing directly to critical product
+      and infrastructure capabilities across cloud asset inventory, compliance,
+      cost analysis, and policy-as-code workflows.
 
     accomplishments:
-      - Managed 12 engineers developing custom kubernetes operators
-        that managed our distributed database.
+      - Architected and built Jun0, Stacklet's agentic AI assistant, using Amazon
+        Bedrock, LangChain, LangGraph, vector retrieval, and MCP tool calling to
+        let users explore cloud governance data conversationally, generate and
+        validate policies, run natural-language queries, and analyze cost,
+        security, and compliance posture.
+
+      - Lead development of the cloud asset database and compliance
+        notifications delivered through Slack, email, and Jira.
+
+      - Build FinOps and cost-analysis capabilities using cloud billing data.
+
+      - Develop shift-left compliance through Terraform policy evaluation.
+
+      - Provide technical guidance across AWS, ECS, Lambda, RDS, Terraform,
+        GitHub Actions, and AWS CodePipeline.
+
+      - Support both SaaS and on-premises deployments with fully automated
+        infrastructure-as-code workflows.
+
+      - Partner with product and executive leadership to plan roadmaps for
+        critical features, while interviewing, hiring, and mentoring engineers.
+
+      - Established SLI/SLO practices, improved incident management, and built
+        a stronger culture around operational metrics.
+
+  - name: Ditto.live
+    dates: July 2023 - July 2024
+    title: Senior Engineering Manager, SRE and DevTools
+    description: >
+      Ditto is a distributed database that provides peer-to-peer communication
+      and local-first data synchronization for web and mobile applications. I
+      led the global SRE organization and the teams responsible for platform
+      reliability and developer tooling.
+
+    accomplishments:
+      - Led a global SRE team with follow-the-sun operational coverage.
+
+      - Managed 12 engineers developing Kubernetes operators and the platform
+        used to run the distributed database.
+
+      - Owned FinOps and cloud cost management across the organization.
+
+      - Led SOC 2 compliance operations and supporting engineering controls.
+
+      - Operated SaaS and on-premises Kubernetes environments managed with
+        kOps and Cluster API.
+
+      - Standardized observability around Loki, Grafana, Tempo, and Mimir.
 
   - name: Zapier
     dates: March 2021 - July 2023
-    title: Engineering Manager, SRE
+    title: Senior Engineering Manager, SRE and Developer Experience
     description: >
       Zapier is a no-code solution for automation. It
       ties many APIs together through a combination
       of webhooks and polling.
 
-      I was the engineering manager of the largest SRE
-      team in the organization that covered americas
-      timezones to asia pacific (APAC). 
+      I joined as a Staff Site Reliability Engineer and was promoted to Senior
+      Engineering Manager. I led the Compute infrastructure and SRE team, with
+      coverage spanning the Americas through Asia-Pacific.
 
       * Monitoring and Metrics through a mix of Grafana,
       Prometheus, DataDog, PagerDuty, and Graylog.
@@ -32,6 +79,10 @@ companies:
       * 1:1 with my direct reports
 
     accomplishments:
+      - Built Zapier's first AI capability using early OpenAI GPT models,
+        LangChain, and Pinecone vector search to provide semantic retrieval and
+        conversational access to internal knowledge.
+
       - Managed 12 Kubernetes cluster for both production
         and staging environments.
 
@@ -66,44 +117,6 @@ companies:
 
       - Built out a better monitoring and auditing system for our production
         bastion access.
-
-  - name: Stacklet
-    dates: March 2022 - June 2023
-    title: Engineering Manager, SRE
-    description: >
-      Stacklet is a cloud governance and FinOps tool that allows organizations
-      to main their SOC2, CIS, and ISO certifications through a set of policy
-      packs and a cloud asset inventory.
-
-      It is built on top of the opensource tool Cloud custodian. 
-
-      I was the engineering manager of the team developing some of the most critical
-      parts of the application such as:
-
-      * Cloud Asset Database
-
-      * Compliance Notifications via Slack, Email, and JIRA
-
-      * FinOps and Cost Analysis
-
-      * Shift-Left compliance through terraform policies
-
-      * This included the management of all the infrastructure being deployed. The
-      infrastructure was 100% Infrastructure as Code utilizing terraform with a mix
-      of Github Actions and AWS CodePipeline.
-
-    accomplishments:
-      - Introduced the AWS Cost and Usage Report functionality which moved
-        us into the FinOps space.
-      - Managed the rollout of both GCP and Azure support for our asset
-        database
-      - Introduced the SLI/SLO framework and rolled out the new monitoring
-        infrastructure that all teams utilize.
-      - Revamped the on-call process and introduced a throughout retrospective
-        system for incidents.
-      - Along with our SaaS offering we also had an on-prem offering so our IaC had to
-        work flawlessly to spin up new accounts on the fly.
-
 
   - name: EventRay
     dates: June 2016 to March 2021
@@ -345,4 +358,3 @@ companies:
       - Our algorithms picked winners more often than
         machine learning attempts at the time utilizing
         the same data
-

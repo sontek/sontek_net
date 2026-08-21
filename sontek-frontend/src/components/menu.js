@@ -7,9 +7,7 @@ export default function Menu() {
                 <div className="col">
                     <header id="banner" className="body">
                         <h1>
-                            <Link href="/">
-                                <a>sontek.net</a>
-                            </Link>
+                            <Link href="/">sontek.net</Link>
                         </h1>
                     </header>
                 </div>
@@ -17,24 +15,16 @@ export default function Menu() {
                     <nav>
                         <ul>
                             <li>
-                                <Link href="/">
-                                    <a>Home</a>
-                                </Link>
+                                <Link href="/">Home</Link>
                             </li>
                             <li>
-                                <Link href="/blog">
-                                    <a>Blog</a>
-                                </Link>
+                                <Link href="/blog">Blog</Link>
                             </li>
                             <li>
-                                <Link href="/resume">
-                                    <a>Resume</a>
-                                </Link>
+                                <Link href="/resume">Resume</Link>
                             </li>
                             <li>
-                                <Link href="/about">
-                                    <a>About</a>
-                                </Link>
+                                <Link href="/about">About</Link>
                             </li>
                         </ul>
                     </nav>

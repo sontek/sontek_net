@@ -12,15 +12,15 @@ export default function About() {
                 <div>
                     <Image
                         priority
-                        height="467"
-                        width="700"
+                        height="450"
+                        width="600"
                         src="/images/family_small.jpg"
                         alt={"Picture of John with Family"}
                     />
                 </div>
                 <small>
-                    I&apos;m a father of two who lives in Luquillo, Puerto Rico and
-                    loves to hack on opensource
+                    I&apos;m a dad who lives in Luquillo, Puerto Rico and loves to
+                    hack on opensource
                 </small>
             </div>
             <br />
@@ -39,9 +39,9 @@ export default function About() {
                     half-rack out of a datacenter.
                 </p>
                 <p>
-                    My technology stack of choice is Python, Rust, React.js, and
-                    Postgres but I&apos;m not very picky. I&apos;ve worked professionally
-                    with PHP, C#, and Perl as well.
+                    My technology stack of choice is Python, Go, TypeScript,
+                    React.js, and Postgres, but I&apos;m not very picky. I&apos;ve worked
+                    professionally with PHP, C#, and Perl as well.
                 </p>
             </div>
             <div>

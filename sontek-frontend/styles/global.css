@@ -104,6 +104,10 @@ iframe, img {
     max-width: var(--content-width);
 }
 
+img {
+    height: auto;
+}
+
 .center {
     text-align: center;
 }
@@ -114,7 +118,8 @@ div[data-rehype-pretty-code-fragment] pre, .highlight {
     padding-top: 5px;
     padding-bottom: 5px;
     border-radius: 5px;
-    overflow: scroll;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 pre {

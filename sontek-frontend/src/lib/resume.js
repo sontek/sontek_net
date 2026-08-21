@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import yaml from "js-yaml";
+import { load } from "js-yaml";
 
 const resumeDirectory = path.join(process.cwd(), "resume");
 
@@ -22,6 +22,6 @@ export async function processResumeDetails(fileName) {
     const fullPath = path.join(resumeDirectory, fileName);
     const fileContents = fs.readFileSync(fullPath, "utf8");
 
-    const resumeDetails = yaml.load(fileContents);
+    const resumeDetails = load(fileContents);
     return resumeDetails;
 }
