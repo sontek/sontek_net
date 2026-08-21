@@ -1,7 +1,8 @@
 import React from "react";
 import resumeStyles from "../styles/resume.module.css";
 import Layout from "../src/components/layout";
-import { getResumeDetails } from "../src/lib/resume";
+import { formatResumeDateRange } from "../src/lib/resume.mjs";
+import { getResumeDetails } from "../src/lib/resume-server.mjs";
 import cn from "classnames";
 import Head from "next/head";
 
@@ -18,17 +19,17 @@ function HistoryItem(item) {
     return (
         <div className={resumeStyles.historyItem}>
             <h2>{item["name"]}</h2>
-            <p>{item["dates"]}</p>
+            <p>{formatResumeDateRange(item["startDate"], item["endDate"])}</p>
             <p>
-                <strong>{item["title"]}</strong>
+                <strong>{item["position"]}</strong>
             </p>
-            {item["description"].split("\n").map((paragraph, index) => {
+            {item["summary"].split("\n").map((paragraph, index) => {
                 return <p key={index}>{paragraph}</p>;
             })}
             <div className={resumeStyles.accomplishments}>
                 <h3>Accomplishments</h3>
                 <ul>
-                    {item["accomplishments"].map((accomplishment) => {
+                    {item["highlights"].map((accomplishment) => {
                         return <li key={accomplishment}>{accomplishment}</li>;
                     })}
                 </ul>
@@ -37,59 +38,56 @@ function HistoryItem(item) {
     );
 }
 
-function History(historyData) {
+function History({ work }) {
     return (
         <div className={resumeStyles.history}>
             <h1>Work History</h1>
-            {historyData["companies"].map((company, index) => {
+            {work.map((company, index) => {
                 return <HistoryItem key={index} {...company} />;
             })}
         </div>
     );
 }
 
-function About(aboutData) {
+function About({ basics, skills }) {
     return (
         <div className="grid">
             <div className={cn("col", resumeStyles.col)}>
-                <h2>{aboutData["name"]}</h2>
-                <p>Location: {aboutData["location"]["city"]}</p>
-                <p>{aboutData["description"]}</p>
+                <h2>{basics["name"]}</h2>
+                <p>
+                    Location: {basics["location"]["city"]},{" "}
+                    {basics["location"]["region"]}
+                </p>
+                <p>{basics["summary"]}</p>
             </div>
             <div className={resumeStyles.col}>
                 <div>
                     <h2>Contact Information</h2>
                     <ul>
-                        {Object.keys(aboutData["contact"]).map((key) => {
-                            if (key === "email") {
-                                return (
-                                    <li key={key}>
-                                        {aboutData["contact"][key]}
-                                    </li>
-                                );
-                            }
-
-                            return (
-                                <li key={key}>
-                                    <a
-                                        href={aboutData["contact"][key]}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        {aboutData["contact"][key]}
-                                    </a>
-                                </li>
-                            );
-                        })}
+                        <li>{basics["email"]}</li>
+                        <li>
+                            <a href={basics["url"]}>{basics["url"]}</a>
+                        </li>
+                        {basics["profiles"].map((profile) => (
+                            <li key={profile["network"]}>
+                                <a
+                                    href={profile["url"]}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
+                                    {profile["url"]}
+                                </a>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </div>
             <div className={resumeStyles.skills}>
                 <h3>Top Skills:</h3>
-                {aboutData["skills"].map((skill) => {
+                {skills.map((skill) => {
                     return (
-                        <span className={resumeStyles.skill} key={skill}>
-                            {skill}
+                        <span className={resumeStyles.skill} key={skill["name"]}>
+                            {skill["name"]}
                         </span>
                     );
                 })}
@@ -107,8 +105,11 @@ export default function Resume(props) {
             </Head>
             <div className={resumeStyles.resume}>
                 <div className={"container"}>
-                    <About {...resumeData["about"]} />
-                    <History {...resumeData["history"]} />
+                    <About
+                        basics={resumeData["basics"]}
+                        skills={resumeData["skills"]}
+                    />
+                    <History work={resumeData["work"]} />
                 </div>
             </div>
         </Layout>

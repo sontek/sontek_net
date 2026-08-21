@@ -4,6 +4,7 @@ import TagList from "../../src/components/taglist";
 import { getAllPostIds, getPostData } from "../../src/lib/posts";
 import utilStyles from "../../styles/util.module.css";
 import blogStyles from "../../styles/blog.module.css";
+import MermaidContent from "../../src/components/mermaid-content";
 
 import Head from "next/head";
 
@@ -38,9 +39,7 @@ export default function Post({ postData }) {
                 <div className={utilStyles.lightText}>
                     Tagged with: <TagList tags={postData.tags} />
                 </div>
-                <div
-                    dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
-                />
+                <MermaidContent html={postData.contentHtml} />
             </article>
         </Layout>
     );

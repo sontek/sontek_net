@@ -5,6 +5,7 @@ import utilStyles from "../../../styles/util.module.css";
 import blogStyles from "../../../styles/blog.module.css";
 import Link from "next/link";
 import Date from "../../../src/components/date";
+import MermaidContent from "../../../src/components/mermaid-content";
 
 export async function getStaticPaths() {
     const tags = await getAllTags();
@@ -54,12 +55,8 @@ export default function TagList({ id, allTagData }) {
                             <small className={utilStyles.lightText}>
                                 <Date dateString={date} />
                             </small>
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html:
-                                        contentHtml.substring(0, 400) +
-                                        "...",
-                                }}
+                            <MermaidContent
+                                html={contentHtml.substring(0, 400) + "..."}
                             />
                         </article>
                     </li>
