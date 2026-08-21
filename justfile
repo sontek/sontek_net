@@ -23,14 +23,21 @@ fe-lint: fe-install
 lint: fe-lint
   echo "Done linting"
 
+# Run frontend tests
+fe-test: fe-install
+  just _cfe "yarn test"
+
+# Build the static frontend without publishing it
+fe-build: fe-install
+  HOST="https://sontek.net" just _cfe "yarn build"
+
 # Update resume from prod
 pdf-resume:
   just _cfe "node generate_pdf_resume.js"
 
 
 # Build and deploy assets
-fe-deploy-prod: fe-install
-  HOST="https://sontek.net" just _cfe "yarn build"
+fe-deploy-prod: fe-build
   touch {{ fe }}/out/.nojekyll
   echo "sontek.net" > {{ fe }}/out/CNAME
   just _cfe "yarn deploy"

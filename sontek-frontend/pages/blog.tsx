@@ -7,7 +7,8 @@ import Link from "next/link";
 import Head from "next/head";
 import Layout from "../src/components/layout";
 import blogStyles from "../styles/blog.module.css";
-import {htmlSubstring} from "../src/lib/html";
+import { htmlSubstring } from "../src/lib/html";
+import MermaidContent from "../src/components/mermaid-content";
 
 export async function getStaticProps() {
     const allTagData = await getAllTags();
@@ -58,12 +59,11 @@ export default function Home({ allPostsData, allTagData }) {
                                     <small className={utilStyles.lightText}>
                                         Published on <Date dateString={date} />
                                     </small>
-                                    <div
-                                        dangerouslySetInnerHTML={{
-                                            __html:
-                                                htmlSubstring(contentHtml, 300) +
-                                                "...",
-                                        }}
+                                    <MermaidContent
+                                        html={
+                                            htmlSubstring(contentHtml, 300) +
+                                            "..."
+                                        }
                                     />
                                 </article>
                             </li>

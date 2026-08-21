@@ -6,7 +6,7 @@ import markdown from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import hrehypeStringify from 'rehype-stringify'
 import rehypeRaw from 'rehype-raw'
-import remarkMermaid from '@southball/remark-mermaid';
+import remarkMermaid from './remark-mermaid.mjs';
 import rehypePrettyCode from 'rehype-pretty-code';
 
 import { formatISO } from "date-fns";

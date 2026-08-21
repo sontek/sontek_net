@@ -1,6 +1,7 @@
 import fs from 'fs';
 import RSS from "rss";
 import { getRecentPosts } from "./posts";
+import { replaceMermaidForStaticConsumers } from "./remark-mermaid.mjs";
 
 export async function generateRSSFeed() {
     const site_url = process.env["HOST"];
@@ -21,7 +22,7 @@ export async function generateRSSFeed() {
     allPosts.map((post) => {
         feed.item({
             title: post.title,
-            description: post.contentHtml,
+            description: replaceMermaidForStaticConsumers(post.contentHtml),
             url: `${site_url}/blog/${post.path}`,
             date: post.date,
         });
