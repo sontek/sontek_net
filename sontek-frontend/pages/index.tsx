@@ -12,14 +12,16 @@ export default function Home() {
             </Head>
             <div className="container grid">
                 <div className="col">
-                    <Image
-                        className={indexStyles.profile}
-                        priority
-                        width="200"
-                        height="200"
-                        src="/images/sontek_profile.jpg"
-                        alt={"photo of John"}
-                    />
+                    <div className={indexStyles.profileFrame}>
+                        <Image
+                            className={indexStyles.profile}
+                            priority
+                            width="200"
+                            height="200"
+                            src="/images/sontek_profile.jpg"
+                            alt={"photo of John"}
+                        />
+                    </div>
                 </div>
                 <div className="col">
                     <header className="center">

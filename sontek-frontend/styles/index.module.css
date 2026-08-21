@@ -16,9 +16,19 @@ only imports what you use
 https://easings.net
 */
 
-img.profile {
+.profileFrame {
     width: 200px;
+    height: 200px;
+    overflow: hidden;
     border-radius: 50%;
+}
+
+img.profile {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 35% center;
+    transform: scale(1.15);
 }
 
 .social svg {
