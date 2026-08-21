@@ -1,6 +1,6 @@
 name: John M. Anderson
 description: Full-stack software developer, SRE, and manager of engineers
-             who loves DevOps, Python, Go, and Rust. I'm a Certified Kubernetes
+             who loves DevOps, Python, Go, TypeScript, and React. I'm a Certified Kubernetes
              Administrator and ScrumMaster as well.
 
 location:
@@ -17,17 +17,23 @@ contact:
 skills:
   - Kubernetes
   - Terraform
+  - Cloud Custodian
+  - AWS
+  - Agentic AI
+  - Amazon Bedrock
+  - LangChain
+  - Pinecone
   - ElasticSearch
   - Docker
   - ArgoCD
-  - Jenkins
+  - GitHub Actions
   - Linux
   - Python
+  - Go
+  - TypeScript
+  - React.js
   - Postgres
   - Redis
-  - Memcached
   - Ansible
-  - AWS
-  - React.js
-  - react-native
-  - electron
+  - FinOps
+  - Observability

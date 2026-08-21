@@ -31,7 +31,6 @@ pdf-resume:
 # Build and deploy assets
 fe-deploy-prod: fe-install
   HOST="https://sontek.net" just _cfe "yarn build"
-  just _cfe "yarn export"
-  touch {{ fe }}/dist/.nojekyll
-  echo "sontek.net" > {{ fe }}/dist/CNAME
+  touch {{ fe }}/out/.nojekyll
+  echo "sontek.net" > {{ fe }}/out/CNAME
   just _cfe "yarn deploy"

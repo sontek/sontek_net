@@ -46,7 +46,7 @@ export default function TagList({ id, allTagData }) {
                             <header>
                                 <h3 className="entry-title">
                                     <Link href={`/blog/${path}`}>
-                                        <a>{title}</a>
+                                        {title}
                                     </Link>
                                 </h3>
                             </header>

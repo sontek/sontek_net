@@ -1,9 +1,10 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
+  const host = process.env.HOST || 'https://sontek.net';
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  await page.goto('https://sontek.net/resume', {waitUntil: 'networkidle2'});
+  await page.goto(`${host}/resume`, {waitUntil: 'networkidle2'});
 
   let div_selector_to_remove= ".grid";
   await page.evaluate((sel) => {
@@ -18,7 +19,12 @@ const puppeteer = require('puppeteer');
       */
   }, div_selector_to_remove)
 
-  await page.pdf({path: 'public/sontek_resume.pdf'});
+  await page.pdf({
+      path: 'public/sontek_resume.pdf',
+      format: 'letter',
+      printBackground: true,
+      scale: 0.95,
+  });
 
   await browser.close();
 })();

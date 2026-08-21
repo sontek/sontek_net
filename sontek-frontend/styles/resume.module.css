@@ -49,3 +49,15 @@
     padding-bottom: 5px;
     border-bottom: solid 1px var(--brand);
 }
+
+@media print {
+    .historyItem h2,
+    .historyItem h3 {
+        break-after: avoid;
+    }
+
+    .historyItem p,
+    .historyItem li {
+        break-inside: avoid;
+    }
+}
