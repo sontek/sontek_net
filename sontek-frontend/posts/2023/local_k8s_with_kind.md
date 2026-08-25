@@ -10,13 +10,13 @@ title: Running a kubernetes cluster locally with kind
 ---
 Previously I [showed](/blog/2022/local_kubeadm_cluster) how to run kubernetes
 locally with `kubeadm` and VMs but sometimes that is overkill so I wanted to
-show how to run [kind](https://kind.sigs.k8s.io/) which is "kuberetes in
+show how to run [kind](https://kind.sigs.k8s.io/) which is "kubernetes in
 docker".
 
 # Creating your first cluster
 kind is a very flexible way to run kubernetes locally and allows you to run
-single node or multinode clusters while having the flexibility to use all
-the features of kubernetes success as ingress.
+single node or multinode clusters with access to all the features of
+kubernetes, such as ingress.
 
 To create your first cluster it is as simple as running:
 
@@ -56,7 +56,7 @@ CONTAINER ID   IMAGE                  COMMAND                  CREATED         S
 ```
 
 # Making the cluster useful
-There are a few things you'll notice with the command we ran originally:
+There are a few things you will notice with the command we ran originally:
 
 - It grabbed the latest kubernetes version available
 - It is running a single node cluster
@@ -89,12 +89,12 @@ nodes:
 - role: worker
 ```
 
-With this we've now generated a 4 node cluster where we have a single
+With this we have now generated a 4 node cluster where we have a single
 control-plane and three workers.  Then we defined some extra configuration on
 the control-plane:
 
 - **kubeadmConfigPatches**: We want to change the default configuration the
-  cluster uses so it'll tag the nodes with the `ingress-ready` label so the
+  cluster uses so it will tag the nodes with the `ingress-ready` label so the
   controller will use them.
 - **extraPortMappings**: allow the local host to make requests to the Ingress controller over ports 80/443
 - **node-labels**: only allow the ingress controller to run on specific node(s) matching the label selector
@@ -106,10 +106,10 @@ as `kind_config.yml` and then run:
 ❯ kind create cluster --image kindest/node:v1.25.11 --config kind_config.yml --name kind-multinode
 ```
 
-This time I've added a few additional flags on the commandline. `--image`
+This time I have added a few additional flags on the commandline. `--image`
 allows us to use a different version of kubernetes and `--name` allows us to
-make more than one cluster. So if you didn't destroy the first cluster you'll
-see we have two of them now:
+make more than one cluster. So if you did not destroy the first cluster you
+will see we have two of them now:
 
 ```bash
 ❯ kind get clusters
@@ -174,7 +174,7 @@ job.batch/ingress-nginx-admission-create   1/1           22s        68s
 job.batch/ingress-nginx-admission-patch    1/1           35s        68s
 ```
 
-Once `ingress-nginx-controller` is in `Running` state you are read to go!
+Once `ingress-nginx-controller` is in `Running` state you are ready to go!
 
 # Deploying your first app
 To prove that the cluster is working correctly we will deploy
@@ -296,7 +296,7 @@ spec:
 ```
 
 There are a few critical options here.  The first is the annotation to rewrite
-the path so it doesn't include `/httpbin/` when it sends the request to the
+the path so it does not include `/httpbin/` when it sends the request to the
 service and then the `path` and `pathType` so it knows which paths to send to
 which service.
 

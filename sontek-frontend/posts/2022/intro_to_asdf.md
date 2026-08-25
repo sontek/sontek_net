@@ -23,10 +23,10 @@ of plugins.
 With micro-services being all the rage and the ever changing landscape
 of the development world, it is rare to utilize a single version of
 language runtime. Even when you want to upgrade from one to the other
-you'll need both usable on your system at the same time.
+you will need both usable on your system at the same time.
 
-I've used tools like `pyenv` and `nvm` in the past when I needed to change
-versions depending on which project I'm contributing to. But with `asdf`
+I have used tools like `pyenv` and `nvm` in the past when I needed to change
+versions depending on which project I am contributing to. But with `asdf`
 you have one tool to rule them all!
 
 
@@ -47,7 +47,7 @@ yarn                         *https://github.com/twuni/asdf-yarn.git
 ```
 
 On the left will be the name of the plugin and on the right will be the repository
-where it lives.  It'll me marked with an asterisk if you already have it installed.
+where it lives.  It will be marked with an asterisk if you already have it installed.
 
 To install a plugin you say `asdf plugin add <plugin>` to get it installed.  You can
 also provide the repository where you want it pulled from, for example:
@@ -58,7 +58,7 @@ also provide the repository where you want it pulled from, for example:
 ```
 
 This will not give you any version of those languages, it is only installing the
-plugin that knows how to work with those languages.   You are ready to pull down
+plugin that knows how to work with those languages.  You are ready to pull down
 any versions you want at that point:
 
 ```bash
@@ -87,10 +87,10 @@ yarn
 ```
 
 ## Using the installed languages
-To activate a specific version of a language you have you have three options:
+To activate a specific version of a language you have three options:
 
 ### Make it global
-You can make it global, meaning when you run the tool like `python` it'll use
+You can make it global, meaning when you run the tool like `python` it will use
 this version for the system:
 
 ```bash
@@ -135,6 +135,6 @@ yarn            1.22.17         .tool-versions
 
 
 ## Conclusion
-[asdf](https://asdf-vm.com/)  is an AWESOME tool to utilize if you find yourself using many
+[asdf](https://asdf-vm.com/) is an AWESOME tool to utilize if you find yourself using many
 different languages or many different versions of the same language. You should check it out
 and see if it can improve your workflow.

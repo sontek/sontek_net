@@ -8,7 +8,7 @@ tags:
 title: AWS From Scratch with Terraform - Setting up your Root Account for IaC  with Terraform Cloud and Github actions.
 ---
 Following this article will get you setup with an AWS Root account that can be
-managed through through Terraform Cloud with OIDC and github actions. As a best practice you
+managed through Terraform Cloud with OIDC and github actions. As a best practice you
 should not keep long-lived access keys in your CI/CD pipelines when
 deploying to AWS, instead you should use OIDC (OpenID Connect) to securely
 deploy to AWS when using Terraform Cloud or Github Actions.
@@ -65,7 +65,7 @@ Terraform --> JWT[JWT & Cloud Role ID #3] --> AWS
    of the job.
 
 # What does this post accomplish
-- Setup a root AWS account that is managed througuh terraform
+- Setup a root AWS account that is managed through terraform
 - Setup OIDC authentication with Terraform Cloud so it can talk to AWS
 - Setup Github Actions authentication with Terraform Cloud so we can run plan
   and apply through the CI/CD pipeline.
@@ -89,7 +89,7 @@ Then choose `Create Access key`:
 </center>
 
 You need to set these environment variables in your shell so that your local
-shell has access to AWS. After you set them you can verify you set them correct
+shell has access to AWS. After you set them you can verify you set them correctly
 by running:
 
 ```bash
@@ -107,15 +107,15 @@ and you should get a result similar to:
 ```
 
 ## Bootstrap
-Before you can manage any of your accounts through Terraform Cloud you'll need
+Before you can manage any of your accounts through Terraform Cloud you will need to
 bootstrap some core infrastructure like OIDC so Terraform Cloud can authenticate
 securely and manage AWS Resources on your behalf.
 
 I personally prefer doing this in two repositories:
 
 - `infra-bootstrap`: This repository does the bare minimum to hook up terraform
-   cloud with your AWS account and stores the state in git.  Its the only infra
-   that will not be controlled by your CI/CD pipeline.ccccccug
+   cloud with your AWS account and stores the state in git.  It is the only infra
+   that will not be controlled by your CI/CD pipeline.
 
 - `infra`: The actual repository where all the rest of your AWS resources are
    managed.  It will store state in Terraform Cloud and you can introduce a
@@ -123,12 +123,12 @@ I personally prefer doing this in two repositories:
 
    **Note**: This repository will be generated with the terraform code.
 
-After manually creating the git repository `infra-boostrap` in your Github
+After manually creating the git repository `infra-bootstrap` in your Github
 account We will need 3 providers to bootstrap the account `aws`, `github`, and
 `tfe`.
 
 ### Variables
-Create a `1-variables.tf` where we can define the variables we'll need
+Create a `1-variables.tf` where we can define the variables we will need
    for creating these resources.
 
 ```hcl
@@ -171,7 +171,7 @@ variable "github_organization" {
 }
 
 variable "github_repo_name" {
-  description = "The name of the git reppository we'll create for managing infra"
+  description = "The name of the git repository we'll create for managing infra"
   type        = string
 }
 
@@ -188,7 +188,7 @@ variable "aws_root_account_id" {
 ```
 
 We will use these variables in the later modules but they are mostly metadata
-around the terraform and github accounts you'll need to setup manually.
+around the terraform and github accounts you will need to setup manually.
 
 ### Providers
 Create a file called `2-providers.tf` and define the providers:
@@ -227,7 +227,7 @@ provider "github" {
 ```
 
 The key things there are we define `allowed_account_ids` to prevent us from
-working against any account that isn't the root and we are using one of the
+working against any account that is not the root and we are using one of the
 variables we defines earlier.
 
 ### Github
@@ -277,7 +277,7 @@ variable named `GITHUB_TOKEN`.
 
 ### Terraform Cloud
 Now we need to setup dynamic credentials so the terraform cloud agent is
-allowed to take actions on your behalf.   To do this we'll setup an IAM
+allowed to take actions on your behalf.   To do this we will setup an IAM
 role and an OIDC provider. Create a file called `4-tfc.tf`:
 
 ```hcl
@@ -390,10 +390,10 @@ resource "tfe_variable" "tfc-role" {
 
 This module is dynamic because there is one piece that will require a
 manual oauth setup for github.  So the first pass will apply without it
-and then later on we'll create it and run the apply again.
+and then later on we will create it and run the apply again.
 
 ## Applying the changes
-Now we just need to define our settings for the module and we'll get our
+Now we just need to define our settings for the module and we will get our
 infrastructure applied.  Create a file called `settings.auto.tfvars` and
 populate it with the content for your account.  This is an example of what
 this should look like:
@@ -452,7 +452,7 @@ At this point it:
 # Verify TFC can talk to AWS
 To verify that TFC can communicate with AWS through the dynamic credentials,
 lets clone the *NEW* repository we just generated and make some dummy resources. After
-you've cloned the repository lets make a folder for the workspace `root` that we
+you have cloned the repository lets make a folder for the workspace `root` that we
 defined in bootstrap:
 
 ```bash
@@ -500,7 +500,7 @@ provider "aws" {
 **NOTE**: You should replace `organization`, `workspaces.name`, and
 `tags.Owner` to be your own values.
 
-Now create a small resource to prove everything is working, we'll use SQS for
+Now create a small resource to prove everything is working, we will use SQS for
 this. Create a file called `2-sqs.tf`:
 
 ```hcl
@@ -541,7 +541,7 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 So Terraform Cloud has full access to create AWS resources!   The final step
 is to get github running the plan/apply on pull requests. Commit these files
-to your repository and we'll remove them in a pull request. Create a
+to your repository and we will remove them in a pull request. Create a
 `.gitignore` file in the root:
 
 ```
@@ -565,11 +565,11 @@ The two most popular workflows when using terraform are:
 - **Apply before Merge**: This is the default for things like
   [Atlantis](https://www.runatlantis.io/).
 
-I don't like apply-after-merge.  There are a lot of ways where a `plan`
+I do not like apply-after-merge.  There are a lot of ways where a `plan`
 can succeed but an `apply` will fail and you end up with broken configuration
 in `main`.
 
-So in this article I'll show you how to implement **apply-before-merge** with
+So in this article I will show you how to implement **apply-before-merge** with
 github actions.
 
 All of these changes will be in the `infra` repository that was generated from
@@ -592,7 +592,7 @@ So create the folders:
 ```
 
 # On Pull Request
-The first flow we'll create is the `terraform plan` workflow which should be
+The first flow we will create is the `terraform plan` workflow which should be
 ran whenever a pull request is opened. Create the file
 `.github/workflows/on-pull-request.yml` and put this content in it:
 
@@ -664,7 +664,7 @@ jobs:
 This creates three jobs:
 
 - **terraform_validate**: This validates the terraform via `terraform validate`
-  command to make sure that it is correct and doesn't have duplicate resources
+  command to make sure that it is correct and does not have duplicate resources
   or anything like that.
 - **terraform_fmt**: This verifies that the terraform is well formatted by
   running the `terraform fmt` command.`
@@ -692,9 +692,9 @@ shows the plan:
 </center>
 
 # Apply on Label
-So now that the plan is working we need some way to `apply` the changes. I've
+So now that the plan is working we need some way to `apply` the changes. I have
 found the best way to do this is via a label rather than a comment because of
-the way github actions work. Their event based actions like `on-comment` aren't
+the way github actions work. Their event based actions like `on-comment` are not
 executed in the context of a pull-request.
 
 Since we will be using a label to signal a plan is ready to be applied lets
@@ -744,10 +744,10 @@ know the status.
 </center>
 
 # Merge on Apply
-One thing you'll notice is that the pull request stayed open even after the
-infrastructure is applied and we don't want that. We want any changes that have
+One thing you will notice is that the pull request stayed open even after the
+infrastructure is applied and we do not want that. We want any changes that have
 made it into the environment to be merged into `main` automatically. To do
-this we'll create our final action.
+this we will create our final action.
 
 Create a new file `.github/workflows/on-apply-finished.yml` with this content:
 
@@ -789,7 +789,7 @@ jobs:
 ```
 
 This will wait until the `pr_apply` job completes and as long as it was
-successful it'll merge the branch!
+successful it will merge the branch!
 
 **NOTE**: As I mentioned earlier, the event based actions do not run in the
 context of the pull request which means you cannot test changes to them during
@@ -815,7 +815,7 @@ You want to enable the following settings:
 - ✅ Require a pull request before merging
 - ✅ Require status checks to pass before merging
 
-Then for `Status checks that are required.` select all of the ones we've
+Then for `Status checks that are required.` select all of the ones we have
 created:
 
 <center>

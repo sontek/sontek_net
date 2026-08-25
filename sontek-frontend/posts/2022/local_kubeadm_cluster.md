@@ -9,13 +9,13 @@ tags:
 title: Running a kubernetes cluster locally with kubeadm
 ---
 
-I’m going to show you how to get a real kubernetes cluster setup locally on top of virtual
-machines!  I’ll be using multipass but feel free to use virtualbox, proxmox, or whatever your
+I am going to show you how to get a real kubernetes cluster setup locally on top of virtual
+machines!  I will be using multipass but feel free to use virtualbox, proxmox, or whatever your
 favorite cloud provider is.
 
-kubeadm a production ready kubernetes install tool and I prefer to use it over minikube, kind,
+kubeadm is a production ready kubernetes install tool and I prefer to use it over minikube, kind,
 etc. because it gives you a more real world experience for *managing* the kubernetes cluster. 
-This isn’t important if you are a user of the cluster but if you have to run your own this is
+This is not important if you are a user of the cluster but if you have to run your own this is
 a great way to gain some daily experience.
 
 
@@ -27,8 +27,8 @@ up to the reader such as:
 - choosing a container runtime
 - Selecting and installing a CNI (container network interface)
 
-I’m going to be opinionated and make specific technology decisions such as using containerd and
-cilium so that you don't have to think about those decisions.
+I am going to be opinionated and make specific technology decisions such as using containerd and
+cilium so that you do not have to think about those decisions.
 
 ## Getting your Virtual Machines setup!
 The minimum requirements for a control plane node in kubernetes is 2gb of RAM and 2 CPUs.  Since
@@ -38,7 +38,7 @@ a cluster that looks like this:
 - Control Plane: 2gb RAM, 2 CPU
 - Worker: 4gb RAM, 2 CPU
 
-Since we’ll be using multipass to launch the nodes, we can do that now:
+Since we will be using multipass to launch the nodes, we can do that now:
 
 ```bash
 ❯ multipass launch -c 2 -m 4G -d 10G -n controlplane 22.04
@@ -48,13 +48,13 @@ Name                    State             IPv4             Image
 controlplane            Running           192.168.64.7     Ubuntu 22.04 LTS
 worker                  Running           192.168.64.8     Ubuntu 22.04 LTS
 ```
-Now we can start working on our controlplane first, lets shell in:
+Now we can start working on our controlplane first, let us shell in:
 
 ```bash
 ❯ multipass shell controlplane
 ```
 
-Lets first add the kubernetes repo to the system so we have access to all the kubernetes tools:
+Let us first add the kubernetes repo to the system so we have access to all the kubernetes tools:
 
 ```bash
 ❯ echo "deb  http://apt.kubernetes.io/  kubernetes-xenial  main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -67,10 +67,10 @@ Now that our system is setup, we can move on to getting a container runtime.
 
 ## Getting your Container Runtime!
 Before we start pulling in kubernetes components we need to get a container runtime setup on the
-machine.   We we are going to use containerd for this purpose.  You can view the docs of for it
+machine.   We are going to use containerd for this purpose.  You can view the docs of for it
 [here](https://github.com/containerd/containerd/blob/main/docs/getting-started.md).
 
-Which will download the latest binary and set it up.   I’m going to walk you through how to do it
+Which will download the latest binary and set it up.   I am going to walk you through how to do it
 using the version packaged with Ubuntu which could be older than the latest release.
 
 First thing we want to do is configure the networking to allow iptables to manage:
@@ -136,7 +136,7 @@ net.ipv4.conf.lxc0965b7b545f7.rp_filter = 0
 net.ipv4.conf.lxcb05ffd84ab74.rp_filter = 0
 ```
 
-Now lets pull down the container runtime we’ll be using which is containerd.
+Now let us pull down the container runtime we will be using which is containerd.
 
 Ubuntu ships with a very old version of containerd so you need to upgrade to
 the version shipped from the docker repos:
@@ -163,7 +163,7 @@ We are going to use the latest version available which was 1.6.8-1
 ❯ sudo apt-get install containerd.io=1.6.8-1 -y
 ```
 
-Then we'll setup a configuration that enables containerd to use the systemd
+Then we will setup a configuration that enables containerd to use the systemd
 cgroup.  We are hard coding this config instead of using `containerd config default`
 because that currently has had a [bug](https://github.com/containerd/containerd/issues/4574)
 for many years that generates an invalid config.
@@ -184,7 +184,7 @@ EOF
 ❯ sudo systemctl restart containerd.service
 ```
 
-You can verify its running with ctr:
+You can verify it is running with ctr:
 ```bash
 ❯ sudo ctr --address /var/run/containerd/containerd.sock containers list
 CONTAINER    IMAGE    RUNTIME
@@ -194,7 +194,7 @@ Now that this is working we can move on to getting kubernetes installed!
 
 ## Using kubeadm!
 
-Now we need to get the kubernetes tools installed onto the system.  I’m going to be using 1.23
+Now we need to get the kubernetes tools installed onto the system.  I am going to be using 1.23
 but to find the latest version you can run:
 
 ```bash
@@ -231,7 +231,7 @@ Once that finishes running it should give you some tips setup your configuration
 ❯ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-You can run those on the master node for now, but later I'll show you how to move
+You can run those on the master node for now, but later I will show you how to move
 the config to your host computer.
 
 Now you should be able to check that your node is not ready yet:
@@ -242,11 +242,11 @@ NAME           STATUS     ROLES                  AGE     VERSION
 controlplane   NotReady   control-plane,master   4m16s   v1.23.5
 ```
 
-*Note*: If you recieve "The connecto to the server was refused" error,
+*Note*: If you receive "The connection to the server was refused" error,
 The cluster starting up and getting all the dependencies running could take
-a bit of time.  So if you aren't able to communicate right away you can check
-which pods are up and running with `crictl`.  You'll need `kube-apiserver` up
-and running.  If it isn't you can check:
+a bit of time.  So if you are not able to communicate right away you can check
+which pods are up and running with `crictl`.  You will need `kube-apiserver` up
+and running.  If it is not you can check:
 
 ```bash
 ❯ sudo crictl --runtime-endpoint=unix:///var/run/containerd/containerd.sock ps -a
@@ -264,7 +264,7 @@ kube-apiserver and read its logs:
 ❯ sudo crictl --runtime-endpoint=unix:///var/run/containerd/containerd.sock logs 10432b81d7c61
 ```
 
-There are a few ways to figure out why the node isn’t ready yet.  Usually I would check the
+There are a few ways to figure out why the node is not ready yet.  Usually I would check the
 `kubelet` logs first:
 
 ```bash
@@ -289,11 +289,11 @@ might see something useful.  In this case under `Lease` you would see:
 Ready            False   Sun, 17 Apr 2022 20:53:37 -0400   Sun, 17 Apr 2022 20:43:07 -0400   KubeletNotReady              container runtime network not ready: NetworkReady=false reason:NetworkPluginNotReady message:Network plugin returns error: cni plugin not initialize
 ```
 
-Lets get our CNI installed, we’ll be using cilium!
+Let us get our CNI installed, we will be using cilium!
 
 ## Setting up your CNI!
 Cilium has great documentation over [here](https://docs.cilium.io/en/v1.9/gettingstarted/k8s-install-kubeadm/),
-but I’ll walk you through it anyways.  I do recommend checking out their documentation so you
+but I will walk you through it anyways.  I do recommend checking out their documentation so you
 are familiar with it.   We will use `helm` to pull down the version of cilium we want:
 
 ```bash
@@ -308,7 +308,7 @@ are familiar with it.   We will use `helm` to pull down the version of cilium we
 ```
 
 Now we can install cilium!  It is *very* important that you pay attention to the
-compatibility of cilium with the version of kubernetes you are intstalling. Check
+compatibility of cilium with the version of kubernetes you are installing. Check
 the compatibility list [here](https://docs.cilium.io/en/v1.12/concepts/kubernetes/compatibility/).
 
 ```bash
@@ -347,8 +347,8 @@ Time to join our worker to the cluster!
 
 ## Joining a worker to the cluster!
 We have to go through the same steps as the controlplane to get the point that we have a
-container runtime and `kubeadm`.   I’m not going to talk about the commands a second time but
-I’ll re-iterate them here for ease of following along.
+container runtime and `kubeadm`.   I am not going to talk about the commands a second time but
+I will re-iterate them here for ease of following along.
 
 First open up another shell and connect to the worker:
 
@@ -402,7 +402,7 @@ EOF
 ```
 
 From there we should be ready to join the cluster.   When we ran `kubeadm init` previously it
-printed a join command out that we could use but I’m going to show you how to do it if you
+printed a join command out that we could use but I am going to show you how to do it if you
 were coming back later and no longer had that token.
 
 Back on the *controplane* node run:
@@ -418,7 +418,7 @@ Now copy that command and run it with `sudo` on the worker:
 ❯ sudo kubeadm join 192.168.64.7:6443 --token wxs197.cco6mjj9ricvu8ov --discovery-token-ca-cert-hash sha256:bd01c065240fa76f30a02ecb70a8cea6e329c9678994d4da1f6ccac7694b97fb
 ```
 
-After this completes it’ll take a minute or two for everything to be synced up but if you go
+After this completes it will take a minute or two for everything to be synced up but if you go
 back to the master node you should have 2 ready nodes now:
 
 ```bash
@@ -436,7 +436,7 @@ it from outside of the cluster.   To do this we can use scp
 multipass transfer controlplane:/home/ubuntu/.kube/config local.config
 ```
 
-Normally kubernetes configuration is in ~/.kube/config but I like to maint a separate file for
+Normally kubernetes configuration is in ~/.kube/config but I like to maintain a separate file for
 each cluster and then I set the `KUBECONFIG` env var to access it. 
 
 ```bash

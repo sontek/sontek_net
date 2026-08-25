@@ -8,7 +8,7 @@ title: Speed up github actions with conditional jobs, even with required checks
 ---
 Having every github action run on every pull request will end up slowing you
 down and sometimes even discourage you from making changes.  For example, if you
-see an error in the `README.md` but you know you'll have to wait for the entire
+see an error in the `README.md` but you know you will have to wait for the entire
 test suite to run you may choose not to push the change.
 
 # Path Filtering
@@ -37,7 +37,7 @@ on:
 ```
 
 Although the path filtering feature of github works, I do not recommend using
-it because it has some critical issues that I'll talk about below!
+it because it has some critical issues that I will talk about below!
 
 # Branch Protection / Required Checks
 Path Filtering has one major flaw which is that it skips the run of the job
@@ -80,7 +80,7 @@ files like `tests`, `docs`, etc. and conditionally do things if each of them
 changed.
 
 So from our example, this step will generate output we can use `steps.changed-files-yaml.outputs.src_any_changed`
-that is either `true` or `false.`. To use this we can us the `if` conditional
+that is either `true` or `false`. To use this we can use the `if` conditional
 block on our jobs.
 
 ```yaml
@@ -92,7 +92,7 @@ steps:
             --TERRAFORM_VERSION=${{ env.RTX_TERRAFORM_VERSION }}
 ```
 
-This will then skip linting if we didn't change any terraform and the job will
+This will then skip linting if we did not change any terraform and the job will
 be marked successful!
 
 <center>
@@ -101,7 +101,7 @@ be marked successful!
 
 This can be confusing sometimes and the people you work with (or future you!)
 may wonder why these critical checks are being skipped.   I like to include
-a message with the decision that was made so its obvious that we wanted to skip
+a message with the decision that was made so it is obvious that we wanted to skip
 them:
 
 ```yaml

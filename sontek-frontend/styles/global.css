@@ -112,14 +112,16 @@ img {
     text-align: center;
 }
 
-div[data-rehype-pretty-code-fragment] pre, .highlight {
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border-radius: 5px;
+figure[data-rehype-pretty-code-figure] pre, .highlight {
+    padding: 16px 20px;
+    border-radius: 8px;
     overflow-x: auto;
     overflow-y: hidden;
+}
+
+figure[data-rehype-pretty-code-figure] code {
+    display: grid;
+    padding: 0;
 }
 
 pre {
