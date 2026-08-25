@@ -8,14 +8,14 @@ tags:
 title: How to speak spanish like a colombian drug lord!
 ---
 
-I've been living in Puerto Rico for 4 years but two of those have been COVID and so I haven't been able to practice Spanish as much as I'd like. So to speed up my learning I've decided I want to watch a lot of spanish speaking television to start training my ears, but to do this I need a baseline of words I understand to be able to even know what they are saying!
+I have been living in Puerto Rico for 4 years but two of those have been COVID and so I have not been able to practice Spanish as much as I would like. So to speed up my learning I have decided I want to watch a lot of spanish speaking television to start training my ears, but to do this I need a baseline of words I understand to be able to even know what they are saying!
 
-Learning through apps like Duolingo, Drops, etc start with weird topics like vegetables that don't get you to a very good baseline for actually understanding daily conversations, so I think consuming TV is a better use of my time. 
+Learning through apps like Duolingo, Drops, etc start with weird topics like vegetables that do not get you to a very good baseline for actually understanding daily conversations, so I think consuming TV is a better use of my time. 
 
 ## Subtitles
-I've decided the way to understand what the best words to study are is to download every subtitle for every episode of a show I want to watch and then count each word.  The more a word is spoken the more important it is for me to know it since I'll be hearing it a lot in the show.
+I have decided the way to understand what the best words to study are is to download every subtitle for every episode of a show I want to watch and then count each word.  The more a word is spoken the more important it is for me to know it since I will be hearing it a lot in the show.
 
-I'm going to download subtitles from Netflix. Subtitles in Netflix are in WebVTT format, which looks like this:
+I am going to download subtitles from Netflix. Subtitles in Netflix are in WebVTT format, which looks like this:
 
 ```
 248
@@ -36,7 +36,7 @@ It gives you a start time, end time, and the text on the screen.   So my first p
 
 
 ### Dummy parsing 
-What I basically did was `text.split(" ")` and started counting the words.   This approach was quick and painless but it had a few downs falls.    Some words *look* the same when in reality they are not and so this meant I'd have to study every meaning of a word even if it was more rare.
+What I basically did was `text.split(" ")` and started counting the words.   This approach was quick and painless but it had a few downsides.    Some words *look* the same when in reality they are not and so this meant I would have to study every meaning of a word even if it was more rare.
 
 An example of this is the word "como", you can say:
 
@@ -46,7 +46,7 @@ An example of this is the word "como", you can say:
 I need to know which version of a word is being used so I can count it properly.
 
 ### Regular Expressions are always the answer
-I couldn't figure out what the word was without it being in a complete sentence, but subtitles are fragments.   They are split up into timings for displaying on the screen but they don't include entire sentences.  For example, it might look like this:
+I could not figure out what the word was without it being in a complete sentence, but subtitles are fragments.   They are split up into timings for displaying on the screen but they do not include entire sentences.  For example, it might look like this:
 
 ```
 23
@@ -58,12 +58,12 @@ Solo las que luchan por ellos
 consiguen sus sueños.
 ```
 
-I want to detect the start of a sentence and the end of a sentence and then combine it, so that you end up with "Solo las que luchan por ellos consiguen sus sueños.".   My first thought was a regular expression on punctuation.   This worked well *most* of the time but there were enough exceptions to the rule that it broke often on generated a lot of broken sentences:
+I want to detect the start of a sentence and the end of a sentence and then combine it, so that you end up with "Solo las que luchan por ellos consiguen sus sueños.".   My first thought was a regular expression on punctuation.   This worked well *most* of the time but there were enough exceptions to the rule that it broke often and generated a lot of broken sentences:
 
 - Abbreviations like "EE. UU" for estados unidos (united states)
 - Ellipsis
 
-Splitting on spaces also didn't work for identifying the parts of speech since I needed the context around the word.
+Splitting on spaces also did not work for identifying the parts of speech since I needed the context around the word.
 
 <center>
 <img src="/images/posts/learning_spanish/regex-extraction.png" />
@@ -72,7 +72,7 @@ Splitting on spaces also didn't work for identifying the parts of speech since I
 ## Natural Language Processing
 So to solve my pain I decided to grab https://spacy.io/ and do some NLP on the subtitles so that I could identify the proper parts of speech and get an accurate representation of the words I needed to learn.
 
-The way spaCy works is you can send it a sentence and it'll return you a set of tokens:
+The way spaCy works is you can send it a sentence and it will return you a set of tokens:
 
 ```
 >>> import spacy
@@ -81,7 +81,7 @@ The way spaCy works is you can send it a sentence and it'll return you a set of 
 ['PROPN', 'PUNCT', 'SCONJ', 'PRON', 'PUNCT']
 ```
 
-So now I could identify the parts of speech and pull sentences together through end of sentence punctation.   The first thing I did was generate a CSV of sentences that looked like this:
+So now I could identify the parts of speech and pull sentences together through end of sentence punctuation.   The first thing I did was generate a CSV of sentences that looked like this:
 
 <table>
 <tr>
@@ -168,13 +168,13 @@ Which returned a list of words and their count:
 8	el	35920
 ```
 
-Now I wanted to identify where my diminishing returns would be.   Is there a set of words that I must learn because they are spoken so often that I wouldn't understand a conversation if they weren't in my vocabulary?
+Now I wanted to identify where my diminishing returns would be.   Is there a set of words that I must learn because they are spoken so often that I would not understand a conversation if they were not in my vocabulary?
 
 <center>
 <img src="/images/posts/learning_spanish/diminishing_returns.png" />
 </center>
 
-As you can see in this chart, the usage for words drops off at around the ~200 mark.   So there are basically 150 words I *must* know and then the rest are equally important.   I wasn't quite happy with this because some parts of speech are higher priority than others, for example I think having a strong understanding of the popular verbs will go a long way.  So I also wanted to identify what are the most important verbs to learn:
+As you can see in this chart, the usage for words drops off at around the ~200 mark.   So there are basically 150 words I *must* know and then the rest are equally important.   I was not quite happy with this because some parts of speech are higher priority than others, for example I think having a strong understanding of the popular verbs will go a long way.  So I also wanted to identify what are the most important verbs to learn:
 
 ```
 grouped_verbs = (words[words.pos == 'VERB'].groupby(['word', 'pos']).size() 
@@ -388,7 +388,7 @@ p_df
 
 </table>
 
-But living in Puerto Rico, one thing I've realized is speed of speech is also important.  I have a much easier time speaking with people from Colombia and Mexico than I do with Puerto Ricans because they speak so much faster.   So even though I could understand 75% of "Tarde para la ira" if I learned the 200 words, I want to make sure they are speaking at a pace I could understand as well.
+But living in Puerto Rico, one thing I have realized is speed of speech is also important.  I have a much easier time speaking with people from Colombia and Mexico than I do with Puerto Ricans because they speak so much faster.   So even though I could understand 75% of "Tarde para la ira" if I learned the 200 words, I want to make sure they are speaking at a pace I could understand as well.
 
 So I loaded up the other CSV file that was the full sentences and added a "time per word" column:
 
@@ -509,7 +509,7 @@ sentence_group.time_per_word.mean().reset_index().sort_values('time_per_word')
 
 </table>
 
-Luckily the two series that have the least amount of vocabulary also speak the slowest!   So these will be the series I start with.    The final question I wanted to answer is "What are the top words I'm missing for a series".    Since I'll know 75% of the series from the top 200 words, I'm hoping there are some top words from a specific series that I can also learn to get an even higher understanding.
+Luckily the two series that have the least amount of vocabulary also speak the slowest!   So these will be the series I start with.    The final question I wanted to answer is "What are the top words I am missing for a series".    Since I will know 75% of the series from the top 200 words, I am hoping there are some top words from a specific series that I can also learn to get an even higher understanding.
 
 First, find which words are in each show but not in the top 200:
 
@@ -549,7 +549,7 @@ So adding those few words to my vocabulary will also give me a better understand
 ## Conclusion
 I believe a data-driven approach to language learning will be an effective way to get me speaking better spanish.   It was a ton of fun to play with spaCy, pandas, and jupyter as well!
 
-I'll improve the data analysis over time as well but I do believe this is a pretty good starting point!
+I will improve the data analysis over time as well but I do believe this is a pretty good starting point!
 
 <center>
 <img src="/images/posts/learning_spanish/meme.png" />

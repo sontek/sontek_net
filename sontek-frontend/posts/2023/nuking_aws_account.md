@@ -7,14 +7,14 @@ tags:
     - SRE
 title: Wiping an AWS Account with aws-nuke
 ---
-When you're an SRE/DevOps engineer you'll end up making AWS accounts and
+When you are an SRE/DevOps engineer you will end up making AWS accounts and
 create a lot of cruft in your sandbox and development accounts. AWS
 does not make it easy to clear these up but there is a tool called
 [aws-nuke](https://github.com/rebuy-de/aws-nuke) that will do it for you!
 
 # Safe Guards
 aws-nuke has a few safeguards in place to prevent inadvertent data loss.
-The first of which is it requires you to alias the targetted account. I
+The first of which is it requires you to alias the targeted account. I
 like to put `nuke` in the alias to make it clear.
 
 ```bash
@@ -115,10 +115,10 @@ regions:
   - us-west-2
 ```
 
-I personally don't recommend targetting all AWS regions at the same time.  It
+I personally do not recommend targeting all AWS regions at the same time.  It
 will generate a lot of output and be slow.  You could do it if necessary but
 most people only have a few regions they use and so they can set those directly.
-For example it, maybe you only use `us-` based regions?
+For example, maybe you only use `us-` based regions?
 
 
 So lets run the dry-run and see what it wants to nuke:
@@ -160,7 +160,7 @@ resource that should catch your eye that you probably do not want to delete:
 
 - `arn:aws:iam::777777777777:saml-provider/AWSSSO_254abb4071f10b25_DO_NOT_DELETE`
 
-AWS clearly doesn't want us to delete that!
+AWS clearly does not want us to delete that!
 
 # Filters
 To prevent nuke from deleting resources you want to keep you can define presets
@@ -181,7 +181,7 @@ presets:
       - type: "glob"
         value: "AWSReservedSSO_*"
 ```
-You can see in this example I'm targetting specific resource types and then
+You can see in this example I am targeting specific resource types and then
 matching them with both `regex` and `glob` filter types. These are super
 powerful but a lot of times the simpler filters can be used.  I start with
 `contains` filter and then go from there:
@@ -264,9 +264,9 @@ Once you are ready and have your filters in place you can run it for real!
 # Next steps
 One final note about it is that it does not understand the relationship between
 resources and so it could try deleting an EBS volume that is still in use by an
-EC2 instance.  There isn't a great solution for this outside of running nuke a
+EC2 instance.  There is not a great solution for this outside of running nuke a
 few times.
 
-The tool is well documented and so you can find the rest of information going to 
+The tool is well documented and so you can find the rest of the information by going to 
 [https://github.com/rebuy-de/aws-nuke](https://github.com/rebuy-de/aws-nuke)!
 
