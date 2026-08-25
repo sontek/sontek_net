@@ -7,10 +7,27 @@ tags:
     - Security
 title: eksclustergames.com walk through!
 ---
+
+**The short version: this is a hacking game where every level hides a secret password (called a "flag") inside a real cloud setup, and each challenge below is one more wrong assumption that a Kubernetes/AWS team made when they configured it.**
+
 [eksclustergames.com](https://eksclustergames.com) is a new CTF targeted at
 kubernetes vulnerabilities. This is a walk through on how to solve the issues.
 
+A quick note on vocabulary before we start: a "CTF" (Capture The Flag) is a
+security game where you're given access to a deliberately broken system and
+your job is to find a hidden piece of text called a "flag" in each level,
+usually formatted like `event_name{some_words_here}`. Finding the flag proves
+you found and exploited the bug. Nothing here is theoretical: every command
+below is a real command run against a real (practice) AWS/Kubernetes
+environment, and every flag has been redacted so this post doesn't just hand
+out the answers.
+
 # Challenge 1
+This challenge is about what happens when anyone who can log into the cluster
+is also allowed to read every password stored in it. In Kubernetes, a
+"secret" is meant to be a locked box for sensitive values like passwords,
+API keys, or tokens, but a locked box only helps if not everyone has the key.
+
 The first challenge starts off with a clue:
 
 ```
@@ -57,7 +74,10 @@ Since there is only one, let us view it!
 ```
 
 The flag seems to be in `.items[0].data.flag` and is `base64` encoded so we can
-decode it as well:
+decode it as well. Base64 is not encryption, it's just a way to turn arbitrary
+bytes into plain text characters so they're safe to stuff into JSON. Anyone
+can reverse it instantly with a single command, so a "base64 encoded" secret
+is not a protected secret, it's just a secret written in a different font:
 
 ```bash
 ❯ kubectl get secret -o json|jq '.items[0].data.flag' -r | base64 -d
@@ -69,6 +89,15 @@ This one was definitely a softball but it gets you nice and warmed up on the
 platform.
 
 # Challenge 2
+This challenge is about what happens when the "keys to the front door" of a
+private image warehouse get left somewhere findable. A container image is
+basically a zip file with an app and everything it needs to run bundled
+inside, and it's usually built up in layers, like a stack of transparent
+sheets, where each layer records one step of how the image was built. A
+container registry is just the warehouse that stores and serves those images,
+similar to how Docker Hub or Amazon's ECR work. If a registry is private,
+you need credentials to pull images from it, same as a private GitHub repo.
+
 The hint for this challenge is:
 
 ```
@@ -96,7 +125,9 @@ With only one pod as a target, let us get the image for it:
 
 So it is on standard `docker.io` registry instead of a private one like I was
 expecting from the clue.   The second hint was that crane is on the system so
-let us use that to pull the image and inspect it:
+let us use that to pull the image and inspect it. (`crane` is a small
+command-line tool for poking at container images and registries directly,
+without needing Docker installed.)
 
 ```bash
 ❯ crane config eksclustergames/base_ext_image 
@@ -205,6 +236,12 @@ wiz_eks_challenge{nothing_can_be_said_to_*REDACTED*}'
 So let us submit that and move onto the next one!
 
 # Challenge 3
+This challenge is the same lesson as Challenge 2, but the secret lives on
+Amazon's private registry (ECR, short for Elastic Container Registry) and
+we're doing it from inside a real, "compromised" pod, meaning the attacker
+already has a shell running in one of the cluster's containers and is trying
+to see how far that foothold reaches into AWS itself.
+
 The hint is:
 
 ```
@@ -216,7 +253,12 @@ Remember: You are running inside a compromised EKS pod.
 
 This sounds very similar to the last one but with the hints that it is on ECR and
 that we are in the pod itself it makes me believe we will have something like IRSA
-access to AWS from the pod and need to use that to get to it.
+access to AWS from the pod and need to use that to get to it. IRSA stands for
+"IAM Roles for Service Accounts," AWS's mechanism that lets a Kubernetes pod
+borrow a specific AWS permission set without anyone hardcoding an AWS access
+key into the pod. We haven't set any of that up ourselves here, but the
+cluster's worker machines (the EC2 "nodes" that pods run on) each carry their
+own AWS identity too, and that's the door we're about to walk through.
 
 First let us check what pods we are working with:
 
@@ -249,7 +291,13 @@ Unable to locate credentials. You can configure credentials by running "aws conf
 ```
 
 Credentials are not configured right now, so we need to discover them.  Let us
-check if we have metadata server access:
+check if we have metadata server access. Every EC2 machine can talk to a
+special internal-only address, `169.254.169.254`, called the instance
+metadata server. It answers questions like "what AWS role am I running as"
+and, critically, will hand back temporary AWS credentials for that role to
+anything running on the machine that asks. It's meant only for the machine
+itself to use, but if an attacker's process can reach that address, it can
+ask too:
 
 ```bash
 ❯ curl http://169.254.169.254/latest/meta-data/iam
@@ -284,6 +332,14 @@ export AWS_SESSION_TOKEN="FwoGZXIvYXdzEBQaDAM9SyNaDBowmWoT1SK3AbqDZUQpyn<*REDACT
     "Arn": "arn:aws:sts::688655246681:assumed-role/eks-challenge-cluster-nodegroup-NodeInstanceRole/i-0cb922c6673973282"
 }
 ```
+
+That `Arn` line is worth pausing on: it says we are now "assumed-role"
+`NodeInstanceRole`. An IAM role in AWS is a reusable bundle of permissions
+(not tied to one specific person), and "assuming" a role means getting
+temporary credentials that act with that role's permissions instead of your
+own. STS (Security Token Service) is the AWS service that hands out those
+temporary credentials, which is exactly what we just did by reading them off
+the metadata server.
 
 Now we should be able to authenticate crane and inspect the image from ECR:
 
@@ -354,6 +410,10 @@ wiz_eks_challenge{the_history_of_container_images_could_reveal<*REDACTED*>}
 Time for challenge 4!
 
 # Challenge 4
+This challenge is about privilege escalation: starting from an identity with
+almost no permissions and finding a path to one with a lot more. This is the
+core skill in most real-world Kubernetes breakins, since attackers rarely
+land somewhere powerful, they land somewhere weak and then look for a way up.
 
 The hint:
 
@@ -362,6 +422,14 @@ You're inside a vulnerable pod on an EKS cluster. Your pod's service-account has
 no permissions. Can you navigate your way to access the EKS Node's privileged
 service-account?
 ```
+
+A quick definition before we dive in: a Kubernetes "service account" is an
+identity that a pod uses to talk to the Kubernetes API, the same way a human
+user has a username to log in. RBAC (Role-Based Access Control) is the
+permission system that decides what each identity, human or service account,
+is allowed to do. `kubectl auth can-i --list` is the command you run to ask
+"what am I actually allowed to do right now," which is the RBAC equivalent
+of checking your own ID badge.
 
 This sounds like we are going to need to escalate our privileges through the AWS
 access we acquired in the last challenge. Let us start with inspecting the
@@ -443,7 +511,11 @@ is at least worth trying it:
 }
 ```
 
-This gets us a token, so let us try to use it:
+This gets us a token, so let us try to use it. This is important: `aws eks
+get-token` doesn't create a new Kubernetes identity out of thin air, it takes
+our AWS role and turns it into a Kubernetes login token, because EKS is
+configured to trust anyone holding valid credentials for certain AWS roles as
+also being a valid Kubernetes user:
 
 ```bash
 ❯ export TOKEN=$(aws eks get-token --cluster-name eks-challenge-cluster|jq '.status.token' -r)
@@ -513,6 +585,12 @@ wiz_eks_challenge{only_a_real_pro_can_navigate_<*REDACTED*>}
 ```
 
 # Challenge 5
+This is the final challenge, and it's about jumping the fence between
+Kubernetes and AWS in the *other* direction: using a specific pod identity to
+become a specific AWS role, which is exactly what IRSA is supposed to make
+possible for legitimate workloads, and exactly what an attacker wants to
+abuse if it's set up loosely.
+
 The hint:
 
 ```
@@ -622,8 +700,11 @@ look at that service account we want to become:
 }
 ```
 
-I think we are going to need to use our AWS access to assume that role, I do not
-believe our kubernetes access is going to get us anywhere:
+That `eks.amazonaws.com/role-arn` annotation is the IRSA link mentioned
+earlier: it tells Kubernetes "any pod using this service account should be
+able to become this specific AWS IAM role." I think we are going to need to
+use our AWS access to assume that role, I do not believe our kubernetes
+access is going to get us anywhere:
 
 ```bash
 ❯ aws sts assume-role --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test
@@ -632,7 +713,15 @@ An error occurred (AccessDenied) when calling the AssumeRole operation: User: ar
 ```
 
 Ok, so *maybe* our kubernetes access is important since we cannot assume the role
-directly.   Let us try to use that $TOKEN from `debug-sa` to assume the role:
+directly.   Let us try to use that $TOKEN from `debug-sa` to assume the role.
+This is a different flavor of role assumption called
+`AssumeRoleWithWebIdentity`: instead of proving who you are with an AWS
+access key, you hand AWS a signed Kubernetes token (a "web identity") and AWS
+checks it against the trust relationship configured on the role, via OIDC.
+OIDC (OpenID Connect) is the standard that lets one system (here, the EKS
+cluster) issue tokens that another system (AWS IAM) can verify without the
+two systems sharing a direct login, which is the actual plumbing underneath
+IRSA:
 
 ```bash
 ❯ aws sts assume-role-with-web-identity --role-arn arn:aws:iam::688655246681:role/challengeEksS3Role --role-session-name test --web-identity-token $TOKEN
@@ -641,7 +730,11 @@ An error occurred (InvalidIdentityToken) when calling the AssumeRoleWithWebIdent
 ```
 
 Getting closer!   The default audience for a token created with `kubectl` is
-`https://kubernetes.default.svc` which amazon does not seem to like.  Let us try
+`https://kubernetes.default.svc` which amazon does not seem to like. A
+token's "audience" is a field baked into it that says who the token is meant
+for, so a token minted for talking to the Kubernetes API isn't automatically
+valid for talking to AWS STS, even if it's otherwise a legitimate,
+correctly-signed token for the same service account. Let us try
 creating it again with `sts.amazonaws.com`:
 
 ```bash

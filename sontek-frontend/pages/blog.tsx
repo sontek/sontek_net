@@ -60,10 +60,7 @@ export default function Home({ allPostsData, allTagData }) {
                                         Published on <Date dateString={date} />
                                     </small>
                                     <MermaidContent
-                                        html={
-                                            htmlSubstring(contentHtml, 300) +
-                                            "..."
-                                        }
+                                        html={htmlSubstring(contentHtml, 300)}
                                     />
                                 </article>
                             </li>

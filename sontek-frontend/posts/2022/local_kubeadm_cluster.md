@@ -27,6 +27,10 @@ up to the reader such as:
 - choosing a container runtime
 - Selecting and installing a CNI (container network interface)
 
+A CNI is the plugin that gives every container an IP address and lets it talk to other
+containers, even across different machines. Kubernetes doesn't ship with networking built in,
+it just calls out to a CNI plugin to handle that.
+
 I am going to be opinionated and make specific technology decisions such as using containerd and
 cilium so that you do not have to think about those decisions.
 
@@ -34,6 +38,12 @@ cilium so that you do not have to think about those decisions.
 The minimum requirements for a control plane node in kubernetes is 2gb of RAM and 2 CPUs.  Since
 we actually want to be able to schedule workloads on the workers afterwards we are going to setup
 a cluster that looks like this:
+
+Quick vocab check before the numbers: a "node" is just Kubernetes-speak for one machine in the
+cluster. The control plane node is the brain, it decides what runs where and tracks the cluster's
+state, but it doesn't run your application containers by default. A worker node's whole job is
+running your application containers. You'll also see the word "pod" later on, that's the smallest
+unit Kubernetes schedules, usually one or a few containers running together.
 
 - Control Plane: 2gb RAM, 2 CPU
 - Worker: 4gb RAM, 2 CPU
@@ -91,6 +101,11 @@ EOF
 We also need to disable some default systemd settings for `rp_filter`  because
 they are not compatible with cilium. See the bug report
 [here](https://github.com/cilium/cilium/commit/cabc6581b8128681f4ed23f8d6dc463180eea61e)
+
+`rp_filter` (reverse path filtering) is a kernel check that drops packets arriving from a
+direction the kernel doesn't expect. It's a defense against spoofed traffic and a good default on
+most machines. But cilium builds its own virtual network paths that trip this check, so we have
+to turn it off everywhere for cilium to work.
 
 ```bash
 ❯ sudo sed -i -e '/net.ipv4.conf.*.rp_filter/d' $(grep -ril '\.rp_filter' /etc/sysctl.d/ /usr/lib/sysctl.d/)
@@ -167,6 +182,12 @@ Then we will setup a configuration that enables containerd to use the systemd
 cgroup.  We are hard coding this config instead of using `containerd config default`
 because that currently has had a [bug](https://github.com/containerd/containerd/issues/4574)
 for many years that generates an invalid config.
+
+A cgroup (control group) is a Linux kernel feature that limits and tracks how much CPU, memory,
+and other resources a process can use. It's how containers get boxed in so one of them can't eat
+all the machine's resources. Both containerd and systemd can manage cgroups, and they need to
+agree on who's in charge. The config below tells containerd to let systemd handle it, which is
+what Kubernetes expects.
 
 ```bash
 ❯ cat <<EOF | sudo tee /etc/containerd/config.toml

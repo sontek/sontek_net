@@ -6,6 +6,7 @@ import blogStyles from "../../../styles/blog.module.css";
 import Link from "next/link";
 import Date from "../../../src/components/date";
 import MermaidContent from "../../../src/components/mermaid-content";
+import { htmlSubstring } from "../../../src/lib/html";
 
 export async function getStaticPaths() {
     const tags = await getAllTags();
@@ -56,7 +57,7 @@ export default function TagList({ id, allTagData }) {
                                 <Date dateString={date} />
                             </small>
                             <MermaidContent
-                                html={contentHtml.substring(0, 400) + "..."}
+                                html={htmlSubstring(contentHtml, 400)}
                             />
                         </article>
                     </li>

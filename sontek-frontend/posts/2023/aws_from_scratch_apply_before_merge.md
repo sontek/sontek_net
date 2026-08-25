@@ -13,6 +13,12 @@ should not keep long-lived access keys in your CI/CD pipelines when
 deploying to AWS, instead you should use OIDC (OpenID Connect) to securely
 deploy to AWS when using Terraform Cloud or Github Actions.
 
+**Terraform** is a tool for describing your cloud infrastructure as text
+files instead of clicking around in a web console. That practice is called
+**IaC**, short for "Infrastructure as Code." OIDC (OpenID Connect) lets AWS
+hand out a credential that expires in minutes, generated fresh for each job,
+instead of a permanent password sitting in your CI secrets.
+
 <iframe width="854" height="480" src="https://www.youtube.com/embed/3oZd1m8_KIo"
     title="AWS From Scratch - Preparing your account to be managed by IaC via Terraform and Github Actions"
     frameborder="0"
@@ -64,6 +70,12 @@ Terraform --> JWT[JWT & Cloud Role ID #3] --> AWS
    provides a short-lived cloud access token that is available only for the duration
    of the job.
 
+An **IAM role** is AWS's way of defining a set of permissions and who is
+allowed to use them. A **JWT** (JSON Web Token) is the signed token
+Terraform Cloud presents to AWS to prove its identity. It works like a hall
+pass with a signature on it, one AWS can verify without calling anyone to
+check.
+
 # What does this post accomplish
 - Setup a root AWS account that is managed through terraform
 - Setup OIDC authentication with Terraform Cloud so it can talk to AWS
@@ -107,6 +119,13 @@ and you should get a result similar to:
 ```
 
 ## Bootstrap
+This is the chicken and egg part. Before Terraform Cloud can manage your AWS
+account for you, something has to create the first pieces that let Terraform
+Cloud talk to AWS at all. That something is you, running Terraform by hand,
+one time, against the very account you're about to put under automation.
+Everything you build here becomes the foundation the rest of the automation
+stands on.
+
 Before you can manage any of your accounts through Terraform Cloud you will need to
 bootstrap some core infrastructure like OIDC so Terraform Cloud can authenticate
 securely and manage AWS Resources on your behalf.
@@ -276,9 +295,11 @@ variable named `GITHUB_TOKEN`.
 
 
 ### Terraform Cloud
-Now we need to setup dynamic credentials so the terraform cloud agent is
-allowed to take actions on your behalf.   To do this we will setup an IAM
-role and an OIDC provider. Create a file called `4-tfc.tf`:
+Now we need to setup dynamic credentials, meaning Terraform Cloud requests a
+fresh short-lived AWS credential for every run instead of using a stored
+password, so the terraform cloud agent is allowed to take actions on your
+behalf. To do this we will setup an IAM role and an OIDC provider. Create a
+file called `4-tfc.tf`:
 
 ```hcl
 resource "tfe_organization" "organization" {
@@ -564,6 +585,11 @@ The two most popular workflows when using terraform are:
 
 - **Apply before Merge**: This is the default for things like
   [Atlantis](https://www.runatlantis.io/).
+
+The difference: apply-after-merge merges the pull request first, then builds
+the infrastructure. Apply-before-merge builds the infrastructure first,
+while the pull request is still open, and merges automatically once that
+succeeds.
 
 I do not like apply-after-merge.  There are a lot of ways where a `plan`
 can succeed but an `apply` will fail and you end up with broken configuration
