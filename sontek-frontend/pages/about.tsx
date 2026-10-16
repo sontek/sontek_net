@@ -12,14 +12,14 @@ export default function About() {
                 <div>
                     <Image
                         priority
-                        height="450"
+                        height="400"
                         width="600"
-                        src="/images/family_small.jpg"
-                        alt={"Picture of John with Family"}
+                        src="/images/john_small.jpg"
+                        alt={"Picture of John Anderson"}
                     />
                 </div>
                 <small>
-                    I&apos;m a dad who lives in Luquillo, Puerto Rico and loves to
+                    I&apos;m a dad who lives in Oakland, California and loves to
                     hack on opensource
                 </small>
             </div>

@@ -29,7 +29,7 @@ export default function Home() {
                         <p>
                             I&apos;m a full-stack software developer that enjoys
                             Python, Go, TypeScript, React.js, DevOps, and Linux.
-                            I live in Luquillo, PR.
+                            I live in Oakland, CA.
                         </p>
                     </header>
                 </div>
